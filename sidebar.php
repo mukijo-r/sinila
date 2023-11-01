@@ -91,7 +91,7 @@ if (isset($_SESSION['tahunAjar'])) {
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-people-group"></i></div>
                                 Siswa
                             </a>
-                            <a class="nav-link" href="siswa.php">
+                            <a class="nav-link" href="kelas.php">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-people-group"></i></div>
                                 Kelas
                             </a>
@@ -161,19 +161,16 @@ if (isset($_SESSION['tahunAjar'])) {
                 <form method="post">
                 <div class="modal-body">
                     <h5>Tentang Aplikasi</h5>
-                    <p>Sistem Informasi Manajemen Keuangan SDK Bhakti Rogojampi.</p>
+                    <p>Sistem Pengelolaan Nilai SDK Bhakti Rogojampi.</p>
                     <h5>Fitur</h5>
                     <ul>
-                        <li>Mengelola data siswa, guru, dan alumni,</li>
-                        <li>Mengelola iuran siswa,</li>
-                        <li>Mengelola tabungan siswa,</li>
-                        <li>Mengelola berbagai kategori kas,</li>
-                        <li>Membuat laporan keuangan bulanan.</li>
+                        <li>Mengelola data nilai</li>
+                        <li>Mencetak rapor.</li>
                     </ul>
                     <h5>Versi</h5>
                     <p>1.0.0 </p>
                     <h5>Tanggal Rilis</h5>
-                    <p>15 Oktober 2023 </p>
+                    <p>15 November 2023 </p>
                     <h5>Pengembangan</h5>
                     <ul>
                         <li>Pengembang : Mukijo</li>
