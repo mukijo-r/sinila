@@ -2,12 +2,24 @@
 include 'config.php';
 require 'sidebar_function.php';
 //session_start();
+if (isset($_SESSION['user'])) {
+    $username = $_SESSION['user'];
+} else {
+    // Pengguna tidak masuk. Lakukan sesuatu, seperti mengarahkan mereka kembali ke halaman login.
+    header('location: login.php');
+}
+
 if (isset($_SESSION['tahunAjar'])) {
     $tahunAjar = $_SESSION['tahunAjar'];
 }
+
+if (isset($_SESSION['kelas'])) {
+    $kelas = $_SESSION['kelas'];
+}
+
 ?>
 
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8" />
@@ -15,7 +27,7 @@ if (isset($_SESSION['tahunAjar'])) {
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Dashboard - SIM Keuangan</title>
+        <title>Dashboard - SIM Penilaian</title> -->
         <style>
             @media print {
                 .sb-sidenav, .accordion, .sb-sidenav-dark, .sb-sidenav-menu, .nav, .nav-link, .sb-nav-link-icon, .fas, .fa-tachometer-alt, .sb-sidenav-menu-heading, .nav-link, .collapsed, .sb-nav-link-icon, .sb-sidenav-collapse-arrow, .collapse, .sb-sidenav-menu-nested, .nav, .nav-link, .sb-sidenav-footer, .small, .modal {
@@ -104,88 +116,124 @@ if (isset($_SESSION['tahunAjar'])) {
                         </div>                            
                     </div>
                     <div style="text-align: center;" class="sb-sidenav-footer">
+                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalKelas">Ganti Kelas</button>
+                    </div>
+                    <div style="text-align: center;" class="sb-sidenav-footer">
                         <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalTahunAjar">Ganti Tahun Ajar</button>
-                        
                     </div>
                 </nav>
             </div>
 
-            <!-- Modal Ganti Tahun ajar-->
-    <div class="modal fade" id="modalTahunAjar">
-    <div class="modal-dialog">
-        <div class="modal-content">
+    <!-- Modal Ganti Kelas-->
+    <div class="modal fade" id="modalKelas">
+        <div class="modal-dialog">
+            <div class="modal-content">
 
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h4 class="modal-title">Ganti Tahun Ajar</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <!-- Modal body -->      
-                <form method="post">
-                <div class="modal-body">
-                    <br>
-                    <select class="form-select" name="tahunAjar" aria-label="Pilih TA">
-                        <option selected>Pilih Tahun Ajar</option>
-                        <?php
-                            // Ambil data kelas dari tabel kelas
-                            $queryTA = mysqli_query($conn, "SELECT id_tahun_ajar, tahun_ajar FROM tahun_ajar");
-                            while ($ta = mysqli_fetch_assoc($queryTA)) {
-                                echo '<option value="' . $ta['tahun_ajar'] . '">' . $ta['tahun_ajar'] . '</option>';
-                            }
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Ganti Kelas</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <!-- Modal body -->      
+                    <form method="post">
+                    <div class="modal-body">
+                        <br>
+                        <select class="form-select" name="kelas" aria-label="Pilih Kelas">
+                            <option selected>Pilih Kelas</option>
+                            <?php
+                                 // Ambil data kelas dari tabel kelas
+                                 $queryKelas = mysqli_query($conn, "SELECT id_kelas, nama_kelas FROM kelas WHERE id_kelas <> 404");
+                                 while ($rowKelas = mysqli_fetch_assoc($queryKelas)) {
+                                     echo '<option value="' . $rowKelas['id_kelas'] . '">' . $rowKelas['nama_kelas'] . '</option>';
+                                 }
                             ?>
-                    </select>
-                    <br>
+                        </select>
+                        <br>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary" name="ubahKelas">Ubah</button> 
+                    </div>
+                    <br> 
+                </form>   
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Ganti Tahun ajar-->
+    <div class="modal fade" id="modalTahunAjar">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Ganti Tahun Ajar</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="text-center">
-                    <button type="submit" class="btn btn-primary" name="ubahTahunAjar">Ubah</button> 
-                </div>
-                <br> 
-            </form>   
+                <!-- Modal body -->      
+                    <form method="post">
+                    <div class="modal-body">
+                        <br>
+                        <select class="form-select" name="tahunAjar" aria-label="Pilih TA">
+                            <option selected>Pilih Tahun Ajar</option>
+                            <?php
+                                // Ambil data kelas dari tabel kelas
+                                $queryTA = mysqli_query($conn, "SELECT id_tahun_ajar, tahun_ajar FROM tahun_ajar");
+                                while ($ta = mysqli_fetch_assoc($queryTA)) {
+                                    echo '<option value="' . $ta['tahun_ajar'] . '">' . $ta['tahun_ajar'] . '</option>';
+                                }
+                                ?>
+                        </select>
+                        <br>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary" name="ubahTahunAjar">Ubah</button> 
+                    </div>
+                    <br> 
+                </form>   
             </div>
         </div>
     </div>
 
 
-
     <!-- Modal About-->
     <div class="modal fade" id="modalAbout">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
 
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h4 class="modal-title">Info</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <!-- Modal body -->      
-                <form method="post">
-                <div class="modal-body">
-                    <h5>Tentang Aplikasi</h5>
-                    <p>Sistem Pengelolaan Nilai SDK Bhakti Rogojampi.</p>
-                    <h5>Fitur</h5>
-                    <ul>
-                        <li>Mengelola data nilai</li>
-                        <li>Mencetak rapor.</li>
-                    </ul>
-                    <h5>Versi</h5>
-                    <p>1.0.0 </p>
-                    <h5>Tanggal Rilis</h5>
-                    <p>15 November 2023 </p>
-                    <h5>Pengembangan</h5>
-                    <ul>
-                        <li>Pengembang : Mukijo</li>
-                        <li>Email : mkjjaya@gmail.com</li>
-                        <li>No.tlp : 0856-4334-6785</li>
-                        <li>Afiliasi : Universitas Siber Asia</li>
-                    </ul>
-                    <h5>Dukungan</h5>
-                    <p>Aplikasi didukung oleh XAMPP versi 8.0.19 ke atas.</p>
-                    <h5>Bantuan</h5>
-                    <p>Jika Anda memiliki pertanyaan atau masalah, silakan hubungi melalui email atau WA.</p>
-                    <p>Terima kasih telah menggunakan aplikasi ini!</p>                    
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Info</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <br> 
-            </form>   
+                <!-- Modal body -->      
+                    <form method="post">
+                    <div class="modal-body">
+                        <h5>Tentang Aplikasi</h5>
+                        <p>Sistem Pengelolaan Nilai SDK Bhakti Rogojampi.</p>
+                        <h5>Fitur</h5>
+                        <ul>
+                            <li>Mengelola data nilai</li>
+                            <li>Mencetak rapor.</li>
+                        </ul>
+                        <h5>Versi</h5>
+                        <p>1.0.0 </p>
+                        <h5>Tanggal Rilis</h5>
+                        <p>15 November 2023 </p>
+                        <h5>Pengembangan</h5>
+                        <ul>
+                            <li>Pengembang : Mukijo</li>
+                            <li>Email : mkjjaya@gmail.com</li>
+                            <li>No.tlp : 0856-4334-6785</li>
+                            <li>Afiliasi : Universitas Siber Asia</li>
+                        </ul>
+                        <h5>Dukungan</h5>
+                        <p>Aplikasi didukung oleh XAMPP versi 8.0.19 ke atas.</p>
+                        <h5>Bantuan</h5>
+                        <p>Jika Anda memiliki pertanyaan atau masalah, silakan hubungi melalui email atau WA.</p>
+                        <p>Terima kasih telah menggunakan aplikasi ini!</p>                    
+                    </div>
+                    <br> 
+                </form>   
             </div>
         </div>
     </div> 

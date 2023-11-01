@@ -1,36 +1,6 @@
 <?php
 include 'function.php';
 require 'config.php';
-
-//cek login
-if (isset($_POST['login'])) {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    $tahunAjar = $_POST['tahunAjar'];
-
-    // Dapatkan kata sandi terenkripsi dari database
-    $result = mysqli_query($conn, "SELECT * FROM users WHERE username='$username'");
-    if ($row = mysqli_fetch_assoc($result)) {
-        $hashedPassword = $row['password'];
-
-        // Periksa apakah kata sandi yang dimasukkan sesuai dengan yang terenkripsi
-        if (password_verify($password, $hashedPassword)) {
-            // Kata sandi cocok, beri izin login
-            $_SESSION['user'] = $username; // Simpan nama user dalam sesi
-            $_SESSION['log'] = 'True';
-            $_SESSION['previous_user'] = $username;
-            $_SESSION['tahunAjar'] = $tahunAjar;
-            header('location:index.php');
-        } else {
-            // Kata sandi tidak cocok, arahkan kembali ke halaman login
-            header('location:login.php');
-        }
-    } else {
-        // Tidak ada akun dengan username tersebut
-        header('location:login.php');
-    }
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -104,7 +74,20 @@ if (isset($_POST['login'])) {
                                                         }
                                                     ?>
                                                 </select>
-                                            </div>   
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                                <select class="form-select" name="kelas" id="kelas" aria-label="Kelas">
+                                                    <option selected>Pilih Kelas</option>
+                                                    <?php
+                                                    // Ambil data kelas dari tabel kelas
+                                                    $queryKelas = mysqli_query($conn, "SELECT id_kelas, nama_kelas FROM kelas");
+                                                    while ($kelas = mysqli_fetch_assoc($queryKelas)) {
+                                                        echo '<option value="' . $kelas['id_kelas'] . '">' . $kelas['nama_kelas'] . '</option>';
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                            </div>     
                                             <div class="form-check mb-3">
                                                 <input class="form-check-input" id="inputRememberPassword" type="checkbox" value="" />
                                                 <label class="form-check-label" for="inputRememberPassword">Remember Password</label>

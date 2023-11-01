@@ -12,22 +12,27 @@ if (isset($_SESSION['user'])) {
     header('location: login.php');
 }
 
-// Tambahkan pemeriksaan tambahan di sini, misalnya untuk nama pengguna sebelumnya
-if (isset($_SESSION['previous_user'])) {
-    $previousUsername = $_SESSION['previous_user'];
+if (isset($_SESSION['tahunAjar'])) {
+    $tahunAjar = $_SESSION['tahunAjar'];
+}
+
+if (isset($_SESSION['kelas'])) {
+    $kelas = $_SESSION['kelas'];
 }
 
 
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
-    <head>
+    <head><?=$kelas;?>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Dashboard - Manajemen Keuangan</title>
+        <title>Dashboard - Manajemen Penilaian</title>
         <style>
             .with-background {
                 background-image: url('assets/img/welcome.jpg'); /* Ganti 'url-gambar-anda.jpg' dengan URL gambar yang ingin Anda gunakan */
@@ -54,9 +59,9 @@ if (isset($_SESSION['previous_user'])) {
 
     </head>
     <body class="sb-nav-fixed">
-        <?php include 'navbar.php'; ?>;
+        <?php include 'navbar.php'; ?>
         <div id="layoutSidenav">
-            <?php include 'sidebar.php'; ?>;
+            <?php include 'sidebar.php'; ?><?=$kelas;?>
             <div id="layoutSidenav_content" class="with-background">
                 <main>
                     <div class="container-fluid px-4" >
@@ -65,8 +70,7 @@ if (isset($_SESSION['previous_user'])) {
                             style="border-left: .35rem solid #fcdb5e; border-top: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee; opacity: 0.85;">
                             <blockquote class="blockquote pb-2">
                                 <i><h1>
-                                    Selamat datang <?= isset($previousUsername) ? $previousUsername : $username; ?>, Anda berada di tahun ajaran <u><?=$tahunAjar;?></u>
-                                </h1></i>                                
+                                    Selamat datang <?=$username; ?>, Anda berada di tahun ajaran <u><?=$tahunAjar;?></u> dan kelas <?=$kelas;?></h1></i>                                
                             </blockquote>
                     </figure>
                     </div>
@@ -75,7 +79,7 @@ if (isset($_SESSION['previous_user'])) {
                         <figure class="bg-light p-4"
                             style="border-left: .35rem solid #fcdb5e; border-top: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee; opacity: 0.85;">
                             <div class="row">                                
-                                
+                                <?=$kelas;?>
                             </div>
                         </figure>
                     </div>

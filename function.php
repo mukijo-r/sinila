@@ -10,6 +10,36 @@
 
     $conn = mysqli_connect("localhost:3306","root","","sdk");
 
+    //login
+    if (isset($_POST['login'])) {
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+        $tahunAjar = $_POST['tahunAjar'];
+        $kelas = $_POST['kelas'];
+        // Dapatkan kata sandi terenkripsi dari database
+        $result = mysqli_query($conn, "SELECT * FROM users WHERE username='$username'");
+        if ($row = mysqli_fetch_assoc($result)) {
+            $hashedPassword = $row['password'];
+
+            // Periksa apakah kata sandi yang dimasukkan sesuai dengan yang terenkripsi
+            if (password_verify($password, $hashedPassword)) {
+                // Kata sandi cocok, beri izin login
+                $_SESSION['user'] = $username; // Simpan nama user dalam sesi
+                $_SESSION['log'] = 'True';
+                $_SESSION['previous_user'] = $username;
+                $_SESSION['tahunAjar'] = $tahunAjar;
+                $_SESSION['kelas'] = $kelas;
+                header('location:index.php');
+            } else {
+                // Kata sandi tidak cocok, arahkan kembali ke halaman login
+                header('location:login.php');
+            }
+        } else {
+            // Tidak ada akun dengan username tersebut
+            header('location:login.php');
+        }
+    }
+
    
     // Tambah Kategori Kas
     if(isset($_POST['tambahKategoriKas'])){
