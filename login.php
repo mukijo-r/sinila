@@ -6,6 +6,7 @@ require 'config.php';
 if (isset($_POST['login'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
+    $tahunAjar = $_POST['tahunAjar'];
 
     // Dapatkan kata sandi terenkripsi dari database
     $result = mysqli_query($conn, "SELECT * FROM users WHERE username='$username'");
@@ -17,7 +18,8 @@ if (isset($_POST['login'])) {
             // Kata sandi cocok, beri izin login
             $_SESSION['user'] = $username; // Simpan nama user dalam sesi
             $_SESSION['log'] = 'True';
-            $_SESSION['previous_user'] = $username;            
+            $_SESSION['previous_user'] = $username;
+            $_SESSION['tahunAjar'] = $tahunAjar;
             header('location:index.php');
         } else {
             // Kata sandi tidak cocok, arahkan kembali ke halaman login
@@ -100,7 +102,7 @@ if (isset($_POST['login'])) {
                                                         while ($ta = mysqli_fetch_assoc($queryTA)) {
                                                             echo '<option value="' . $ta['tahun_ajar'] . '">' . $ta['tahun_ajar'] . '</option>';
                                                         }
-                                                        ?>
+                                                    ?>
                                                 </select>
                                             </div>   
                                             <div class="form-check mb-3">
