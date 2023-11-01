@@ -1,7 +1,10 @@
 <?php
 include 'config.php';
 require 'sidebar_function.php';
-
+//session_start();
+if (isset($_SESSION['tahunAjar'])) {
+    $tahunAjar = $_SESSION['tahunAjar'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -50,7 +53,7 @@ require 'sidebar_function.php';
                                 <div style="text-align: center;">
                                     <h6>Tahun Ajar</h6>
                                     <a href=# data-bs-toggle="modal" data-bs-target="#modalTahunAjar">
-                                    <h5><?=$tahun_ajar;?><h5>
+                                    <h5><?=$tahunAjar;?><h5>
                                     </a>
                                 </div>
                             </div>
@@ -120,13 +123,6 @@ require 'sidebar_function.php';
             <!-- Modal body -->      
                 <form method="post">
                 <div class="modal-body">
-                    <h6>Tambahkan Tahun Ajar baru atau pilih dari menu<h6>
-                    <br>
-                    <input type="text" name="newTahunAjar" placeholder="Tahun/Tahun" class="form-control">
-                    <br>
-                    <div class="text-center">
-                    <button type="submit" class="btn btn-success" name="tambahTahunAjar">Tambah</button> 
-                    </div>
                     <br>
                     <select class="form-select" name="tahunAjar" aria-label="Pilih TA">
                         <option selected>Pilih Tahun Ajar</option>
