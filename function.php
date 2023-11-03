@@ -7,10 +7,28 @@
 
     session_start();
     //Koneksi ke database
+    if (isset($_SESSION['user'])) {
+        $username = $_SESSION['user'];
+    } else {
+        // Pengguna tidak masuk. Lakukan sesuatu, seperti mengarahkan mereka kembali ke halaman login.
+        header('location: login.php');
+    }
+    
+    if (isset($_SESSION['tahunAjar'])) {
+        $tahunAjar = $_SESSION['tahunAjar'];
+    }
+    
+    if (isset($_SESSION['kelas'])) {
+        $kelas = $_SESSION['kelas'];
+    }
+    
+    $queryUser = mysqli_query($conn, "SELECT nama_lengkap FROM users WHERE username = '$username'");
+    $rowUser = mysqli_fetch_array($queryUser);
+    $namaUser = $rowUser['nama_lengkap'];
 
     $conn = mysqli_connect("localhost:3306","root","","sdk");
 
-    //login
+    //1. login
     if (isset($_POST['login'])) {
         $username = $_POST['username'];
         $password = $_POST['password'];
@@ -39,33 +57,28 @@
             header('location:login.php');
         }
     }
-
-   
-    // Tambah Kategori Kas
-    if(isset($_POST['tambahKategoriKas'])){
-        $jenisKas = $_POST['jenisKas'];
-        $kelompok = $_POST['kelompok'];
-        $namaGuru = $_POST['guru'];
-        $kode = $_POST['kode'];
-        $keterangan = $_POST['keterangan'];
+  
+    // 2. Tambah Mapel
+    if(isset($_POST['tambahMapel'])){
+        $mapel = $_POST['mapel'];
 
         try {
-            $queryInsertKategori = "INSERT INTO `kategori`(`nama_kategori`, `kelompok`, `id_guru`, `kode`, `keterangan`) VALUES ('$jenisKas', '$kelompok', '$namaGuru', '$kode', '$keterangan')";
+            $queryMapel = "INSERT INTO `mapel`(`mapel`) VALUES ('$mapel')";
                 
-            $kategori = mysqli_query($conn, $queryInsertKategori);
+            $insertMapel = mysqli_query($conn, $queryMapel);
 
-            if (!$kategori) {
+            if (!$insertMapel) {
                 throw new Exception("Query insert gagal"); // Lempar exception jika query gagal
             }
 
             // Query SELECT untuk memeriksa apakah data sudah masuk ke database
-            $result = mysqli_query($conn, "SELECT * FROM kategori WHERE nama_kategori='$jenisKas'");
+            $result = mysqli_query($conn, "SELECT * FROM mapel WHERE mapel='$mapel'");
 
             if ($result && mysqli_num_rows($result) === 1) {
                 // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
-                $_SESSION['flash_message'] = 'Tambah kategori berhasil';
+                $_SESSION['flash_message'] = 'Tambah mata pelajaran berhasil';
                 $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
-                header('location:kategori_kas.php');
+                header('location:mapel.php');
                 exit;
             } else {
                 // Data tidak ada dalam database, itu berarti gagal
@@ -73,10 +86,102 @@
             }
         } catch (Exception $e) {
             // Tangani exception jika terjadi kesalahan
-            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryInsertKategori . $e->getMessage();
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $e->getMessage();
             $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
-            echo $queryInsertTabung;
-            header('location:kategori_kas.php');
+            header('location:mapel.php');
+            exit;
+        }
+    }
+
+    // 3. Edit Mapel
+    if(isset($_POST['UbahMapel'])){
+        $idMapel = $_POST['idMapel'];
+        $newMapel = $_POST['mapelEdit'];
+
+        try {
+            $queryMapel = "UPDATE `mapel` SET `mapel`='$newMapel' WHERE `id_mapel`='$idMapel'";
+                
+            $updateMapel = mysqli_query($conn, $queryMapel);
+
+            if (!$updateMapel) {
+                throw new Exception("Query update gagal"); // Lempar exception jika query gagal
+            }
+
+            // Query SELECT untuk memeriksa apakah data sudah masuk ke database
+            $result = mysqli_query($conn, "SELECT * FROM mapel WHERE mapel='$newMapel'");
+
+            if ($result && mysqli_num_rows($result) === 1) {
+                // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
+                $_SESSION['flash_message'] = 'Ubah mata pelajaran berhasil';
+                $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
+                header('location:mapel.php');
+                exit;
+            } else {
+                // Data tidak ada dalam database, itu berarti gagal
+                throw new Exception("Data tidak ditemukan");
+            }
+        } catch (Exception $e) {
+            // Tangani exception jika terjadi kesalahan
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $e->getMessage();
+            $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
+            header('location:mapel.php');
+            exit;
+        }
+    }
+
+    // 4. Tambah Nilai Mapel
+    if(isset($_POST['tambahNilaiMapel'])){
+        $semester = $_POST['semester'];
+        $idSiswa = $_POST['siswa'];
+        $idMapel = $_POST['mapel'];
+        $lingkupMateri = $_POST['lingkupMateri'];
+        $tujuanPembelajaran = $_POST['tujuanPembelajaran'];
+        $nilai = $_POST['nilai'];
+
+        $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
+        $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
+        $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];
+
+        try {
+            $queryInsertNilaiMapel = "INSERT INTO `nilai_mapel`
+            (`tanggal`, `id_tahun_Ajar`, `semester`, `id_siswa`, `id_mapel`, `lingkup_materi`, `tujuan_pembelajaran`, `nilai`, `guru_penilai`) 
+            VALUES ('$tanggal','$idTahunAjar','$semester','$idSiswa','$idMapel','$lingkupMateri','$tujuanPembelajaran','$nilai','$namaUser')";
+                
+            $insertNilaiMapel = mysqli_query($conn, $queryInsertNilaiMapel);
+
+            if (!$insertNilaiMapel) {
+                throw new Exception("Query insert gagal"); // Lempar exception jika query gagal
+            }
+
+            // Query SELECT untuk memeriksa apakah data sudah masuk ke database
+            $result = mysqli_query($conn, "SELECT * 
+            FROM nilai_mapel 
+            WHERE 
+            tanggal='$tanggal' AND
+            id_tahun_Ajar='$idTahunAjar' AND
+            semester='$semester' AND
+            id_siswa='$idSiswa' AND
+            id_mapel='$idMapel' AND
+            lingkup_materi='$lingkupMateri' AND
+            tujuan_pembelajaran='$tujuanPembelajaran' AND
+            nilai='$nilai'            
+            ");
+
+            if ($result && mysqli_num_rows($result) === 1) {
+                // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
+                $_SESSION['flash_message'] = 'Tambah nilai berhasil';
+                $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
+                header('location:input_nilai_mapel.php');
+                exit;
+            } else {
+                // Data tidak ada dalam database, itu berarti gagal
+                throw new Exception("Data tidak ditemukan setelah ditambahkan");
+            }
+        } catch (Exception $e) {
+            // Tangani exception jika terjadi kesalahan
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryInsertNilaiMapel . $e->getMessage();
+            $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
+            header('location:input_nilai_mapel.php');
             exit;
         }
     }
