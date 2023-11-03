@@ -5,20 +5,24 @@ require 'config.php';
 
 //session_start();
 
-if (isset($_SESSION['user'])) {
-    $username = $_SESSION['user'];
-} else {
-    // Pengguna tidak masuk. Lakukan sesuatu, seperti mengarahkan mereka kembali ke halaman login.
-    header('location: login.php');
-}
+// if (isset($_SESSION['user'])) {
+//     $username = $_SESSION['user'];
+// } else {
+//     // Pengguna tidak masuk. Lakukan sesuatu, seperti mengarahkan mereka kembali ke halaman login.
+//     header('location: login.php');
+// }
 
-if (isset($_SESSION['tahunAjar'])) {
-    $tahunAjar = $_SESSION['tahunAjar'];
-}
+// if (isset($_SESSION['tahunAjar'])) {
+//     $tahunAjar = $_SESSION['tahunAjar'];
+// }
 
-if (isset($_SESSION['kelas'])) {
-    $kelas = $_SESSION['kelas'];
-}
+// if (isset($_SESSION['kelas'])) {
+//     $kelas = $_SESSION['kelas'];
+// }
+
+// $queryUser = mysqli_query($conn, "SELECT nama_lengkap FROM users WHERE username = '$username'");
+// $rowUser = mysqli_fetch_array($queryUser);
+// $namaUser = $rowUser['nama_lengkap'];
 
 
 
@@ -70,7 +74,7 @@ if (isset($_SESSION['kelas'])) {
                             style="border-left: .35rem solid #fcdb5e; border-top: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee; opacity: 0.85;">
                             <blockquote class="blockquote pb-2">
                                 <i><h1>
-                                    Selamat datang <?=$username; ?>, Anda berada di tahun ajaran <u><?=$tahunAjar;?></u> dan kelas <?=$kelas;?></h1></i>                                
+                                    Selamat datang <?=$namaUser; ?>, Anda berada di tahun ajaran <u><?=$tahunAjar;?></u> dan kelas <?=$kelas;?></h1></i>                                
                             </blockquote>
                     </figure>
                     </div>
