@@ -77,8 +77,7 @@ if (isset($_SESSION['kelas'])) {
                             </a>
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="penetapan.php">Mata Pelajaran</a>
-                                    <a class="nav-link" href="transaksi_masuk_siswa.php">Nilai</a>
+                                    <a class="nav-link" href="input_nilai_mapel.php">Nilai Mapel</a>
                                     <a class="nav-link" href="transaksi_keluar_siswa.php">Absensi</a>
                                 </nav>
                             </div>
@@ -104,10 +103,13 @@ if (isset($_SESSION['kelas'])) {
                                 Siswa
                             </a>
                             <a class="nav-link" href="kelas.php">
-                                <div class="sb-nav-link-icon"><i class="fa-solid fa-people-group"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-school"></i></div>
                                 Kelas
                             </a>
-
+                            <a class="nav-link" href="mapel.php">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-book-open"></i></div>
+                                Mata Pelajaran
+                            </a>
                             <div class="sb-sidenav-menu-heading">Info</div>
                             <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#modalAbout">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-circle-info"></i></div>
