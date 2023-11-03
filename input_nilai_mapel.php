@@ -13,9 +13,12 @@ date_default_timezone_set('Asia/Jakarta');
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>Halaman Input Nilai</title>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
     </head>
     <body class="sb-nav-fixed">
         <?php include 'navbar.php'; ?>
@@ -79,6 +82,7 @@ date_default_timezone_set('Asia/Jakarta');
                                     ta.tahun_ajar AS tahun_ajar,
                                     s.nama AS nama_siswa,
                                     s.id_kelas AS id_kelas,
+                                    m.id_mapel as id_mapel,
                                     m.mapel as mapel
                                     FROM nilai_mapel nm
                                     LEFT JOIN tahun_ajar ta ON nm.id_tahun_ajar = ta.id_tahun_ajar
@@ -97,7 +101,8 @@ date_default_timezone_set('Asia/Jakarta');
                                         $semester = $data['semester'];                                      
                                         $kelas = $data['id_kelas'];
                                         $idSiswa = $data['id_siswa'];
-                                        $namaSiswa = $data['nama_siswa'];                                        
+                                        $namaSiswa = $data['nama_siswa'];
+                                        $idMapel = $data['id_mapel'];                                       
                                         $mapel = $data['mapel'];
                                         $lingkupMateri = $data['lingkup_materi'];
                                         $tujuanPembelajaran = $data['tujuan_pembelajaran'];
@@ -117,13 +122,12 @@ date_default_timezone_set('Asia/Jakarta');
                                             <td><?=$nilai;?></td>
                                             <td><?=$guruPenilai;?></td>
                                             <td>
-                                                <button type="button" class="btn btn-warning" name="tblEdit" data-bs-toggle="modal" data-bs-target="#modalEditTransSiswa<?=$idNilaiMapel;?>">Edit</button>
-                                                <button type="button" class="btn btn-danger" name="tblHapus" data-bs-toggle="modal" data-bs-target="#modalHapusTransSiswa<?=$idNilaiMapel;?>">Hapus</button> 
+                                                <button type="button" class="btn btn-warning" name="tblEdit" data-bs-toggle="modal" data-bs-target="#modalEditNilaiSiswa<?=$idNilaiMapel;?>">Edit</button>
+                                                <button type="button" class="btn btn-danger" name="hapusNilaiMapel" data-bs-toggle="modal" data-bs-target="#modalHapusNilaiSiswa<?=$idNilaiMapel;?>">Hapus</button> 
                                             </td>
                                         </tr>
-
                                         <!-- Modal edit Transaksi Masuk Siswa -->
-                                        <div class="modal fade" id="modalEditTransSiswa<?=$idNilaiMapel;?>">
+                                        <div class="modal fade" id="modalEditNilaiSiswa<?=$idNilaiMapel;?>">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <!-- Modal Header -->
@@ -134,107 +138,79 @@ date_default_timezone_set('Asia/Jakarta');
                                                     <!-- Modal Body -->
                                                     <form method="post">
                                                         <div class="modal-body">
-                                                            <div>
-                                                                <label for="tanggal">Tanggal Bayar :</label>       
-                                                                <input type="datetime-local" name="tanggal" value="<?=$tanggalBayar; ?>" class="form-control">
+                                                        <div class="mb-3">
+                                                                <label for="semester">Semester :</label><br>
+                                                                <select class="form-select" name="semester" id="semester" aria-label="Semester" required>>
+                                                                    <option value="<?=$semester;?>"><?=$semester;?></option>                            
+                                                                    <option value="Ganjil">Ganjil</option>
+                                                                    <option value="Genap">Genap</option>
+                                                                </select>
+                                                            </div>      
+                                                            <div class="mb-3">
+                                                                <label for="siswa">Siswa :</label>
+                                                                <select name="siswa" class="form-select" id="siswa" aria-label="Siswa" required>>
+                                                                    <option value="<?=$idSiswa;?>"><?=$namaSiswa;?></option>
+                                                                    <?php
+                                                                    // Ambil data siswa dari tabel siswa
+                                                                    $querySiswa = mysqli_query($conn, "SELECT id_siswa, nama FROM siswa WHERE id_kelas = $kelas");
+                                                                    while ($rowSiswa = mysqli_fetch_assoc($querySiswa)) {
+                                                                        echo '<option value="' . $rowSiswa['id_siswa'] . '">' . $rowSiswa['nama'] . '</option>';
+                                                                    }
+                                                                    ?>
+                                                                </select>
                                                             </div>
                                                             <div class="mb-3">
-                                                                <label for="kelasEdit">Kelas :</label>
-                                                                <select class="form-select" name="kelasEdit" id="kelasEdit" aria-label="Kelas">
-                                                                    <option selected><?=$kelas;?></option>
+                                                                <label for="mapel">Mata Pelajaran :</label>
+                                                                <select class="form-select" name="mapel" id="mapel" aria-label="mapel" required>
+                                                                    <option value="<?=$idMapel;?>"><?=$mapel;?></option>
                                                                     <?php
                                                                     // Ambil data kelas dari tabel kelas
-                                                                    $queryKelas = mysqli_query($conn, "SELECT id_kelas, nama_kelas FROM kelas");
-                                                                    while ($kelas = mysqli_fetch_assoc($queryKelas)) {
-                                                                        echo '<option value="' . $kelas['id_kelas'] . '">' . $kelas['nama_kelas'] . '</option>';
+                                                                    $queryMapel = mysqli_query($conn, "SELECT id_mapel, mapel FROM mapel");
+                                                                    while ($rowMapel = mysqli_fetch_assoc($queryMapel)) {
+                                                                        echo '<option value="' . $rowMapel['id_mapel'] . '">' . $rowMapel['mapel'] . '</option>';
                                                                     }
                                                                     ?>
                                                                 </select>
                                                             </div>
                                                             <div class="mb-3">
-                                                                <label for="siswaEdit">Siswa :</label>
-                                                                <select name="siswaEdit" class="form-select" id="siswaEdit" aria-label="Siswa">
-                                                                    <option selected><?=$namaSiswa;?></option>
-                                                                    <!-- Opsi siswa akan diisi secara dinamis menggunakan JavaScript -->
+                                                                <label for="lingkupMateri">Lingkup Materi :</label>
+                                                                <select class="form-select" name="lingkupMateri" id="lingkupMateri" aria-label="lingkupMateri" required>
+                                                                    <option value="<?=$lingkupMateri;?>"><?=$lingkupMateri;?></option>                         
+                                                                    <option value="LM 1">LM 1</option>
+                                                                    <option value="LM 2">LM 2</option>
+                                                                    <option value="LM 3">LM 3</option>
+                                                                    <option value="LM 4">LM 4</option>
                                                                 </select>
                                                             </div>
                                                             <div class="mb-3">
-                                                                <label for="subKategoriEdit">Sub Kategori : </label>
-                                                                <select class="form-select" name="subKategoriEdit" id="subKategoriEdit" aria-label="subKategori">
-                                                                    <option value=<?=$idSubKategori;?>><?=$subKategori;?></option>
-                                                                    <?php
-                                                                    // Ambil data kelas dari tabel kelas
-                                                                    $querySubKategori = mysqli_query($conn, "SELECT id_sub_kategori, nama_sub_kategori FROM sub_kategori_siswa");
-                                                                    while ($subKategori = mysqli_fetch_assoc($querySubKategori)) {
-                                                                        echo '<option value="' . $subKategori['id_sub_kategori'] . '">' . $subKategori['nama_sub_kategori'] . '</option>';
-                                                                    }
-                                                                    ?>
-                                                                </select>
-                                                            </div>                                                           
-                                                            <div class="mb-3">
-                                                                <label for="bulanEdit">Bulan :</label>
-                                                                <select class="form-select" name="bulanEdit" id="bulanEdit" aria-label="Edit Bulan">
-                                                                    <option selected><?=$bulan;?></option>
-                                                                    <option value="Januari">Januari</option>
-                                                                    <option value="Februari">Februari</option>
-                                                                    <option value="Maret">Maret</option>
-                                                                    <option value="April">April</option>
-                                                                    <option value="Mei">Mei</option>
-                                                                    <option value="Juni">Juni</option>
-                                                                    <option value="Juli">Juli</option>
-                                                                    <option value="Agustus">Agustus</option>
-                                                                    <option value="September">September</option>
-                                                                    <option value="Oktober">Oktober</option>
-                                                                    <option value="November">November</option>
-                                                                    <option value="Desember">Desember</option>
+                                                                <label for="tujuanPembelajaran">Tujuan Pembelajaran :</label>
+                                                                <select class="form-select" name="tujuanPembelajaran" id="tujuanPembelajaran" aria-label="tujuanPembelajaran" required>
+                                                                    <option value="<?=$tujuanPembelajaran;?>"><?=$tujuanPembelajaran;?></option>                         
+                                                                    <option value="TP1">TP 1</option>
+                                                                    <option value="TP2">TP 2</option>
+                                                                    <option value="TP3">TP 3</option>
+                                                                    <option value="TP4">TP 4</option>
+                                                                    <option value="TP5">TP 5</option>
+                                                                    <option value="TP6">TP 6</option>
                                                                 </select>
                                                             </div>
                                                             <div class="mb-3">
-                                                                <label for="nominalEdit">Penetapan :</label>                     
-                                                                <input type="text" name="nominalEdit" id="nominalEdit" value="<?=$penetapan;?>" class="form-control" readonly>
-                                                            </div>
-                                                            <div class="mb-3">
-                                                                <label for="bulanIniEdit">Bulan ini :</label>                     
-                                                                <input type="text" name="bulanIniEdit" id="bulanIniEdit" value="<?=$bulanIni;?>" class="form-control">
-                                                            </div><div class="mb-3">
-                                                                <label for="tunggakanEdit">Tunggakan :</label>                     
-                                                                <input type="text" name="tunggakanEdit" id="tunggakanEdit" value="<?=$tunggakan;?>" class="form-control" readonly>
-                                                            </div>
-                                                            <!-- <div class="mb-3">
-                                                                <label for="jumlahEdit">jumlah Pembayaran :</label>                        
-                                                                <input type="number" name="jumlahEdit" id="jumlahEdit" value="<?=$nominal;?>" class="form-control">
-                                                            </div> -->
-                                                            <div class="mb-3">   
-                                                                <label for="guruEdit">Penerima :</label>                     
-                                                                <select name="guruEdit" class="form-select" id="guruEdit" value="<?=$namaGuru;?>" aria-label="Guru">>
-                                                                <option selected><?=$namaGuru;?></option>
-                                                                    <?php
-                                                                    // Ambil data guru dari tabel guru
-                                                                    $queryGuru = mysqli_query($conn, "SELECT id_guru, nama_lengkap FROM guru");
-                                                                    while ($guru = mysqli_fetch_assoc($queryGuru)) {
-                                                                        echo '<option value="' . $guru['id_guru'] . '">' . $guru['nama_lengkap'] . '</option>';
-                                                                    }
-                                                                    ?>
-                                                                </select>
-                                                            </div>
-                                                            <div class="mb-3">
-                                                            <label for="keteranganEdit">Keterangan :</label>   
-                                                                <textarea name="keteranganEdit" class="form-control" id="keteranganEdit" value="<?=$keterangan;?>" rows="2"><?=$keterangan;?></textarea>
+                                                                <label for="nilai">Nilai :</label>                        
+                                                                <input type="number" name="nilai" value="<?=$nilai;?>" class="form-control" required max="100">                    
                                                             </div>
                                                         </div>
                                                         <!-- Modal Footer -->
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                                                            <input type="hidden" name="id_tms_masuk" value="<?=$idTransaksiMasukSiswa;?>">
-                                                            <button type="submit" class="btn btn-primary" name="editTransSiswa">Simpan</button>
-                                                        </div>
+                                                            <input type="hidden" name="idNilaiMapel" value="<?=$idNilaiMapel;?>">
+                                                            <button type="submit" class="btn btn-primary" name="ubahNilaiMapel">Simpan</button>
+                                                        </div><br>
                                                     </form>
                                                 </div>
                                             </div>
                                         </div>
 
                                     <!-- Modal Hapus Transaksi Masuk Siswa-->
-                                    <div class="modal fade" id="modalHapusTransSiswa<?=$idTransaksiMasukSiswa;?>">
+                                    <div class="modal fade" id="modalHapusNilaiSiswa<?=$idNilaiMapel;?>">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
 
@@ -248,17 +224,19 @@ date_default_timezone_set('Asia/Jakarta');
                                             
                                             <form method="post">
                                             <div class="modal-body">
-                                                <h5>Anda yakin ingin menghapus data pembayaran <u> <?=$namaSiswa;?> </u> dengan nominal Rp. <b><?=$nominal;?>?</h5>
+                                            <h5>Anda yakin ingin menghapus data nilai <b><?=$nilai;?></b> atas nama <u><?=$namaSiswa;?></u>?</h5>
                                                 
                                             </div>
-                                            <div class="text-center">
-                                                <input type="hidden" name="idTms" value="<?=$idTransaksiMasukSiswa;?>">
-                                                <button type="submit" class="btn btn-danger" name="hapusTransaksiSiswa">Hapus</button> 
+                                            <div class="modal-footer">
+                                                <input type="hidden" name="idNilaiMapel" value="<?=$idNilaiMapel;?>">
+                                                <button type="submit" class="btn btn-danger" name="hapusNilaiMapel">Hapus</button> 
                                             </div>
                                             <br> 
                                             </form>       
                                             </div>
                                         </div>
+
+
                                     <?php
                                     };
 
@@ -277,89 +255,102 @@ date_default_timezone_set('Asia/Jakarta');
         <script src="assets/demo/chart-area-demo.js"></script>
         <script src="assets/demo/chart-bar-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
-        <script src="js/datatables-simple-demo.js"></script>
-        <script>
-        </script>
+        <script src="js/datatables-simple-demo.js"></script>   
     </body>   
 
     <!-- Modal Tambah Nilai Siswa -->
-<div class="modal fade" id="modalTambahNilaiMapel">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h4 class="modal-title">Tambah Nilai Mapel Siswa kelas <?=$kelas;?></h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    <div class="modal fade" id="modalTambahNilaiMapel">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Tambah Nilai Mapel Siswa kelas <?=$kelas;?></h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <!-- Modal Body -->
+                <form method="post">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="semester">Semester :</label><br>
+                            <select class="form-select" name="semester" id="semester" aria-label="Semester" required>>
+                                <option selected>Pilih semester</option>                            
+                                <option value="Ganjil">Ganjil</option>
+                                <option value="Genap">Genap</option>
+                            </select>
+                        </div>      
+                        <div class="mb-3">
+                            <label for="siswa">Siswa :</label>
+                            <select name="siswa" class="form-select" id="siswa" aria-label="Siswa" required>>
+                                <option selected disabled>Pilih Siswa</option>
+                                <?php
+                                // Ambil data siswa dari tabel siswa
+                                $querySiswa = mysqli_query($conn, "SELECT id_siswa, nama FROM siswa WHERE id_kelas = $kelas");
+                                while ($rowSiswa = mysqli_fetch_assoc($querySiswa)) {
+                                    echo '<option value="' . $rowSiswa['id_siswa'] . '">' . $rowSiswa['nama'] . '</option>';
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="mapel">Mata Pelajaran :</label>
+                            <select class="form-select" name="mapel" id="mapel" aria-label="mapel" required>
+                                <option selected disabled>Pilih Mapel</option>
+                                <?php
+                                // Ambil data kelas dari tabel kelas
+                                $queryMapel = mysqli_query($conn, "SELECT id_mapel, mapel FROM mapel");
+                                while ($rowMapel = mysqli_fetch_assoc($queryMapel)) {
+                                    echo '<option value="' . $rowMapel['id_mapel'] . '">' . $rowMapel['mapel'] . '</option>';
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="lingkupMateri">Lingkup Materi :</label>
+                            <select class="form-select" name="lingkupMateri" id="lingkupMateri" aria-label="lingkupMateri" required>
+                                <option selected disabled>Pilih LM</option>                         
+                                <option value="LM 1">LM 1</option>
+                                <option value="LM 2">LM 2</option>
+                                <option value="LM 3">LM 3</option>
+                                <option value="LM 4">LM 4</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tujuanPembelajaran">Tujuan Pembelajaran :</label>
+                            <select class="form-select" name="tujuanPembelajaran" id="tujuanPembelajaran" aria-label="tujuanPembelajaran" required>
+                                <option selected disabled>Pilih TP</option>                         
+                                <option value="TP1">TP 1</option>
+                                <option value="TP2">TP 2</option>
+                                <option value="TP3">TP 3</option>
+                                <option value="TP4">TP 4</option>
+                                <option value="TP5">TP 5</option>
+                                <option value="TP6">TP 6</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nilai">Nilai :</label>                        
+                            <input type="number" name="nilai" id="nilai" class="form-control" required max="100">                    
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary" name="tambahNilaiMapel">Simpan</button>
+                    </div>
+                </form>
             </div>
-            <!-- Modal Body -->
-            <form method="post">
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="semester">Semester :</label><br>
-                        <select class="form-select" name="semester" id="semester" aria-label="Semester" required>>
-                            <option selected>Pilih semester</option>                            
-                            <option value="Ganjil">Ganjil</option>
-                            <option value="Genap">Genap</option>
-                        </select>
-                    </div>      
-                    <div class="mb-3">
-                        <label for="siswa">Siswa :</label>
-                        <select name="siswa" class="form-select" id="siswa" aria-label="Siswa" required>>
-                            <option selected disabled>Pilih Siswa</option>
-                            <?php
-                            // Ambil data siswa dari tabel siswa
-                            $querySiswa = mysqli_query($conn, "SELECT id_siswa, nama FROM siswa WHERE id_kelas = $kelas");
-                            while ($rowSiswa = mysqli_fetch_assoc($querySiswa)) {
-                                echo '<option value="' . $rowSiswa['id_siswa'] . '">' . $rowSiswa['nama'] . '</option>';
-                            }
-                            ?>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="mapel">Mata Pelajaran :</label>
-                        <select class="form-select" name="mapel" id="mapel" aria-label="mapel" required>
-                            <option selected disabled>Pilih Mapel</option>
-                            <?php
-                            // Ambil data kelas dari tabel kelas
-                            $queryMapel = mysqli_query($conn, "SELECT id_mapel, mapel FROM mapel");
-                            while ($rowMapel = mysqli_fetch_assoc($queryMapel)) {
-                                echo '<option value="' . $rowMapel['id_mapel'] . '">' . $rowMapel['mapel'] . '</option>';
-                            }
-                            ?>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="lingkupMateri">Lingkup Materi :</label>
-                        <select class="form-select" name="lingkupMateri" id="lingkupMateri" aria-label="lingkupMateri" required>
-                            <option selected disabled>Pilih LM</option>                         
-                            <option value="LM 1">LM 1</option>
-                            <option value="LM 2">LM 2</option>
-                            <option value="LM 3">LM 3</option>
-                            <option value="LM 4">LM 4</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="tujuanPembelajaran">Tujuan Pembelajaran :</label>
-                        <select class="form-select" name="tujuanPembelajaran" id="tujuanPembelajaran" aria-label="tujuanPembelajaran" required>
-                            <option selected disabled>Pilih TP</option>                         
-                            <option value="TP1">TP 1</option>
-                            <option value="TP2">TP 2</option>
-                            <option value="TP3">TP 3</option>
-                            <option value="TP4">TP 4</option>
-                            <option value="TP5">TP 5</option>
-                            <option value="TP6">TP 6</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="nilai">Nilai :</label>                        
-                        <input type="number" name="nilai" id="nilai" class="form-control" required>                    
-                </div>
-                <div class="text-center">
-                    <button type="submit" class="btn btn-primary" name="tambahNilaiMapel">Simpan</button>
-                </div>
-            </form>
         </div>
     </div>
-</div>
+
+    <script>
+        // Mendapatkan nilai input
+    const nilai = document.getElementById("nilai").value;
+
+    // Memeriksa apakah nilai lebih dari 100
+    if (nilai > 100) {
+    // Menampilkan pesan error
+    alert("Nilai maksimal adalah 100");
+
+    // Mengatur nilai input ke 100
+    document.getElementById("nilai").value = 100;
+    }
+
+    </script>
 
 </html>

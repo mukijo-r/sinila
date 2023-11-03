@@ -186,34 +186,52 @@
         }
     }
 
-    // Edit Kategori Kas
-    if(isset($_POST['ubahKategoriKas'])){
-        $idKas = $_POST['idk'];
-        $jenisKas = $_POST['jenisKas'];
-        $kelompok = $_POST['kelompok'];
-        $idGuru = $_POST['guru'];
-        $kode = $_POST['kode'];
-        $keterangan = $_POST['keterangan'];
+    // 5. Edit Nilai Mapel
+    if(isset($_POST['ubahNilaiMapel'])){
+        $idNilaiMapel = $_POST['idNilaiMapel'];
+        $semester = $_POST['semester'];
+        $idSiswa = $_POST['siswa'];
+        $idMapel = $_POST['mapel'];
+        $lingkupMateri = $_POST['lingkupMateri'];
+        $tujuanPembelajaran = $_POST['tujuanPembelajaran'];
+        $nilai = $_POST['nilai'];
 
         try {
-            $queryUpdateKategori = "UPDATE `kategori` SET `nama_kategori`='$jenisKas', `kelompok`='$kelompok', `id_guru`='$idGuru', `kode`='$kode', `keterangan`='$keterangan' WHERE `id_kategori`='$idKas'";
+            $queryUpdateNilaiMapel = "UPDATE `nilai_mapel` 
+            SET 
+            `semester`='$semester',
+            `id_siswa`='$idSiswa',
+            `id_mapel`='$idMapel',
+            `lingkup_materi`='$lingkupMateri',
+            `tujuan_pembelajaran`='$tujuanPembelajaran',
+            `nilai`='$nilai'
+            WHERE
+            `id_nm`=$idNilaiMapel
+            ";
             
-            $kategori = mysqli_query($conn, $queryUpdateKategori);
+            $updateNilaiMapel = mysqli_query($conn, $queryUpdateNilaiMapel);
 
-            if (!$kategori) {
+            if (!$updateNilaiMapel) {
                 throw new Exception("Query update gagal"); // Lempar exception jika query gagal
             }
 
             // Query SELECT untuk memeriksa apakah data sudah masuk ke database
-
-            $queryResult = "SELECT * FROM kategori WHERE nama_kategori='$jenisKas' AND `kelompok`='$kelompok' AND `id_guru`='$idGuru' AND `kode`='$kode' AND `keterangan`='$keterangan'";
+            $queryResult = "SELECT * FROM `nilai_mapel` 
+            WHERE 
+            `semester`='$semester' AND 
+            `id_siswa`='$idSiswa' AND 
+            `id_mapel`='$idMapel' AND 
+            `lingkup_materi`='$lingkupMateri' AND 
+            `tujuan_pembelajaran`='$tujuanPembelajaran' AND  
+            `nilai`='$nilai'
+            ";
             $result = mysqli_query($conn, $queryResult);
 
             if ($result && mysqli_num_rows($result) === 1) {
                 // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
                 $_SESSION['flash_message'] = 'Ubah kategori berhasil';
                 $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
-                header('location:kategori_kas.php');
+                header('location:input_nilai_mapel.php');
                 exit;
             } else {
                 // Data tidak ada dalam database, itu berarti gagal
@@ -221,34 +239,34 @@
             }
         } catch (Exception $e) {
             // Tangani exception jika terjadi kesalahan
-            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryResult . $e->getMessage();
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryUpdateNilaiMapel . $e->getMessage();
             $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
             echo $queryInsertTabung;
-            header('location:kategori_kas.php');
+            header('location:input_nilai_mapel.php');
             exit;
         }
     }
 
-    // Hapus Kategori Kas
-    if(isset($_POST['hapusKategoriKas'])){
-        $idKas = $_POST['idk'];
+    // 6. Hapus Nilai Mapel
+    if(isset($_POST['hapusNilaiMapel'])){
+        $idNilaiMapel = $_POST['idNilaiMapel'];
 
         try {
-            $queryHapusKategori = "DELETE from `kategori` WHERE `id_kategori`='$idKas'";          
-            $kategori = mysqli_query($conn, $queryHapusKategori);
+            $queryHapusNilaiMapel = "DELETE FROM `nilai_mapel` WHERE `id_nm`='$idNilaiMapel'";          
+            $hapusNilaiMapel = mysqli_query($conn, $queryHapusNilaiMapel);
 
-            if (!$kategori) {
+            if (!$hapusNilaiMapel) {
                 throw new Exception("Query hapus gagal"); // Lempar exception jika query gagal
             }
 
             // Query SELECT untuk memeriksa apakah data sudah masuk ke database
-            $result = mysqli_query($conn, "SELECT * FROM kategori WHERE `id_kategori`='$idKas'");
+            $result = mysqli_query($conn, "SELECT * FROM `nilai_mapel` WHERE `id_nm`='$idNilaiMapel'");
 
             if ($result && mysqli_num_rows($result) === 0) {
                 // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
                 $_SESSION['flash_message'] = 'Hapus kategori berhasil';
                 $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
-                header('location:kategori_kas.php');
+                header('location:input_nilai_mapel.php');
                 exit;
             } else {
                 // Data masih ada dalam database, itu berarti gagal
@@ -256,10 +274,9 @@
             }
         } catch (Exception $e) {
             // Tangani exception jika terjadi kesalahan
-            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $e->getMessage();
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryHapusNilaiMapel . $e->getMessage();
             $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
-            echo $queryInsertTabung;
-            header('location:kategori_kas.php');
+            header('location:input_nilai_mapel.php');
             exit;
         }
     }
