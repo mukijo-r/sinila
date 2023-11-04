@@ -55,7 +55,7 @@ date_default_timezone_set('Asia/Jakarta');
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
-                                Daftar Transaksi Masuk
+                                Daftar Nilai 
                             </div>
                             <div class="card-body">
                                 <table id="datatablesSimple">
@@ -126,13 +126,13 @@ date_default_timezone_set('Asia/Jakarta');
                                                 <button type="button" class="btn btn-danger" name="hapusNilaiMapel" data-bs-toggle="modal" data-bs-target="#modalHapusNilaiSiswa<?=$idNilaiMapel;?>">Hapus</button> 
                                             </td>
                                         </tr>
-                                        <!-- Modal edit Transaksi Masuk Siswa -->
+                                        <!-- Modal edit Nilai Mapel Siswa -->
                                         <div class="modal fade" id="modalEditNilaiSiswa<?=$idNilaiMapel;?>">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <!-- Modal Header -->
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title">Edit Transaksi Masuk Siswa</h4>
+                                                        <h4 class="modal-title">Edit Nilai Mapel Siswa</h4>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                     </div>
                                                     <!-- Modal Body -->
@@ -209,14 +209,14 @@ date_default_timezone_set('Asia/Jakarta');
                                             </div>
                                         </div>
 
-                                    <!-- Modal Hapus Transaksi Masuk Siswa-->
+                                    <!-- Modal Hapus Nilai Mapel Siswa-->
                                     <div class="modal fade" id="modalHapusNilaiSiswa<?=$idNilaiMapel;?>">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
 
                                             <!-- Modal Header -->
                                             <div class="modal-header">
-                                                <h4 class="modal-title">Hapus Transaksi Siswa ini?</h4>
+                                                <h4 class="modal-title">Hapus Nilai Siswa ini?</h4>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                             </div>
 
