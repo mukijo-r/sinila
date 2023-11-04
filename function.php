@@ -144,8 +144,8 @@
 
         try {
             $queryInsertNilaiMapel = "INSERT INTO `nilai_mapel`
-            (`tanggal`, `id_tahun_Ajar`, `semester`, `id_siswa`, `id_mapel`, `lingkup_materi`, `tujuan_pembelajaran`, `nilai`, `guru_penilai`) 
-            VALUES ('$tanggal','$idTahunAjar','$semester','$idSiswa','$idMapel','$lingkupMateri','$tujuanPembelajaran','$nilai','$namaUser')";
+            (`tanggal`, `id_tahun_Ajar`, `semester`, `id_siswa`, `kelas`, `id_mapel`, `lingkup_materi`, `tujuan_pembelajaran`, `nilai`, `guru_penilai`) 
+            VALUES ('$tanggal','$idTahunAjar','$semester','$idSiswa', '$kelas', '$idMapel','$lingkupMateri','$tujuanPembelajaran','$nilai','$namaUser')";
                 
             $insertNilaiMapel = mysqli_query($conn, $queryInsertNilaiMapel);
 
@@ -161,6 +161,7 @@
             id_tahun_Ajar='$idTahunAjar' AND
             semester='$semester' AND
             id_siswa='$idSiswa' AND
+            kelas='$kelas' AND
             id_mapel='$idMapel' AND
             lingkup_materi='$lingkupMateri' AND
             tujuan_pembelajaran='$tujuanPembelajaran' AND
@@ -294,8 +295,8 @@
 
         try {
             $queryInsertNilaiPraktek = "INSERT INTO `nilai_praktek`
-            (`tanggal`, `id_tahun_Ajar`, `semester`, `id_siswa`, `kategori_praktek`, `nilai`, `guru_penilai`) 
-            VALUES ('$tanggal','$idTahunAjar','$semester','$idSiswa','$kategoriPraktek','$nilai','$namaUser')";
+            (`tanggal`, `id_tahun_Ajar`, `semester`, `kelas`, `id_siswa`, `kategori_praktek`, `nilai`, `guru_penilai`) 
+            VALUES ('$tanggal','$idTahunAjar','$semester','$kelas','$idSiswa','$kategoriPraktek','$nilai','$namaUser')";
                 
             $insertNilaiPraktek = mysqli_query($conn, $queryInsertNilaiPraktek);
 
@@ -310,6 +311,7 @@
             tanggal='$tanggal' AND
             id_tahun_Ajar='$idTahunAjar' AND
             semester='$semester' AND
+            kelas='$kelas' AND
             id_siswa='$idSiswa' AND
             kategori_praktek='$kategoriPraktek' AND
             nilai='$nilai'            
@@ -408,7 +410,7 @@
                 // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
                 $_SESSION['flash_message'] = 'Hapus kategori berhasil';
                 $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
-                header('location:input_nilai_mapel.php');
+                header('location:input_nilai_praktek.php');
                 exit;
             } else {
                 // Data masih ada dalam database, itu berarti gagal
@@ -418,7 +420,7 @@
             // Tangani exception jika terjadi kesalahan
             $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryHapusNilaiMapel . $e->getMessage();
             $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
-            header('location:input_nilai_mapel.php');
+            header('location:input_nilai_praktek.php');
             exit;
         }
     } 
@@ -436,8 +438,8 @@
 
         try {
             $queryInsertNilaiKepribadian = "INSERT INTO `nilai_kepribadian`
-            (`tanggal`, `id_tahun_Ajar`, `semester`, `id_siswa`, `kategori_kepribadian`, `nilai`, `guru_penilai`) 
-            VALUES ('$tanggal','$idTahunAjar','$semester','$idSiswa','$kategoriKepribadian','$nilai','$namaUser')";
+            (`tanggal`, `id_tahun_Ajar`, `semester`, `kelas`, `id_siswa`, `kategori_kepribadian`, `nilai`, `guru_penilai`) 
+            VALUES ('$tanggal','$idTahunAjar','$semester','$kelas','$idSiswa','$kategoriKepribadian','$nilai','$namaUser')";
                 
             $insertNilaiKepribadian = mysqli_query($conn, $queryInsertNilaiKepribadian);
 
@@ -469,7 +471,7 @@
             }
         } catch (Exception $e) {
             // Tangani exception jika terjadi kesalahan
-            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryInsertNilaiKepribadian . $e->getMessage();
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $e->getMessage();
             $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
             header('location:input_nilai_kepribadian.php');
             exit;
@@ -577,8 +579,8 @@
 
         try {
             $queryInsertNilaiCatatan = "INSERT INTO `nilai_catatan`
-            (`tanggal`, `id_tahun_Ajar`, `semester`, `id_siswa`, `catatan`, `guru_penilai`) 
-            VALUES ('$tanggal','$idTahunAjar','$semester','$idSiswa','$catatan','$namaUser')";
+            (`tanggal`, `id_tahun_Ajar`, `semester`, `kelas`, `id_siswa`, `catatan`, `guru_penilai`) 
+            VALUES ('$tanggal','$idTahunAjar','$semester','$kelas','$idSiswa','$catatan','$namaUser')";
                 
             $insertNilaiCatatan = mysqli_query($conn, $queryInsertNilaiCatatan);
 
@@ -593,6 +595,7 @@
             tanggal='$tanggal' AND
             id_tahun_Ajar='$idTahunAjar' AND
             semester='$semester' AND
+            kelas='$kelas' AND
             id_siswa='$idSiswa' AND
             catatan='$catatan'            
             ");

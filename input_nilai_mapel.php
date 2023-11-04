@@ -81,7 +81,6 @@ date_default_timezone_set('Asia/Jakarta');
                                     nm.*,
                                     ta.tahun_ajar AS tahun_ajar,
                                     s.nama AS nama_siswa,
-                                    s.id_kelas AS id_kelas,
                                     m.id_mapel as id_mapel,
                                     m.mapel as mapel
                                     FROM nilai_mapel nm
@@ -99,7 +98,7 @@ date_default_timezone_set('Asia/Jakarta');
                                         $tanggalTampil = date("d-m-Y", strtotime($tanggal));
                                         $tahunAjar = $data['tahun_ajar'];
                                         $semester = $data['semester'];                                      
-                                        $kelas = $data['id_kelas'];
+                                        $kelas = $data['kelas'];
                                         $idSiswa = $data['id_siswa'];
                                         $namaSiswa = $data['nama_siswa'];
                                         $idMapel = $data['id_mapel'];                                       

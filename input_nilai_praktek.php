@@ -78,8 +78,7 @@ date_default_timezone_set('Asia/Jakarta');
                                     $dataNilaiPraktek = mysqli_query($conn, "SELECT
                                     np.*,
                                     ta.tahun_ajar AS tahun_ajar,
-                                    s.nama AS nama_siswa,
-                                    s.id_kelas AS id_kelas
+                                    s.nama AS nama_siswa
                                     FROM nilai_praktek np
                                     LEFT JOIN tahun_ajar ta ON np.id_tahun_ajar = ta.id_tahun_ajar
                                     LEFT JOIN siswa s ON np.id_siswa = s.id_siswa
@@ -94,7 +93,7 @@ date_default_timezone_set('Asia/Jakarta');
                                         $tanggalTampil = date("d-m-Y", strtotime($tanggal));
                                         $tahunAjar = $data['tahun_ajar'];
                                         $semester = $data['semester'];                                      
-                                        $kelas = $data['id_kelas'];
+                                        $kelas = $data['kelas'];
                                         $idSiswa = $data['id_siswa'];
                                         $namaSiswa = $data['nama_siswa'];                                  
                                         $kategoriPraktek = $data['kategori_praktek'];

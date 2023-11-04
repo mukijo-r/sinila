@@ -94,7 +94,7 @@ date_default_timezone_set('Asia/Jakarta');
                                         $tanggalTampil = date("d-m-Y", strtotime($tanggal));
                                         $tahunAjar = $data['tahun_ajar'];
                                         $semester = $data['semester'];                                      
-                                        $kelas = $data['id_kelas'];
+                                        $kelas = $data['kelas'];
                                         $idSiswa = $data['id_siswa'];
                                         $namaSiswa = $data['nama_siswa'];                                  
                                         $kategoriKepribadian = $data['kategori_kepribadian'];
