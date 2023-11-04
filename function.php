@@ -711,6 +711,163 @@
         }
     }
 
+    // 10. Tambah Absen
+    if(isset($_POST['tambahAbsen'])){
+        $tanggalAbsen = $_POST['tanggalAbsen'];
+        $tanggalInput = date("Y-m-d", strtotime($tanggalAbsen));
+        $semester = $_POST['semester'];
+        $idSiswa = $_POST['siswa'];
+        $absen = $_POST['absen'];
+
+        $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
+        $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
+        $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];
+
+        try {
+            $queryInsertAbsen = "INSERT INTO `absensi`
+            (`id_tahun_ajar`, `semester`, `kelas`, `id_siswa`, `tanggal`, `absen`, `guru_pencatat`) 
+            VALUES 
+            ('$idTahunAjar','$semester','$kelas','$idSiswa','$tanggalInput','$absen','$namaUser')";
+                
+            $insertAbsen = mysqli_query($conn, $queryInsertAbsen);
+
+            if (!$insertAbsen) {
+                throw new Exception("Query insert gagal"); // Lempar exception jika query gagal
+            }
+
+            // Query SELECT untuk memeriksa apakah data sudah masuk ke database
+            $query = "SELECT * 
+            FROM absensi
+            WHERE 
+            `id_tahun_ajar`='$idTahunAjar' AND 
+            `semester`='$semester' AND 
+            `kelas`='$kelas' AND 
+            `id_siswa`='$idSiswa' AND 
+            `tanggal`='$tanggalInput' AND 
+            `absen`='$absen' AND 
+            `guru_pencatat`='$namaUser'";
+
+            $result = mysqli_query($conn, $query);
+
+            if ($result && mysqli_num_rows($result) > 0) {
+                // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
+                $_SESSION['flash_message'] = 'Tambah absen berhasil';
+                $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
+                header('location:input_absensi.php');
+                exit;
+            } else {
+                // Data tidak ada dalam database, itu berarti gagal
+                throw new Exception("Data tidak ditemukan setelah ditambahkan");
+            }
+        } catch (Exception $e) {
+            // Tangani exception jika terjadi kesalahan
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $e->getMessage();
+            $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
+            header('location:input_absensi.php');
+            exit;
+        }
+    }    
+
+    // 11. Ubah Absen
+    if(isset($_POST['ubahAbsen'])){
+        $idAbsen = $_POST['idAbsen'];
+        $tanggalAbsen = $_POST['tanggalAbsen'];
+        $tanggalInput = date("Y-m-d", strtotime($tanggalAbsen));
+        $semester = $_POST['semester'];
+        $idSiswa = $_POST['siswa'];
+        $absen = $_POST['absen'];
+
+        $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
+        $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
+        $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];
+
+        try {
+            $queryUpdateAbsen = "UPDATE `absensi` 
+            SET 
+            `id_tahun_ajar`='$idTahunAjar',
+            `semester`='$semester',
+            `kelas`='$kelas',
+            `id_siswa`='$idSiswa',
+            `tanggal`='$tanggalInput',
+            `absen`='$absen',
+            `guru_pencatat`='$namaUser' 
+            WHERE
+            `id_absen`='$idAbsen'
+            ";
+                
+            $updateAbsen = mysqli_query($conn, $queryUpdateAbsen);
+
+            if (!$updateAbsen) {
+                throw new Exception("Query update gagal"); // Lempar exception jika query gagal
+            }
+
+            // Query SELECT untuk memeriksa apakah data sudah masuk ke database
+            $query = "SELECT * 
+            FROM absensi
+            WHERE 
+            `id_tahun_ajar`='$idTahunAjar' AND 
+            `semester`='$semester' AND 
+            `kelas`='$kelas' AND 
+            `id_siswa`='$idSiswa' AND 
+            `tanggal`='$tanggalInput' AND 
+            `absen`='$absen' AND 
+            `guru_pencatat`='$namaUser'";
+
+            $result = mysqli_query($conn, $query);
+
+            if ($result && mysqli_num_rows($result) > 0) {
+                // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
+                $_SESSION['flash_message'] = 'Update absen berhasil';
+                $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
+                header('location:input_absensi.php');
+                exit;
+            } else {
+                // Data tidak ada dalam database, itu berarti gagal
+                throw new Exception("Data tidak ditemukan setelah diubah");
+            }
+        } catch (Exception $e) {
+            // Tangani exception jika terjadi kesalahan
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $query . $e->getMessage();
+            $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
+            header('location:input_absensi.php');
+            exit;
+        }
+    }
+    
+    // 12. Hapus Absen
+    if(isset($_POST['hapusAbsen'])){
+        $idAbsen = $_POST['idAbsen'];
+
+        try {
+            $queryHapusAbsen = "DELETE FROM `absensi` WHERE `id_absen`='$idAbsen'";          
+            $hapusAbsen = mysqli_query($conn, $queryHapusAbsen);
+
+            if (!$hapusAbsen) {
+                throw new Exception("Query hapus gagal"); // Lempar exception jika query gagal
+            }
+
+            // Query SELECT untuk memeriksa apakah data sudah masuk ke database
+            $result = mysqli_query($conn, "SELECT * FROM `absensi` WHERE `id_absen`='$idAbsen'");
+
+            if ($result && mysqli_num_rows($result) === 0) {
+                // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
+                $_SESSION['flash_message'] = 'Hapus nilai berhasil';
+                $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
+                header('location:input_absensi.php');
+                exit;
+            } else {
+                // Data masih ada dalam database, itu berarti gagal
+                throw new Exception("Data masih ada setelah dihapus");
+            }
+        } catch (Exception $e) {
+            // Tangani exception jika terjadi kesalahan
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $e->getMessage();
+            $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
+            header('location:input_absensi.php');
+            exit;
+        }
+    }
+
     // Ganti Password User
     if (isset($_POST['gantiPassword'])) {
         $username = $_POST['username'];
