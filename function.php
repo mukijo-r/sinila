@@ -421,7 +421,149 @@
             header('location:input_nilai_mapel.php');
             exit;
         }
-    }  
+    } 
+
+    // 7. Tambah Nilai Kepribadian
+    if(isset($_POST['tambahNilaiKepribadian'])){
+        $semester = $_POST['semester'];
+        $idSiswa = $_POST['siswa'];
+        $kategoriKepribadian = $_POST['kategoriKepribadian'];
+        $nilai = $_POST['nilai'];
+
+        $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
+        $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
+        $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];
+
+        try {
+            $queryInsertNilaiKepribadian = "INSERT INTO `nilai_kepribadian`
+            (`tanggal`, `id_tahun_Ajar`, `semester`, `id_siswa`, `kategori_kepribadian`, `nilai`, `guru_penilai`) 
+            VALUES ('$tanggal','$idTahunAjar','$semester','$idSiswa','$kategoriKepribadian','$nilai','$namaUser')";
+                
+            $insertNilaiKepribadian = mysqli_query($conn, $queryInsertNilaiKepribadian);
+
+            if (!$insertNilaiKepribadian) {
+                throw new Exception("Query insert gagal"); // Lempar exception jika query gagal
+            }
+
+            // Query SELECT untuk memeriksa apakah data sudah masuk ke database
+            $result = mysqli_query($conn, "SELECT * 
+            FROM nilai_kepribadian 
+            WHERE 
+            tanggal='$tanggal' AND
+            id_tahun_Ajar='$idTahunAjar' AND
+            semester='$semester' AND
+            id_siswa='$idSiswa' AND
+            kategori_kepribadian='$kategoriKepribadian' AND
+            nilai='$nilai'            
+            ");
+
+            if ($result && mysqli_num_rows($result) === 1) {
+                // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
+                $_SESSION['flash_message'] = 'Tambah nilai berhasil';
+                $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
+                header('location:input_nilai_kepribadian.php');
+                exit;
+            } else {
+                // Data tidak ada dalam database, itu berarti gagal
+                throw new Exception("Data tidak ditemukan setelah ditambahkan");
+            }
+        } catch (Exception $e) {
+            // Tangani exception jika terjadi kesalahan
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryInsertNilaiKepribadian . $e->getMessage();
+            $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
+            header('location:input_nilai_kepribadian.php');
+            exit;
+        }
+    }
+
+    // 8. Ubah Nilai Kepribadian
+    if(isset($_POST['ubahNilaiKepribadian'])){
+        $idNilaiKepribadian = $_POST['idNilaiKepribadian'];
+        $semester = $_POST['semester'];
+        $idSiswa = $_POST['siswa'];
+        $kategoriKepribadian = $_POST['kategoriKepribadian'];
+        $nilai = $_POST['nilai'];
+
+        try {
+            $queryUpdateNilaiKepribadian = "UPDATE `nilai_kepribadian` 
+            SET 
+            `semester`='$semester',
+            `id_siswa`='$idSiswa',
+            `kategori_kepribadian`='$kategoriKepribadian',
+            `nilai`='$nilai'
+            WHERE
+            `id_nk`=$idNilaiKepribadian
+            ";
+            
+            $updateNilaiKepribadian = mysqli_query($conn, $queryUpdateNilaiKepribadian);
+
+            if (!$updateNilaiKepribadian) {
+                throw new Exception("Query update gagal"); // Lempar exception jika query gagal
+            }
+
+            // Query SELECT untuk memeriksa apakah data sudah masuk ke database
+            $queryResult = "SELECT * FROM `nilai_kepribadian` 
+            WHERE 
+            `semester`='$semester' AND 
+            `id_siswa`='$idSiswa' AND 
+            `kategori_kepribadian`='$kategoriKepribadian' AND  
+            `nilai`='$nilai'
+            ";
+            $result = mysqli_query($conn, $queryResult);
+
+            if ($result && mysqli_num_rows($result) === 1) {
+                // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
+                $_SESSION['flash_message'] = 'Ubah nilai kepribadian berhasil';
+                $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
+                header('location:input_nilai_kepribadian.php');
+                exit;
+            } else {
+                // Data tidak ada dalam database, itu berarti gagal
+                throw new Exception("Data tidak ditemukan setelah diubah");
+            }
+        } catch (Exception $e) {
+            // Tangani exception jika terjadi kesalahan
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $e->getMessage();
+            $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
+            echo $queryInsertTabung;
+            header('location:input_nilai_kepribadian.php');
+            exit;
+        }
+    }
+
+    // 6. Hapus Nilai Kepribadian
+    if(isset($_POST['hapusNilaiKepribadian'])){
+        $idNilaiKepribadian = $_POST['idNilaiKepribadian'];
+
+        try {
+            $queryHapusNilaiKepribadian = "DELETE FROM `nilai_kepribadian` WHERE `id_nk`='$idNilaiKepribadian'";          
+            $hapusNilaiKepribadian = mysqli_query($conn, $queryHapusNilaiKepribadian);
+
+            if (!$hapusNilaiKepribadian) {
+                throw new Exception("Query hapus gagal"); // Lempar exception jika query gagal
+            }
+
+            // Query SELECT untuk memeriksa apakah data sudah masuk ke database
+            $result = mysqli_query($conn, "SELECT * FROM `nilai_kepribadian` WHERE `id_nk`='$idNilaiKepribadian'");
+
+            if ($result && mysqli_num_rows($result) === 0) {
+                // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
+                $_SESSION['flash_message'] = 'Hapus nilai berhasil';
+                $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
+                header('location:input_nilai_kepribadian.php');
+                exit;
+            } else {
+                // Data masih ada dalam database, itu berarti gagal
+                throw new Exception("Data masih ada setelah dihapus");
+            }
+        } catch (Exception $e) {
+            // Tangani exception jika terjadi kesalahan
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryHapusNilaiKepribadian . $e->getMessage();
+            $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
+            header('location:input_nilai_kepribadian.php');
+            exit;
+        }
+    } 
 
     // Ganti Password User
     if (isset($_POST['gantiPassword'])) {
