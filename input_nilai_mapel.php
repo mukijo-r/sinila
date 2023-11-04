@@ -81,12 +81,14 @@ date_default_timezone_set('Asia/Jakarta');
                                     nm.*,
                                     ta.tahun_ajar AS tahun_ajar,
                                     s.nama AS nama_siswa,
+                                    s.id_kelas AS id_kelas,
                                     m.id_mapel as id_mapel,
                                     m.mapel as mapel
                                     FROM nilai_mapel nm
                                     LEFT JOIN tahun_ajar ta ON nm.id_tahun_ajar = ta.id_tahun_ajar
                                     LEFT JOIN siswa s ON nm.id_siswa = s.id_siswa
                                     LEFT JOIN mapel m ON nm.id_mapel = m.id_mapel
+                                    WHERE id_kelas = $kelas
                                     ORDER BY nm.tanggal DESC;");
 
                                     $totalEntries = mysqli_num_rows($dataNilaiMapel);
