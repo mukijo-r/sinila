@@ -37,7 +37,7 @@ if (isset($_SESSION['kelas'])) {
 
             /* Style untuk kontainer gambar dengan border melingkar */
             .logo {
-                border-radius: 100%; /* Membuat border melingkar dengan radius 50% dari lebar atau tinggi kontainer */
+                border-radius: 50%; /* Membuat border melingkar dengan radius 50% dari lebar atau tinggi kontainer */
                 overflow: hidden; /* Menghilangkan bagian gambar yang mungkin melampaui border */
             }
 
@@ -81,6 +81,7 @@ if (isset($_SESSION['kelas'])) {
                                     <a class="nav-link" href="daftar_nilai_mapel.php">Daftar Nilai Mapel</a>
                                     <a class="nav-link" href="input_nilai_praktek.php">Nilai Praktek</a>
                                     <a class="nav-link" href="input_nilai_kepribadian.php">Nilai Kepribadian</a>
+                                    <a class="nav-link" href="input_nilai_catatan.php">Nilai Catatan</a>
                                     <a class="nav-link" href="transaksi_keluar_siswa.php">Absensi</a>
                                 </nav>
                             </div>

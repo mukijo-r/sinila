@@ -563,7 +563,150 @@
             header('location:input_nilai_kepribadian.php');
             exit;
         }
-    } 
+    }
+    
+    // 7. Tambah Nilai Catatan
+    if(isset($_POST['tambahNilaiCatatan'])){
+        $semester = $_POST['semester'];
+        $idSiswa = $_POST['siswa'];
+        $catatan = $_POST['catatan'];
+
+        $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
+        $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
+        $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];
+
+        try {
+            $queryInsertNilaiCatatan = "INSERT INTO `nilai_catatan`
+            (`tanggal`, `id_tahun_Ajar`, `semester`, `id_siswa`, `catatan`, `guru_penilai`) 
+            VALUES ('$tanggal','$idTahunAjar','$semester','$idSiswa','$catatan','$namaUser')";
+                
+            $insertNilaiCatatan = mysqli_query($conn, $queryInsertNilaiCatatan);
+
+            if (!$insertNilaiCatatan) {
+                throw new Exception("Query insert gagal"); // Lempar exception jika query gagal
+            }
+
+            // Query SELECT untuk memeriksa apakah data sudah masuk ke database
+            $result = mysqli_query($conn, "SELECT * 
+            FROM nilai_catatan
+            WHERE 
+            tanggal='$tanggal' AND
+            id_tahun_Ajar='$idTahunAjar' AND
+            semester='$semester' AND
+            id_siswa='$idSiswa' AND
+            catatan='$catatan'            
+            ");
+
+            if ($result && mysqli_num_rows($result) === 1) {
+                // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
+                $_SESSION['flash_message'] = 'Tambah catatan berhasil';
+                $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
+                header('location:input_nilai_catatan.php');
+                exit;
+            } else {
+                // Data tidak ada dalam database, itu berarti gagal
+                throw new Exception("Data tidak ditemukan setelah ditambahkan");
+            }
+        } catch (Exception $e) {
+            // Tangani exception jika terjadi kesalahan
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryInsertNilaiCatatan . $e->getMessage();
+            $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
+            header('location:input_nilai_catatan.php');
+            exit;
+        }
+    }
+
+    // 8. Ubah Nilai Catatan
+    if(isset($_POST['ubahNilaiCatatan'])){
+        $idNilaiCatatan = $_POST['idNilaiCatatan'];
+        $semester = $_POST['semester'];
+        $idSiswa = $_POST['siswa'];
+        $catatan = $_POST['catatan'];
+
+        $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
+        $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
+        $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];
+
+        try {
+            $queryUpdateNilaiCatatan = "UPDATE `nilai_catatan` 
+            SET
+            `id_tahun_ajar`='$idTahunAjar',
+            `semester`='$semester',
+            `id_siswa`='$idSiswa',
+            `catatan`='$catatan'
+            WHERE 
+            `id_nc`='$idNilaiCatatan'
+            ";
+                
+            $updateNilaiCatatan = mysqli_query($conn, $queryUpdateNilaiCatatan);
+
+            if (!$updateNilaiCatatan) {
+                throw new Exception("Query update gagal"); // Lempar exception jika query gagal
+            }
+
+            // Query SELECT untuk memeriksa apakah data sudah masuk ke database
+            $result = mysqli_query($conn, "SELECT * 
+            FROM nilai_catatan
+            WHERE 
+            tanggal='$tanggal' AND
+            id_tahun_Ajar='$idTahunAjar' AND
+            semester='$semester' AND
+            id_siswa='$idSiswa' AND
+            catatan='$catatan'            
+            ");
+
+            if ($result && mysqli_num_rows($result) === 1) {
+                // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
+                $_SESSION['flash_message'] = 'Ubah catatan berhasil';
+                $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
+                header('location:input_nilai_catatan.php');
+                exit;
+            } else {
+                // Data tidak ada dalam database, itu berarti gagal
+                throw new Exception("Data tidak ditemukan setelah diubah");
+            }
+        } catch (Exception $e) {
+            // Tangani exception jika terjadi kesalahan
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryUpdateNilaiCatatan . $e->getMessage();
+            $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
+            header('location:input_nilai_catatan.php');
+            exit;
+        }
+    }
+
+    // 9. Hapus Nilai Catatan
+    if(isset($_POST['hapusNilaiCatatan'])){
+        $idNilaiCatatan = $_POST['idNilaiCatatan'];
+
+        try {
+            $queryHapusNilaiCatatan = "DELETE FROM `nilai_catatan` WHERE `id_nc`='$idNilaiCatatan'";          
+            $hapusNilaiCatatan = mysqli_query($conn, $queryHapusNilaiCatatan);
+
+            if (!$hapusNilaiCatatan) {
+                throw new Exception("Query hapus gagal"); // Lempar exception jika query gagal
+            }
+
+            // Query SELECT untuk memeriksa apakah data sudah masuk ke database
+            $result = mysqli_query($conn, "SELECT * FROM `nilai_catatan` WHERE `id_nc`='$idNilaiCatatan'");
+
+            if ($result && mysqli_num_rows($result) === 0) {
+                // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
+                $_SESSION['flash_message'] = 'Hapus nilai berhasil';
+                $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
+                header('location:input_nilai_catatan.php');
+                exit;
+            } else {
+                // Data masih ada dalam database, itu berarti gagal
+                throw new Exception("Data masih ada setelah dihapus");
+            }
+        } catch (Exception $e) {
+            // Tangani exception jika terjadi kesalahan
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $e->getMessage();
+            $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
+            header('location:input_nilai_catatan.php');
+            exit;
+        }
+    }
 
     // Ganti Password User
     if (isset($_POST['gantiPassword'])) {
@@ -638,5 +781,9 @@
             });";
         }
     }
+
+
+
+    
 
 ?>
