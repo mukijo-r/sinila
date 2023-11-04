@@ -35,7 +35,7 @@ date_default_timezone_set('Asia/Jakarta');
                         <div class="container-fluid px-4">
                             <div class="row">
                                 <div class="col-md-2">
-                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalTambahNilaiPaktek">
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalTambahNilaiPraktek">
                                         Input Nilai
                                     </button>
                                 </div>
@@ -112,12 +112,12 @@ date_default_timezone_set('Asia/Jakarta');
                                             <td><?=$nilai;?></td>
                                             <td><?=$guruPenilai;?></td>
                                             <td>
-                                                <button type="button" class="btn btn-warning" name="tblEdit" data-bs-toggle="modal" data-bs-target="#modalEditNilaiPaktek<?=$idNilaiPraktek;?>">Edit</button>
-                                                <button type="button" class="btn btn-danger" name="tblHapus" data-bs-toggle="modal" data-bs-target="#modalHapusNilaiPaktek<?=$idNilaiPraktek;?>">Hapus</button> 
+                                                <button type="button" class="btn btn-warning" name="tblEdit" data-bs-toggle="modal" data-bs-target="#modalEditNilaiPraktek<?=$idNilaiPraktek;?>">Edit</button>
+                                                <button type="button" class="btn btn-danger" name="tblHapus" data-bs-toggle="modal" data-bs-target="#modalHapusNilaiPraktek<?=$idNilaiPraktek;?>">Hapus</button> 
                                             </td>
                                         </tr>
                                         <!-- Modal edit Nilai Praktek Siswa -->
-                                        <div class="modal fade" id="modalEditNilaiPaktek<?=$idNilaiPraktek;?>">
+                                        <div class="modal fade" id="modalEditNilaiPraktek<?=$idNilaiPraktek;?>">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <!-- Modal Header -->
@@ -150,7 +150,7 @@ date_default_timezone_set('Asia/Jakarta');
                                                                 </select>
                                                             </div>
                                                             <div class="mb-3">
-                                                                <label for="kategoriPraktek">Kategori Paktek :</label>
+                                                                <label for="kategoriPraktek">Kategori Praktek :</label>
                                                                 <select class="form-select" name="kategoriPraktek" id="kategoriPraktek" aria-label="kategoriPraktek" required>
                                                                     <option value="<?=$kategoriPraktek;?>"><?=$kategoriPraktek;?></option>                          
                                                                     <option value="Seni Tari">Seni Tari</option>
@@ -182,7 +182,7 @@ date_default_timezone_set('Asia/Jakarta');
                                         </div>
 
                                     <!-- Modal Hapus Nilai Praktek Siswa-->
-                                    <div class="modal fade" id="modalHapusNilaiPaktek<?=$idNilaiPraktek;?>">
+                                    <div class="modal fade" id="modalHapusNilaiPraktek<?=$idNilaiPraktek;?>">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
 
@@ -192,8 +192,7 @@ date_default_timezone_set('Asia/Jakarta');
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                             </div>
 
-                                            <!-- Modal body -->
-                                            
+                                            <!-- Modal body -->                                            
                                             <form method="post">
                                             <div class="modal-body">
                                             <h5>Anda yakin ingin menghapus data nilai <b><?=$nilai;?></b> atas nama <u><?=$namaSiswa;?></u>?</h5>
@@ -207,11 +206,8 @@ date_default_timezone_set('Asia/Jakarta');
                                             </form>       
                                             </div>
                                         </div>
-
-
                                     <?php
                                     };
-
                                     ?>
                                     </tbody>
                                 </table>
@@ -230,13 +226,13 @@ date_default_timezone_set('Asia/Jakarta');
         <script src="js/datatables-simple-demo.js"></script>   
     </body>   
 
-    <!-- Modal Tambah Nilai Paktek Siswa -->
-    <div class="modal fade" id="modalTambahNilaiPaktek">
+    <!-- Modal Tambah Nilai Praktek Siswa -->
+    <div class="modal fade" id="modalTambahNilaiPraktek">
         <div class="modal-dialog">
             <div class="modal-content">
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h4 class="modal-title">Tambah Nilai Paktek Siswa kelas <?=$kelas;?></h4>
+                    <h4 class="modal-title">Tambah Nilai Praktek Siswa kelas <?=$kelas;?></h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <!-- Modal Body -->
@@ -264,7 +260,7 @@ date_default_timezone_set('Asia/Jakarta');
                             </select>
                         </div>                        
                         <div class="mb-3">
-                            <label for="kategoriPraktek">Kategori Paktek :</label>
+                            <label for="kategoriPraktek">Kategori Praktek :</label>
                             <select class="form-select" name="kategoriPraktek" id="kategoriPraktek" aria-label="kategoriPraktek" required>
                                 <option selected disabled>Pilih Kategori</option>                         
                                 <option value="Seni Tari">Seni Tari</option>
