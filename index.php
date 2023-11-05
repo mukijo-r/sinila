@@ -2,30 +2,10 @@
 require 'function.php';
 require 'cek.php';
 require 'config.php';
-
-//session_start();
-
-// if (isset($_SESSION['user'])) {
-//     $username = $_SESSION['user'];
-// } else {
-//     // Pengguna tidak masuk. Lakukan sesuatu, seperti mengarahkan mereka kembali ke halaman login.
-//     header('location: login.php');
-// }
-
-// if (isset($_SESSION['tahunAjar'])) {
-//     $tahunAjar = $_SESSION['tahunAjar'];
-// }
-
-// if (isset($_SESSION['kelas'])) {
-//     $kelas = $_SESSION['kelas'];
-// }
-
-// $queryUser = mysqli_query($conn, "SELECT nama_lengkap FROM users WHERE username = '$username'");
-// $rowUser = mysqli_fetch_array($queryUser);
-// $namaUser = $rowUser['nama_lengkap'];
-
-
-
+session_start();
+$queryUser = mysqli_query($conn, "SELECT nama_lengkap FROM users WHERE username = '$username'");
+$rowUser = mysqli_fetch_array($queryUser);
+$namaUser = $rowUser['nama_lengkap']; 
 ?>
 
 <!DOCTYPE html>
@@ -65,7 +45,7 @@ require 'config.php';
     <body class="sb-nav-fixed">
         <?php include 'navbar.php'; ?>
         <div id="layoutSidenav">
-            <?php include 'sidebar.php'; ?><?=$kelas;?>
+            <?php include 'sidebar.php'; ?>
             <div id="layoutSidenav_content" class="with-background">
                 <main>
                     <div class="container-fluid px-4" >

@@ -77,10 +77,12 @@ date_default_timezone_set('Asia/Jakarta');
                                     $dataNilaiCatatan = mysqli_query($conn, "SELECT
                                     nc.*,
                                     ta.tahun_ajar AS tahun_ajar,
-                                    s.nama AS nama_siswa
+                                    s.nama AS nama_siswa,
+                                    s.id_kelas AS id_kelas
                                     FROM nilai_catatan nc
                                     LEFT JOIN tahun_ajar ta ON nc.id_tahun_ajar = ta.id_tahun_ajar
                                     LEFT JOIN siswa s ON nc.id_siswa = s.id_siswa
+                                    WHERE id_kelas = $kelas
                                     ORDER BY nc.tanggal DESC;");
 
                                     $totalEntries = mysqli_num_rows($dataNilaiCatatan);

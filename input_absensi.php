@@ -77,10 +77,12 @@ date_default_timezone_set('Asia/Jakarta');
                                     $dataAbsen = mysqli_query($conn, "SELECT
                                     ab.*,
                                     ta.tahun_ajar AS tahun_ajar,
-                                    s.nama AS nama_siswa
+                                    s.nama AS nama_siswa,
+                                    s.id_kelas AS id_kelas
                                     FROM absensi ab
                                     LEFT JOIN tahun_ajar ta ON ab.id_tahun_ajar = ta.id_tahun_ajar
                                     LEFT JOIN siswa s ON ab.id_siswa = s.id_siswa
+                                    WHERE id_kelas = $kelas
                                     ORDER BY ab.id_absen DESC;");
 
                                     $totalEntries = mysqli_num_rows($dataAbsen);

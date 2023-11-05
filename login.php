@@ -1,6 +1,39 @@
 <?php
 include 'function.php';
-require 'config.php';
+//require 'config.php';
+
+$conn = mysqli_connect("localhost:3306","root","","sdk");
+//1. login
+if (isset($_POST['login'])) {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $tahunAjar = $_POST['tahunAjar'];
+    $kelas = $_POST['kelas'];
+    // Dapatkan kata sandi terenkripsi dari database
+    $result = mysqli_query($conn, "SELECT * FROM users WHERE username='$username'");
+    if ($row = mysqli_fetch_assoc($result)) {
+        $hashedPassword = $row['password'];
+
+        // Periksa apakah kata sandi yang dimasukkan sesuai dengan yang terenkripsi
+        if (password_verify($password, $hashedPassword)) {
+            // Kata sandi cocok, beri izin login
+            $_SESSION['user'] = $username; // Simpan nama user dalam sesi
+            $_SESSION['log'] = 'True';
+            $_SESSION['tahunAjar'] = $tahunAjar;
+            $_SESSION['kelas'] = $kelas;
+            header('location:index.php');
+            
+        } else {
+            // Kata sandi tidak cocok, arahkan kembali ke halaman login
+            header('location:login.php');
+        }
+    } else {
+        // Tidak ada akun dengan username tersebut
+        header('location:login.php');
+    }
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -95,6 +128,7 @@ require 'config.php';
                                             <div class="d-flex justify-content-center mt-4 mb-0">
                                                 <a class="small" href="#.html"></a>
                                                 <button class="btn btn-primary mx-auto" name="login">Login</button>
+                                                
                                             </div>
                                         </form>
                                     </div>
@@ -114,4 +148,8 @@ require 'config.php';
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
     </body>
+
+    <?php 
+          
+        ?>
 </html>

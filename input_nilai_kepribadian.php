@@ -83,6 +83,7 @@ date_default_timezone_set('Asia/Jakarta');
                                     FROM nilai_kepribadian nk
                                     LEFT JOIN tahun_ajar ta ON nk.id_tahun_ajar = ta.id_tahun_ajar
                                     LEFT JOIN siswa s ON nk.id_siswa = s.id_siswa
+                                    WHERE id_kelas = $kelas
                                     ORDER BY nk.tanggal DESC;");
 
                                     $totalEntries = mysqli_num_rows($dataNilaiKepribadian);
