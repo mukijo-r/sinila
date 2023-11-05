@@ -3,6 +3,10 @@ require 'function.php';
 require 'cek.php';
 require 'config.php';
 date_default_timezone_set('Asia/Jakarta');
+
+$queryUser = mysqli_query($conn, "SELECT nama_lengkap FROM users WHERE username = '$username'");
+$rowUser = mysqli_fetch_array($queryUser);
+$namaUser = $rowUser['nama_lengkap']; 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -83,7 +87,7 @@ date_default_timezone_set('Asia/Jakarta');
                                     LEFT JOIN tahun_ajar ta ON kk.id_tahun_ajar = ta.id_tahun_ajar
                                     LEFT JOIN siswa s ON kk.id_siswa = s.id_siswa
                                     WHERE id_kelas = $kelas
-                                    ORDER BY kk.tanggal DESC;");
+                                    ORDER BY kk.id_kn DESC;");
 
                                     $totalEntries = mysqli_num_rows($dataKenaikanKelas);
                                     $i = $totalEntries;
@@ -98,7 +102,7 @@ date_default_timezone_set('Asia/Jakarta');
                                         $idSiswa = $data['id_siswa'];
                                         $namaSiswa = $data['nama_siswa'];                                  
                                         $status = $data['status'];
-                                        $guruPenilai = $data['guru_penilai'];  
+                                        $guruPenilai = $data['guru_pencatat'];  
                                         ?>
                                         <tr>
                                             <td><?=$i--;?></td>
@@ -120,20 +124,16 @@ date_default_timezone_set('Asia/Jakarta');
                                                 <div class="modal-content">
                                                     <!-- Modal Header -->
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title">Ubah Nilai Catatan Siswa kelas <?=$kelas;?></h4>
+                                                        <h4 class="modal-title">Ubah Kenaikan Kelas <?=$kelas;?></h4>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                     </div>
                                                     <!-- Modal Body -->
                                                     <form method="post">
                                                         <div class="modal-body">
                                                             <div class="mb-3">
-                                                                <label for="semester">Semester :</label><br>
-                                                                <select class="form-select" name="semester" id="semester" aria-label="Semester" required>
-                                                                    <option value="<?=$semester;?>"><?=$semester;?></option>                            
-                                                                    <option value="Ganjil">Ganjil</option>
-                                                                    <option value="Genap">Genap</option>
-                                                                </select>
-                                                            </div>      
+                                                                <label for="tanggalKenaikan">Tanggal Kenaikan Kelas <?=$tanggal;?>:</label>       
+                                                                <input type="date" name="tanggalKenaikan" value="<?=$tanggal;?>" class="form-control">
+                                                            </div>
                                                             <div class="mb-3">
                                                                 <label for="siswa">Siswa :</label>
                                                                 <select name="siswa" class="form-select" id="siswa" aria-label="Siswa" required>
@@ -148,12 +148,17 @@ date_default_timezone_set('Asia/Jakarta');
                                                                 </select>
                                                             </div>                        
                                                             <div class="mb-3">
-                                                                <label for="catatan">Catatan :</label>
-                                                                <input type="text" name="catatan" id="catatan" value="<?=$catatan;?>" class="form-control" required>
+                                                                <label for="kenaikan">Status :</label>
+                                                                <select name="kenaikan" class="form-select" id="kenaikan" aria-label="Kenaikkan" required>
+                                                                    <option value="<?=$status;?>"><?=$status;?></option>
+                                                                    <option value="Naik Kelas">Naik Kelas</option>
+                                                                    <option value="Tidak Naik Kelas">Tidak Naik Kelas</option>
+                                                                </select>
                                                             </div>
                                                             <div class="text-center">
-                                                                <input type="hidden" name="idNilaiCatatan" value="<?=$idKenaikanKelas;?>">
-                                                                <button type="submit" class="btn btn-primary" name="ubahNilaiCatatan">Simpan</button>
+                                                                <input type="hidden" name="idKenaikkanKelas" value="<?=$idKenaikanKelas;?>">
+                                                                <input type="hidden" name="namaUser" value="<?=$namaUser;?>">
+                                                                <button type="submit" class="btn btn-primary" name="ubahKenaikkanKelas">Simpan</button>
                                                             </div>
                                                         </div>
                                                     </form>
@@ -219,7 +224,12 @@ date_default_timezone_set('Asia/Jakarta');
                 </div>
                 <!-- Modal Body -->
                 <form method="post">
-                    <div class="modal-body">   
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="tanggalKenaikan">Tanggal Naik Kelas :</label>       
+                            <?php $tanggalSaatIni = date('Y-m-d');?>
+                            <input type="date" name="tanggalKenaikan" value="<?=$tanggalSaatIni;?>" class="form-control">
+                        </div>   
                         <div class="mb-3">
                             <label for="siswa">Siswa :</label>
                             <select name="siswa" class="form-select" id="siswa" aria-label="Siswa" required>
@@ -235,15 +245,16 @@ date_default_timezone_set('Asia/Jakarta');
                             </select>
                         </div>                        
                         <div class="mb-3">
-                            <label for="kenaikan">Aksi :</label>
-                            <select name="siswa" class="form-select" id="siswa" aria-label="Siswa" required>
+                            <label for="kenaikan">Status :</label>
+                            <select name="kenaikan" class="form-select" id="kenaikan" aria-label="Kenaikkan" required>
                                 <option selected disabled>Naik/Tidak Naik</option>
                                 <option value="Naik Kelas">Naik Kelas</option>
                                 <option value="Tidak Naik Kelas">Tidak Naik Kelas</option>
                             </select>
                         </div>
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary" name="tambahNilaiCatatan">Simpan</button>
+                            <input type="hidden" name="namaUser" value="<?=$namaUser;?>">
+                            <button type="submit" class="btn btn-primary" name="tambahKenaikkanKelas">Simpan</button>
                         </div>
                     </div>
                 </form>

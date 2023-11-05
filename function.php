@@ -18,11 +18,79 @@
     $kelas = $_SESSION['kelas'];
     }
 
-    $queryUser = mysqli_query($conn, "SELECT nama_lengkap FROM users WHERE username = '$username'");
-    $rowUser = mysqli_fetch_array($queryUser);
-    $namaUser = $rowUser['nama_lengkap']; 
+    // 1. Ganti Password User
+    if (isset($_POST['gantiPassword'])) {
+        $username = $_POST['username'];
+        $passwordLama = $_POST['passwordLama'];
+        $password1 = $_POST['passwordBaru'];
+        $password2 = $_POST['confirmPasswordBaru'];
 
-     
+        //Cek user lama 
+        $checkPasswordQuery = "SELECT `password` FROM `users` WHERE `username` = '$username'";
+        $checkPasswordResult = mysqli_query($conn, $checkPasswordQuery);
+        $dataPassword = mysqli_fetch_assoc($checkPasswordResult);
+        $password = $dataPassword['password'];
+
+        if (password_verify($passwordLama, $password)) {
+            //Cek password input sama
+            if ($password1 == $password2) {
+                    $password = password_hash($password1, PASSWORD_BCRYPT);
+                
+                // Coba jalankan query update
+                $queryUpdateUser = "UPDATE `users` 
+                SET `password`='$password'
+                WHERE
+                `username`='$username'
+                ";
+                $UpdateUser = mysqli_query($conn, $queryUpdateUser);
+
+                $checkUserQuery = "SELECT * FROM `users` WHERE `username` = '$username' AND `password`='$password'";
+                $checkUserResult = mysqli_query($conn, $checkUserQuery);
+
+                // Setelah berhasil mengubah password
+                if (mysqli_num_rows($checkUserResult) == 1) {
+
+                    $sweetAlert = "Swal.fire({
+                        title: 'Sukses!',
+                        text: 'Password berhasil diubah.',
+                        icon: 'success',
+                        timer: 2000,
+                        timerProgressBar: true,
+                        showConfirmButton: false
+                    });";
+
+                } else {
+                    // Gagal menambahkan akun
+                    $sweetAlert = "Swal.fire({
+                        title: 'Gagal!',
+                        text: 'Ubah password gagal.',
+                        icon: 'error',
+                        timer: 2000,
+                        timerProgressBar: true,
+                        showConfirmButton: false
+                    });";
+                }
+            } else {
+                $sweetAlert = "Swal.fire({
+                    title: 'Gagal!',
+                    text: 'Password tidak sama. Ubah password gagal.',
+                    icon: 'error',
+                    timer: 2000,
+                    timerProgressBar: true,
+                    showConfirmButton: false
+                });";
+            }
+        } else {
+            $sweetAlert = "Swal.fire({
+                title: 'Gagal!',
+                text: 'Password lama salah. $passwordLamaEncrypted',
+                icon: 'error',
+                timer: 2000,
+                timerProgressBar: true,
+                showConfirmButton: false
+            });";
+        }
+    }     
   
     // 2. Tambah Mapel
     if(isset($_POST['tambahMapel'])){
@@ -103,6 +171,7 @@
         $lingkupMateri = $_POST['lingkupMateri'];
         $tujuanPembelajaran = $_POST['tujuanPembelajaran'];
         $nilai = $_POST['nilai'];
+        $namaUser = $_POST['namaUser'];
 
         $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
         $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
@@ -162,6 +231,7 @@
         $lingkupMateri = $_POST['lingkupMateri'];
         $tujuanPembelajaran = $_POST['tujuanPembelajaran'];
         $nilai = $_POST['nilai'];
+        $namaUser = $_POST['namaUser'];
 
         try {
             $queryUpdateNilaiMapel = "UPDATE `nilai_mapel` 
@@ -254,6 +324,7 @@
         $idSiswa = $_POST['siswa'];
         $kategoriPraktek = $_POST['kategoriPraktek'];
         $nilai = $_POST['nilai'];
+        $namaUser = $_POST['namaUser'];
 
         $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
         $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
@@ -309,6 +380,7 @@
         $idSiswa = $_POST['siswa'];
         $kategoriPraktek = $_POST['kategoriPraktek'];
         $nilai = $_POST['nilai'];
+        $namaUser = $_POST['namaUser'];
 
         try {
             $queryUpdateNilaiPraktek = "UPDATE `nilai_praktek` 
@@ -397,6 +469,7 @@
         $idSiswa = $_POST['siswa'];
         $kategoriKepribadian = $_POST['kategoriKepribadian'];
         $nilai = $_POST['nilai'];
+        $namaUser = $_POST['namaUser'];
 
         $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
         $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
@@ -451,6 +524,7 @@
         $idSiswa = $_POST['siswa'];
         $kategoriKepribadian = $_POST['kategoriKepribadian'];
         $nilai = $_POST['nilai'];
+        $namaUser = $_POST['namaUser'];
 
         try {
             $queryUpdateNilaiKepribadian = "UPDATE `nilai_kepribadian` 
@@ -538,6 +612,7 @@
         $semester = $_POST['semester'];
         $idSiswa = $_POST['siswa'];
         $catatan = $_POST['catatan'];
+        $namaUser = $_POST['namaUser'];
 
         $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
         $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
@@ -591,6 +666,7 @@
         $semester = $_POST['semester'];
         $idSiswa = $_POST['siswa'];
         $catatan = $_POST['catatan'];
+        $namaUser = $_POST['namaUser'];
 
         $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
         $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
@@ -684,6 +760,7 @@
         $semester = $_POST['semester'];
         $idSiswa = $_POST['siswa'];
         $absen = $_POST['absen'];
+        $namaUser = $_POST['namaUser'];
 
         $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
         $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
@@ -742,6 +819,7 @@
         $semester = $_POST['semester'];
         $idSiswa = $_POST['siswa'];
         $absen = $_POST['absen'];
+        $namaUser = $_POST['namaUser'];
 
         $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
         $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
@@ -834,79 +912,63 @@
         }
     }
 
-    // Ganti Password User
-    if (isset($_POST['gantiPassword'])) {
-        $username = $_POST['username'];
-        $passwordLama = $_POST['passwordLama'];
-        $password1 = $_POST['passwordBaru'];
-        $password2 = $_POST['confirmPasswordBaru'];
+    // 13. Tambah Status Naik/Tinggal Kelas
+    if(isset($_POST['tambahKenaikkanKelas'])){
+        $tanggalKenaikan = $_POST['tanggalKenaikan'];
+        $tanggalInput = date("Y-m-d", strtotime($tanggalKenaikan));
+        $semester = "Genap";
+        $idSiswa = $_POST['siswa'];
+        $kenaikan = $_POST['kenaikan']; 
+        $namaUser = $_POST['namaUser'];       
 
-        //Cek user lama 
-        $checkPasswordQuery = "SELECT `password` FROM `users` WHERE `username` = '$username'";
-        $checkPasswordResult = mysqli_query($conn, $checkPasswordQuery);
-        $dataPassword = mysqli_fetch_assoc($checkPasswordResult);
-        $password = $dataPassword['password'];
+        $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
+        $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
+        $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];
 
-        if (password_verify($passwordLama, $password)) {
-            //Cek password input sama
-            if ($password1 == $password2) {
-                    $password = password_hash($password1, PASSWORD_BCRYPT);
+        try {
+            $queryInsertKenaikkanKelas = "INSERT INTO `kenaikan_kelas`
+            (`tanggal`, `id_tahun_ajar`, `semester`, `kelas`, `id_siswa`, `status`, `guru_pencatat`) 
+            VALUES 
+            ('$tanggalInput ','$idTahunAjar','$semester','$kelas','$idSiswa','$kenaikan','$namaUser')";
                 
-                // Coba jalankan query update
-                $queryUpdateUser = "UPDATE `users` 
-                SET `password`='$password'
-                WHERE
-                `username`='$username'
-                ";
-                $UpdateUser = mysqli_query($conn, $queryUpdateUser);
+            $insertKenaikkanKelas = mysqli_query($conn, $queryInsertKenaikkanKelas);
 
-                $checkUserQuery = "SELECT * FROM `users` WHERE `username` = '$username' AND `password`='$password'";
-                $checkUserResult = mysqli_query($conn, $checkUserQuery);
-
-                // Setelah berhasil mengubah password
-                if (mysqli_num_rows($checkUserResult) == 1) {
-
-                    $sweetAlert = "Swal.fire({
-                        title: 'Sukses!',
-                        text: 'Password berhasil diubah.',
-                        icon: 'success',
-                        timer: 2000,
-                        timerProgressBar: true,
-                        showConfirmButton: false
-                    });";
-
-                } else {
-                    // Gagal menambahkan akun
-                    $sweetAlert = "Swal.fire({
-                        title: 'Gagal!',
-                        text: 'Ubah password gagal.',
-                        icon: 'error',
-                        timer: 2000,
-                        timerProgressBar: true,
-                        showConfirmButton: false
-                    });";
-                }
-            } else {
-                $sweetAlert = "Swal.fire({
-                    title: 'Gagal!',
-                    text: 'Password tidak sama. Ubah password gagal.',
-                    icon: 'error',
-                    timer: 2000,
-                    timerProgressBar: true,
-                    showConfirmButton: false
-                });";
+            if (!$insertKenaikkanKelas) {
+                throw new Exception("Query insert gagal"); // Lempar exception jika query gagal
             }
-        } else {
-            $sweetAlert = "Swal.fire({
-                title: 'Gagal!',
-                text: 'Password lama salah. $passwordLamaEncrypted',
-                icon: 'error',
-                timer: 2000,
-                timerProgressBar: true,
-                showConfirmButton: false
-            });";
+
+            // Query SELECT untuk memeriksa apakah data sudah masuk ke database
+            $result = mysqli_query($conn, "SELECT * 
+            FROM kenaikan_kelas
+            WHERE 
+            tanggal='$tanggalInput' AND
+            id_tahun_Ajar='$idTahunAjar' AND
+            semester='$semester' AND
+            kelas='$kelas' AND
+            id_siswa='$idSiswa' AND
+            `status`='$kenaikan'            
+            ");
+
+            if ($result && mysqli_num_rows($result) === 1) {
+                // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
+                $_SESSION['flash_message'] = 'Tambah catatan berhasil';
+                $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
+                header('location:input_naik_kelas.php');
+                exit;
+            } else {
+                // Data tidak ada dalam database, itu berarti gagal
+                throw new Exception("Data tidak ditemukan atau duplikat");
+            }
+        } catch (Exception $e) {
+            // Tangani exception jika terjadi kesalahan
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryInsertKenaikkanKelas . $e->getMessage();
+            $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
+            header('location:input_naik_kelas.php');
+            exit;
         }
     }
+
+    
 
 
 

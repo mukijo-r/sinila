@@ -3,6 +3,10 @@ require 'function.php';
 require 'cek.php';
 require 'config.php';
 date_default_timezone_set('Asia/Jakarta');
+
+$queryUser = mysqli_query($conn, "SELECT nama_lengkap FROM users WHERE username = '$username'");
+$rowUser = mysqli_fetch_array($queryUser);
+$namaUser = $rowUser['nama_lengkap']; 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -203,6 +207,7 @@ date_default_timezone_set('Asia/Jakarta');
                                                         <!-- Modal Footer -->
                                                         <div class="modal-footer">
                                                             <input type="hidden" name="idNilaiMapel" value="<?=$idNilaiMapel;?>">
+                                                            <input type="hidden" name="namaUser" value="<?=$namaUser;?>">
                                                             <button type="submit" class="btn btn-primary" name="ubahNilaiMapel">Simpan</button>
                                                         </div><br>
                                                     </form>
@@ -332,6 +337,7 @@ date_default_timezone_set('Asia/Jakarta');
                             <input type="number" name="nilai" id="nilai" class="form-control" required max="100">                    
                     </div>
                     <div class="text-center">
+                        <input type="hidden" name="namaUser" value="<?=$namaUser;?>">
                         <button type="submit" class="btn btn-primary" name="tambahNilaiMapel">Simpan</button>
                     </div>
                 </form>
