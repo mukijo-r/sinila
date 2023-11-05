@@ -82,6 +82,7 @@ if (isset($_SESSION['kelas'])) {
                                     <a class="nav-link" href="input_nilai_kepribadian.php">Nilai Kepribadian</a>
                                     <a class="nav-link" href="input_nilai_catatan.php">Nilai Catatan</a>
                                     <a class="nav-link" href="input_absensi.php">Absensi</a>
+                                    <a class="nav-link" href="input_naik_kelas.php">Kenaikan Kelas</a>
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts1" aria-expanded="false" aria-controls="collapseLayouts1">
