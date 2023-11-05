@@ -114,12 +114,12 @@ $namaUser = $rowUser['nama_lengkap'];
                                             <td><?=$status;?></td>
                                             <td><?=$guruPenilai;?></td>
                                             <td>
-                                                <button type="button" class="btn btn-warning" name="tblEdit" data-bs-toggle="modal" data-bs-target="#modalEditNilaiCatatan<?=$idKenaikanKelas;?>">Edit</button>
-                                                <button type="button" class="btn btn-danger" name="tblHapus" data-bs-toggle="modal" data-bs-target="#modalHapusNilaiCatatan<?=$idKenaikanKelas;?>">Hapus</button> 
+                                                <button type="button" class="btn btn-warning" name="tblEdit" data-bs-toggle="modal" data-bs-target="#modalEditKenaikan<?=$idKenaikanKelas;?>">Edit</button>
+                                                <button type="button" class="btn btn-danger" name="tblHapus" data-bs-toggle="modal" data-bs-target="#modalHapusKenaikan<?=$idKenaikanKelas;?>">Hapus</button> 
                                             </td>
                                         </tr>
                                         <!-- Modal edit Nilai Catatan Siswa -->
-                                        <div class="modal fade" id="modalEditNilaiCatatan<?=$idKenaikanKelas;?>">
+                                        <div class="modal fade" id="modalEditKenaikan<?=$idKenaikanKelas;?>">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <!-- Modal Header -->
@@ -131,7 +131,7 @@ $namaUser = $rowUser['nama_lengkap'];
                                                     <form method="post">
                                                         <div class="modal-body">
                                                             <div class="mb-3">
-                                                                <label for="tanggalKenaikan">Tanggal Kenaikan Kelas <?=$tanggal;?>:</label>       
+                                                                <label for="tanggalKenaikan">Tanggal Kenaikan Kelas :</label>       
                                                                 <input type="date" name="tanggalKenaikan" value="<?=$tanggal;?>" class="form-control">
                                                             </div>
                                                             <div class="mb-3">
@@ -166,28 +166,28 @@ $namaUser = $rowUser['nama_lengkap'];
                                             </div>
                                         </div>
 
-                                        <!-- Modal Hapus Nilai Catatan Siswa-->
-                                        <div class="modal fade" id="modalHapusNilaiCatatan<?=$idKenaikanKelas;?>">
+                                        <!-- Modal Hapus Status kenaikan Siswa-->
+                                        <div class="modal fade" id="modalHapusKenaikan<?=$idKenaikanKelas;?>">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
 
                                                 <!-- Modal Header -->
                                                 <div class="modal-header">
-                                                    <h4 class="modal-title">Hapus Nilai Catatan Siswa ini?</h4>
+                                                    <h4 class="modal-title">Hapus Status kenaikan Siswa ini?</h4>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                 </div>
 
                                                 <!-- Modal body -->                                            
                                                 <form method="post">
                                                     <div class="modal-body">
-                                                    <h5>Anda yakin ingin menghapus data catatan di bawah atas nama <u><?=$namaSiswa;?></u>?</h5>
+                                                    <h5>Anda yakin ingin menghapus status kenaikan kelas atas nama <u><?=$namaSiswa;?></u>?</h5>
                                                     <br>
-                                                    <h5>"<i><?=$catatan;?></i>"</h5>
+                                                    <h5>"<i><?=$status;?></i>"</h5>
                                                         
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <input type="hidden" name="idNilaiCatatan" value="<?=$idKenaikanKelas;?>">
-                                                        <button type="submit" class="btn btn-danger" name="hapusNilaiCatatan">Hapus</button> 
+                                                        <input type="hidden" name="idKenaikanKelas" value="<?=$idKenaikanKelas;?>">
+                                                        <button type="submit" class="btn btn-danger" name="hapusKenaikkanKelas">Hapus</button> 
                                                     </div>
                                                     <br> 
                                                 </form>       

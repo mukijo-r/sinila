@@ -968,6 +968,101 @@
         }
     }
 
+    // 14. Ubah Status Naik/Tinggal Kelas
+    if(isset($_POST['ubahKenaikkanKelas'])){
+        $idKenaikkanKelas = $_POST['idKenaikkanKelas'];
+        $tanggalKenaikan = $_POST['tanggalKenaikan'];
+        $tanggalInput = date("Y-m-d", strtotime($tanggalKenaikan));
+        $idSiswa = $_POST['siswa'];
+        $kenaikan = $_POST['kenaikan']; 
+        $namaUser = $_POST['namaUser'];       
+
+        $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
+        $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
+        $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];
+
+        try {
+            $queryUpdateKenaikkanKelas = "UPDATE `kenaikan_kelas` 
+            SET             
+            `tanggal`='$tanggalInput',
+            `id_tahun_ajar`='$idTahunAjar',
+            `kelas`='$kelas',
+            `id_siswa`='$idSiswa',
+            `status`='$kenaikan',
+            `guru_pencatat`='$namaUser' 
+            WHERE 
+            `id_kn`='$idKenaikkanKelas'
+            ";
+                
+            $updateKenaikkanKelas = mysqli_query($conn, $queryUpdateKenaikkanKelas);
+
+            if (!$updateKenaikkanKelas) {
+                throw new Exception("Query update gagal"); // Lempar exception jika query gagal
+            }
+
+            // Query SELECT untuk memeriksa apakah data sudah masuk ke database
+            $result = mysqli_query($conn, "SELECT * 
+            FROM kenaikan_kelas
+            WHERE 
+            tanggal='$tanggalInput' AND
+            id_tahun_Ajar='$idTahunAjar' AND
+            kelas='$kelas' AND
+            id_siswa='$idSiswa' AND
+            `status`='$kenaikan'            
+            ");
+
+            if ($result && mysqli_num_rows($result) === 1) {
+                // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
+                $_SESSION['flash_message'] = 'Tambah catatan berhasil';
+                $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
+                header('location:input_naik_kelas.php');
+                exit;
+            } else {
+                // Data tidak ada dalam database, itu berarti gagal
+                throw new Exception("Data tidak ditemukan atau duplikat");
+            }
+        } catch (Exception $e) {
+            // Tangani exception jika terjadi kesalahan
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryUpdateKenaikkanKelas . $e->getMessage();
+            $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
+            header('location:input_naik_kelas.php');
+            exit;
+        }
+    }
+
+    // 15. Hapus Status Naik/Tinggal Kelas
+    if(isset($_POST['hapusKenaikkanKelas'])){
+        $idKenaikanKelas = $_POST['idKenaikanKelas'];
+
+        try {
+            $queryHapusKenaikan = "DELETE FROM `kenaikan_kelas` WHERE `id_kn`='$idKenaikanKelas'";          
+            $hapusKenaikan = mysqli_query($conn, $queryHapusKenaikan);
+
+            if (!$hapusKenaikan) {
+                throw new Exception("Query hapus gagal"); // Lempar exception jika query gagal
+            }
+
+            // Query SELECT untuk memeriksa apakah data sudah masuk ke database
+            $result = mysqli_query($conn, "SELECT * FROM `kenaikan_kelas` WHERE `id_kn`='$idKenaikanKelas'");
+
+            if ($result && mysqli_num_rows($result) === 0) {
+                // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
+                $_SESSION['flash_message'] = 'Hapus nilai berhasil';
+                $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
+                header('location:input_naik_kelas.php');
+                exit;
+            } else {
+                // Data masih ada dalam database, itu berarti gagal
+                throw new Exception("Data masih ada setelah dihapus");
+            }
+        } catch (Exception $e) {
+            // Tangani exception jika terjadi kesalahan
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $e->getMessage();
+            $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
+            header('location:input_naik_kelas.php');
+            exit;
+        }
+    }
     
 
 
