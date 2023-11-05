@@ -1,4 +1,4 @@
-    <?php
+<?php
     require_once 'vendor/autoload.php';
     require 'config.php';
 
@@ -6,57 +6,23 @@
     use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
     session_start();
-    //Koneksi ke database
     if (isset($_SESSION['user'])) {
-        $username = $_SESSION['user'];
-    } else {
-        // Pengguna tidak masuk. Lakukan sesuatu, seperti mengarahkan mereka kembali ke halaman login.
-        header('location: login.php');
+    $username = $_SESSION['user'];
     }
-    
+
     if (isset($_SESSION['tahunAjar'])) {
-        $tahunAjar = $_SESSION['tahunAjar'];
+    $tahunAjar = $_SESSION['tahunAjar'];
     }
-    
+
     if (isset($_SESSION['kelas'])) {
-        $kelas = $_SESSION['kelas'];
+    $kelas = $_SESSION['kelas'];
     }
-    
+
     $queryUser = mysqli_query($conn, "SELECT nama_lengkap FROM users WHERE username = '$username'");
     $rowUser = mysqli_fetch_array($queryUser);
-    $namaUser = $rowUser['nama_lengkap'];
+    $namaUser = $rowUser['nama_lengkap']; 
 
-    $conn = mysqli_connect("localhost:3306","root","","sdk");
-
-    //1. login
-    if (isset($_POST['login'])) {
-        $username = $_POST['username'];
-        $password = $_POST['password'];
-        $tahunAjar = $_POST['tahunAjar'];
-        $kelas = $_POST['kelas'];
-        // Dapatkan kata sandi terenkripsi dari database
-        $result = mysqli_query($conn, "SELECT * FROM users WHERE username='$username'");
-        if ($row = mysqli_fetch_assoc($result)) {
-            $hashedPassword = $row['password'];
-
-            // Periksa apakah kata sandi yang dimasukkan sesuai dengan yang terenkripsi
-            if (password_verify($password, $hashedPassword)) {
-                // Kata sandi cocok, beri izin login
-                $_SESSION['user'] = $username; // Simpan nama user dalam sesi
-                $_SESSION['log'] = 'True';
-                $_SESSION['previous_user'] = $username;
-                $_SESSION['tahunAjar'] = $tahunAjar;
-                $_SESSION['kelas'] = $kelas;
-                header('location:index.php');
-            } else {
-                // Kata sandi tidak cocok, arahkan kembali ke halaman login
-                header('location:login.php');
-            }
-        } else {
-            // Tidak ada akun dengan username tersebut
-            header('location:login.php');
-        }
-    }
+     
   
     // 2. Tambah Mapel
     if(isset($_POST['tambahMapel'])){

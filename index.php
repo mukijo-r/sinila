@@ -2,7 +2,7 @@
 require 'function.php';
 require 'cek.php';
 require 'config.php';
-session_start();
+//session_start();
 $queryUser = mysqli_query($conn, "SELECT nama_lengkap FROM users WHERE username = '$username'");
 $rowUser = mysqli_fetch_array($queryUser);
 $namaUser = $rowUser['nama_lengkap']; 
@@ -10,7 +10,7 @@ $namaUser = $rowUser['nama_lengkap'];
 
 <!DOCTYPE html>
 <html lang="en">
-    <head><?=$kelas;?>
+    <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
