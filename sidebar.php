@@ -92,9 +92,9 @@ if (isset($_SESSION['kelas'])) {
                             </a>
                             <div class="collapse" id="collapseLayouts1" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="tabung.php">Daftar Nilai</a>
-                                    <a class="nav-link" href="tabung_ambil.php">Rapot Sisipan</a>
-                                    <a class="nav-link" href="tabung_list.php">Rapot Akhir Semester</a>
+                                    <a class="nav-link" href="daftar_nilai.php">Daftar Nilai</a>
+                                    <a class="nav-link" href="#.php">Rapot Sisipan</a>
+                                    <a class="nav-link" href="#.php">Rapot Semester</a>
                                 </nav>
                             </div>
                             <div class="sb-sidenav-menu-heading">Master</div>
@@ -119,12 +119,21 @@ if (isset($_SESSION['kelas'])) {
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-circle-info"></i></div>
                                 About
                             </a>
+                            <!-- <div class="sb-sidenav-menu-heading">Pengaturan</div>
+                            <a class="nav-link" href="guru.php" >
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
+                                Ganti Kelas
+                            </a>
+                            <a class="nav-link" href="siswa.php">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-people-group"></i></div>
+                                Ganti Tahun Ajar
+                            </a> -->
                         </div>                            
                     </div>
-                    <div style="text-align: center;" class="sb-sidenav-footer">
+                    <div style="text-align: center;">
                         <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalKelas">Ganti Kelas</button>
-                    </div>
-                    <div style="text-align: center;" class="sb-sidenav-footer">
+                    </div><br>
+                    <div style="text-align: center;">
                         <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalTahunAjar">Ganti Tahun Ajar</button>
                     </div>
                 </nav>
