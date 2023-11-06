@@ -77,7 +77,8 @@ if (isset($_SESSION['kelas'])) {
                             </a>
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="input_nilai_mapel.php">Nilai Mapel</a>
+                                    <a class="nav-link" href="input_nilai_mapel.php">Nilai Harian</a>
+                                    <a class="nav-link" href="input_nilai_ulangan.php">Nilai Ulangan</a>
                                     <a class="nav-link" href="input_nilai_ujian.php">Nilai Ujian</a>
                                     <a class="nav-link" href="input_nilai_praktek.php">Nilai Praktek</a>
                                     <a class="nav-link" href="input_nilai_kepribadian.php">Nilai Kepribadian</a>

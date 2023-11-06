@@ -163,7 +163,7 @@
         }
     }
 
-    // 4. Tambah Nilai Mapel
+    // 4. Tambah Nilai Mapel Harian
     if(isset($_POST['tambahNilaiMapel'])){
         $semester = $_POST['semester'];
         $idSiswa = $_POST['siswa'];
@@ -222,7 +222,7 @@
         }
     }
 
-    // 5. Edit Nilai Mapel
+    // 5. Edit Nilai Mapel Harian
     if(isset($_POST['ubahNilaiMapel'])){
         $idNilaiMapel = $_POST['idNilaiMapel'];
         $semester = $_POST['semester'];
@@ -278,13 +278,12 @@
             // Tangani exception jika terjadi kesalahan
             $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryUpdateNilaiMapel . $e->getMessage();
             $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
-            echo $queryInsertTabung;
             header('location:input_nilai_mapel.php');
             exit;
         }
     }
 
-    // 6. Hapus Nilai Mapel
+    // 6. Hapus Nilai Mapel Harian
     if(isset($_POST['hapusNilaiMapel'])){
         $idNilaiMapel = $_POST['idNilaiMapel'];
 
@@ -1180,7 +1179,7 @@
         }
     }
 
-    // 6. Hapus Nilai Ujian
+    // 18. Hapus Nilai Ujian
     if(isset($_POST['hapusNilaiUjian'])){
         $idNilaiUjian = $_POST['idNilaiUjian'];
 
@@ -1213,8 +1212,155 @@
             exit;
         }
     }
-    
 
+    // 19. Tambah Nilai Ulangan
+    if(isset($_POST['tambahNilaiUlangan'])){
+        $semester = $_POST['semester'];
+        $idSiswa = $_POST['siswa'];
+        $idMapel = $_POST['mapel'];
+        $lingkupMateri = $_POST['lingkupMateri'];
+        $nilai = $_POST['nilai'];
+        $namaUser = $_POST['namaUser'];
+
+        $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
+        $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
+        $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];
+
+        try {
+            $queryInsertNilaiUlangan = "INSERT INTO `nilai_ulangan`
+            (`tanggal`, `id_tahun_Ajar`, `semester`, `id_siswa`, `kelas`, `id_mapel`, `lingkup_materi`, `nilai`, `guru_penilai`) 
+            VALUES ('$tanggal','$idTahunAjar','$semester','$idSiswa', '$kelas', '$idMapel','$lingkupMateri','$nilai','$namaUser')";
+                
+            $insertNilaiUlangan = mysqli_query($conn, $queryInsertNilaiUlangan);
+
+            if (!$insertNilaiUlangan) {
+                throw new Exception("Query insert gagal"); // Lempar exception jika query gagal
+            }
+
+            // Query SELECT untuk memeriksa apakah data sudah masuk ke database
+            $result = mysqli_query($conn, "SELECT * 
+            FROM nilai_ulangan 
+            WHERE 
+            tanggal='$tanggal' AND
+            id_tahun_Ajar='$idTahunAjar' AND
+            semester='$semester' AND
+            id_siswa='$idSiswa' AND
+            kelas='$kelas' AND
+            id_mapel='$idMapel' AND
+            lingkup_materi='$lingkupMateri' AND
+            nilai='$nilai'            
+            ");
+
+            if ($result && mysqli_num_rows($result) === 1) {
+                // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
+                $_SESSION['flash_message'] = 'Tambah nilai berhasil';
+                $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
+                header('location:input_nilai_ulangan.php');
+                exit;
+            } else {
+                // Data tidak ada dalam database, itu berarti gagal
+                throw new Exception("Data tidak ditemukan setelah ditambahkan");
+            }
+        } catch (Exception $e) {
+            // Tangani exception jika terjadi kesalahan
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryInsertNilaiUlangan . $e->getMessage();
+            $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
+            header('location:input_nilai_ulangan.php');
+            exit;
+        }
+    }
+
+    // 20. Edit Nilai Ulangan
+    if(isset($_POST['ubahNilaiUlangan'])){
+        $idNilaiUlangan = $_POST['idNilaiUlangan'];
+        $semester = $_POST['semester'];
+        $idSiswa = $_POST['siswa'];
+        $idMapel = $_POST['mapel'];
+        $lingkupMateri = $_POST['lingkupMateri'];
+        $nilai = $_POST['nilai'];
+        $namaUser = $_POST['namaUser'];
+
+        try {
+            $queryUpdateNilaiUlangan = "UPDATE `nilai_ulangan` 
+            SET 
+            `semester`='$semester',
+            `id_siswa`='$idSiswa',
+            `id_mapel`='$idMapel',
+            `lingkup_materi`='$lingkupMateri',
+            `nilai`='$nilai'
+            WHERE
+            `id_ul`=$idNilaiUlangan
+            ";
+            
+            $updateNilaiUlangan = mysqli_query($conn, $queryUpdateNilaiUlangan);
+
+            if (!$updateNilaiUlangan) {
+                throw new Exception("Query update gagal"); // Lempar exception jika query gagal
+            }
+
+            // Query SELECT untuk memeriksa apakah data sudah masuk ke database
+            $queryResult = "SELECT * FROM `nilai_ulangan` 
+            WHERE 
+            `semester`='$semester' AND 
+            `id_siswa`='$idSiswa' AND 
+            `id_mapel`='$idMapel' AND 
+            `lingkup_materi`='$lingkupMateri' AND 
+            `nilai`='$nilai'
+            ";
+            $result = mysqli_query($conn, $queryResult);
+
+            if ($result && mysqli_num_rows($result) === 1) {
+                // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
+                $_SESSION['flash_message'] = 'Ubah kategori berhasil';
+                $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
+                header('location:input_nilai_ulangan.php');
+                exit;
+            } else {
+                // Data tidak ada dalam database, itu berarti gagal
+                throw new Exception("Data tidak ditemukan setelah diubah");
+            }
+        } catch (Exception $e) {
+            // Tangani exception jika terjadi kesalahan
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryUpdateNilaiUlangan . $e->getMessage();
+            $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
+            header('location:input_nilai_ulangan.php');
+            exit;
+        }
+    }
+    
+    // 6. Hapus Nilai Ulangan
+    if(isset($_POST['hapusNilaiUlangan'])){
+        $idNilaiUlangan = $_POST['idNilaiUlangan'];
+
+        try {
+            $queryHapusNilaiUlangan = "DELETE FROM `nilai_ulangan` WHERE `id_ul`='$idNilaiUlangan'";          
+            $hapusNilaiUlangan = mysqli_query($conn, $queryHapusNilaiUlangan);
+
+            if (!$hapusNilaiUlangan) {
+                throw new Exception("Query hapus gagal"); // Lempar exception jika query gagal
+            }
+
+            // Query SELECT untuk memeriksa apakah data sudah masuk ke database
+            $result = mysqli_query($conn, "SELECT * FROM `nilai_ulangan` WHERE `id_ul`='$idNilaiUlangan'");
+
+            if ($result && mysqli_num_rows($result) === 0) {
+                // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
+                $_SESSION['flash_message'] = 'Hapus nilai ulangan berhasil';
+                $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
+                header('location:input_nilai_ulangan.php');
+                exit;
+            } else {
+                // Data masih ada dalam database, itu berarti gagal
+                throw new Exception("Data masih ada setelah dihapus");
+            }
+        } catch (Exception $e) {
+            // Tangani exception jika terjadi kesalahan
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $e->getMessage();
+            $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
+            header('location:input_nilai_ulangan.php');
+            exit;
+        }
+    }
 
 
     
