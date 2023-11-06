@@ -33,7 +33,7 @@ $namaUser = $rowUser['nama_lengkap'];
                     <div class="container-fluid px-4">
                         <h2 class="mt-4">Input Data</h2>
                         <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">PROSES / Input Data / Nilai Mapel</li>                            
+                            <li class="breadcrumb-item active">PROSES / Input Data / Nilai Harian</li>                            
                         </ol>                        
                         <br>
                         <div class="container-fluid px-4">
@@ -59,7 +59,7 @@ $namaUser = $rowUser['nama_lengkap'];
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
-                                Daftar Nilai 
+                                Daftar Nilai Harian
                             </div>
                             <div class="card-body">
                                 <table id="datatablesSimple">
@@ -93,7 +93,7 @@ $namaUser = $rowUser['nama_lengkap'];
                                     LEFT JOIN siswa s ON nm.id_siswa = s.id_siswa
                                     LEFT JOIN mapel m ON nm.id_mapel = m.id_mapel
                                     WHERE id_kelas = $kelas
-                                    ORDER BY nm.tanggal DESC;");
+                                    ORDER BY nm.id_nm DESC;");
 
                                     $totalEntries = mysqli_num_rows($dataNilaiMapel);
                                     $i = $totalEntries;
@@ -270,7 +270,7 @@ $namaUser = $rowUser['nama_lengkap'];
             <div class="modal-content">
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h4 class="modal-title">Tambah Nilai Mapel Siswa kelas <?=$kelas;?></h4>
+                    <h4 class="modal-title">Tambah Nilai Harian Siswa kelas <?=$kelas;?></h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <!-- Modal Body -->
