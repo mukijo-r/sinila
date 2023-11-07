@@ -205,7 +205,7 @@
 
             if ($result && mysqli_num_rows($result) === 1) {
                 // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
-                $_SESSION['flash_message'] = 'Tambah nilai berhasil';
+                $_SESSION['flash_message'] = 'Tambah nilai harian berhasil';
                 $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
                 header('location:input_nilai_mapel.php');
                 exit;
@@ -266,7 +266,7 @@
 
             if ($result && mysqli_num_rows($result) === 1) {
                 // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
-                $_SESSION['flash_message'] = 'Ubah kategori berhasil';
+                $_SESSION['flash_message'] = 'Ubah nilai harian berhasil';
                 $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
                 header('location:input_nilai_mapel.php');
                 exit;
@@ -300,7 +300,7 @@
 
             if ($result && mysqli_num_rows($result) === 0) {
                 // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
-                $_SESSION['flash_message'] = 'Hapus kategori berhasil';
+                $_SESSION['flash_message'] = 'Hapus nilai harian berhasil';
                 $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
                 header('location:input_nilai_mapel.php');
                 exit;
@@ -355,7 +355,7 @@
 
             if ($result && mysqli_num_rows($result) === 1) {
                 // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
-                $_SESSION['flash_message'] = 'Tambah nilai berhasil';
+                $_SESSION['flash_message'] = 'Tambah nilai praktek berhasil';
                 $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
                 header('location:input_nilai_praktek.php');
                 exit;
@@ -445,7 +445,7 @@
 
             if ($result && mysqli_num_rows($result) === 0) {
                 // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
-                $_SESSION['flash_message'] = 'Hapus kategori berhasil';
+                $_SESSION['flash_message'] = 'Hapus nilai praktek berhasil';
                 $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
                 header('location:input_nilai_praktek.php');
                 exit;
@@ -499,7 +499,7 @@
 
             if ($result && mysqli_num_rows($result) === 1) {
                 // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
-                $_SESSION['flash_message'] = 'Tambah nilai berhasil';
+                $_SESSION['flash_message'] = 'Tambah nilai kepribadian berhasil';
                 $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
                 header('location:input_nilai_kepribadian.php');
                 exit;
@@ -589,7 +589,7 @@
 
             if ($result && mysqli_num_rows($result) === 0) {
                 // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
-                $_SESSION['flash_message'] = 'Hapus nilai berhasil';
+                $_SESSION['flash_message'] = 'Hapus nilai kepribadian berhasil';
                 $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
                 header('location:input_nilai_kepribadian.php');
                 exit;
@@ -735,7 +735,7 @@
 
             if ($result && mysqli_num_rows($result) === 0) {
                 // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
-                $_SESSION['flash_message'] = 'Hapus nilai berhasil';
+                $_SESSION['flash_message'] = 'Hapus catatan berhasil';
                 $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
                 header('location:input_nilai_catatan.php');
                 exit;
@@ -894,7 +894,7 @@
 
             if ($result && mysqli_num_rows($result) === 0) {
                 // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
-                $_SESSION['flash_message'] = 'Hapus nilai berhasil';
+                $_SESSION['flash_message'] = 'Hapus absen berhasil';
                 $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
                 header('location:input_absensi.php');
                 exit;
@@ -950,7 +950,7 @@
 
             if ($result && mysqli_num_rows($result) === 1) {
                 // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
-                $_SESSION['flash_message'] = 'Tambah catatan berhasil';
+                $_SESSION['flash_message'] = 'Tambah status berhasil';
                 $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
                 header('location:input_naik_kelas.php');
                 exit;
@@ -1012,7 +1012,7 @@
 
             if ($result && mysqli_num_rows($result) === 1) {
                 // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
-                $_SESSION['flash_message'] = 'Tambah catatan berhasil';
+                $_SESSION['flash_message'] = 'Ubah status berhasil';
                 $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
                 header('location:input_naik_kelas.php');
                 exit;
@@ -1046,7 +1046,7 @@
 
             if ($result && mysqli_num_rows($result) === 0) {
                 // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
-                $_SESSION['flash_message'] = 'Hapus nilai berhasil';
+                $_SESSION['flash_message'] = 'Hapus status berhasil';
                 $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
                 header('location:input_naik_kelas.php');
                 exit;
@@ -1103,7 +1103,7 @@
 
             if ($result && mysqli_num_rows($result) === 1) {
                 // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
-                $_SESSION['flash_message'] = 'Tambah nilai berhasil';
+                $_SESSION['flash_message'] = 'Tambah nilai ujian berhasil';
                 $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
                 header('location:input_nilai_ujian.php');
                 exit;
@@ -1161,7 +1161,7 @@
 
             if ($result && mysqli_num_rows($result) === 1) {
                 // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
-                $_SESSION['flash_message'] = 'Ubah kategori berhasil';
+                $_SESSION['flash_message'] = 'Ubah nilai ujian berhasil';
                 $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
                 header('location:input_nilai_ujian.php');
                 exit;
@@ -1196,7 +1196,7 @@
 
             if ($result && mysqli_num_rows($result) === 0) {
                 // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
-                $_SESSION['flash_message'] = 'Hapus kategori berhasil';
+                $_SESSION['flash_message'] = 'Hapus nilai ujian berhasil';
                 $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
                 header('location:input_nilai_ujian.php');
                 exit;
@@ -1253,7 +1253,7 @@
 
             if ($result && mysqli_num_rows($result) === 1) {
                 // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
-                $_SESSION['flash_message'] = 'Tambah nilai berhasil';
+                $_SESSION['flash_message'] = 'Tambah nilai ulangan berhasil';
                 $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
                 header('location:input_nilai_ulangan.php');
                 exit;
@@ -1311,7 +1311,7 @@
 
             if ($result && mysqli_num_rows($result) === 1) {
                 // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
-                $_SESSION['flash_message'] = 'Ubah kategori berhasil';
+                $_SESSION['flash_message'] = 'Ubah nilai ulangan berhasil';
                 $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
                 header('location:input_nilai_ulangan.php');
                 exit;
