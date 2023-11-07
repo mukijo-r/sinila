@@ -127,218 +127,193 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                                 } else {
                                     echo '';
                                 }
+
+                                $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
+                                $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
+                                $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];
+
                                 ?>
                             </h6>
                             <h6>MATA PELAJARAN : <?=$namaMapel;?></H6>
                         </div>
                         <?php
+
+                        tabelDaftarNilai($idTahunAjar, $semester, $kelas, $idMapel);
                     }               
                     ?>
                 </div>
                 <?php
-
-                $queryKategori = mysqli_query($conn, "SELECT s.nis, s.nisn, s.nama, 
-                SUM(CASE WHEN nm.lingkup_materi = 'LM 1' AND nm.tujuan_pembelajaran = 'TP1' THEN nm.nilai ELSE 0 END) AS LM1_TP1,
-                SUM(CASE WHEN nm.lingkup_materi = 'LM 1' AND nm.tujuan_pembelajaran = 'TP2' THEN nm.nilai ELSE 0 END) AS LM1_TP2,
-                SUM(CASE WHEN nm.lingkup_materi = 'LM 1' AND nm.tujuan_pembelajaran = 'TP3' THEN nm.nilai ELSE 0 END) AS LM1_TP3,
-                SUM(CASE WHEN nm.lingkup_materi = 'LM 1' AND nm.tujuan_pembelajaran = 'TP4' THEN nm.nilai ELSE 0 END) AS LM1_TP4,
-                SUM(CASE WHEN nm.lingkup_materi = 'LM 2' AND nm.tujuan_pembelajaran = 'TP1' THEN nm.nilai ELSE 0 END) AS LM2_TP1,
-                SUM(CASE WHEN nm.lingkup_materi = 'LM 2' AND nm.tujuan_pembelajaran = 'TP2' THEN nm.nilai ELSE 0 END) AS LM2_TP2,
-                SUM(CASE WHEN nm.lingkup_materi = 'LM 2' AND nm.tujuan_pembelajaran = 'TP3' THEN nm.nilai ELSE 0 END) AS LM2_TP3,
-                SUM(CASE WHEN nm.lingkup_materi = 'LM 2' AND nm.tujuan_pembelajaran = 'TP4' THEN nm.nilai ELSE 0 END) AS LM2_TP4
-                FROM siswa s
-                JOIN nilai_mapel nm ON s.id_siswa = nm.id_siswa
-                WHERE nm.kelas = '1'
-                GROUP BY s.nis, s.nisn, s.nama, nm.kelas;");
-
-                $rowKategori = mysqli_fetch_assoc($queryKategori);
-                $namaKategori = $rowKategori['nama_kategori'];
-                
+                function tabelDaftarNilai($idTahunAjar, $semester, $kelas, $idMapel) {
+                    $conn = mysqli_connect("localhost:3306", "root", "", "sdk");
                     echo '<div class="card mb-4">';
                     echo '<div class="card-header">';
                     echo '<i class="fas fa-table me-1"></i>';
-                    echo 'Daftar Penerimaan kelas ' . $kelas;
+                    echo 'Daftar Nilai kelas ' . $kelas;
                     echo '</div>';
                     echo '<div class="card-body">';
                     echo '<table id="datatablesSimple1" class="table table-bordered">';
                     echo '<thead>';
                     echo '<tr>';
-                    echo '<th rowspan="2" style="vertical-align: middle;">No.</th>';
-                    echo '<th rowspan="2"  style="vertical-align: middle;">Nama Siswa</th>';
-                    echo '<th colspan="4" style="text-align: center;">Iuran ' . $namaKategori . '</th>';
+                    echo '<th rowspan="3" style="vertical-align: middle;">No.</th>';
+                    echo '<th rowspan="3" style="vertical-align: middle;">No. Induk</th>';
+                    echo '<th rowspan="3" style="vertical-align: middle;">NISN</th>';
+                    echo '<th rowspan="3"  style="vertical-align: middle;">Nama</th>';
+                    echo '<th colspan="16" style="text-align: center;">FORMATIF</th>';
+                    echo '<th rowspan="2" colspan="5" style="text-align: center; vertical-align: middle;">NILAI SUMATIF LINGKUP MATERI</th>';
+                    echo '<th rowspan="2" colspan="2" style="text-align: center; vertical-align: middle;">NILAI SUMATIF</th>';
+                    echo '<th rowspan="3"  style="vertical-align: middle;">NR</th>';
                     echo '</tr>';
                     echo '<tr>';
-                    echo '<td>Penetapan</td>';
-                    echo '<td>Bulan ini</td>';
-                    echo '<td>Tunggakan</td>';
-                    echo '<td>Jumlah</td>';
+                    echo '<th colspan="4">Lingkup Materi 1</th>';
+                    echo '<th colspan="4">Lingkup Materi 2</th>';
+                    echo '<th colspan="4">Lingkup Materi 3</th>';
+                    echo '<th colspan="4">Lingkup Materi 4</th>';
+                    echo '</tr>';
+                    echo '<tr>';
+                    echo '<th>TP1</th>';
+                    echo '<th>TP2</th>';
+                    echo '<th>TP3</th>';
+                    echo '<th>TP4</th>';
+                    echo '<th>TP1</th>';
+                    echo '<th>TP2</th>';
+                    echo '<th>TP3</th>';
+                    echo '<th>TP4</th>';
+                    echo '<th>TP1</th>';
+                    echo '<th>TP2</th>';
+                    echo '<th>TP3</th>';
+                    echo '<th>TP4</th>';
+                    echo '<th>TP1</th>';
+                    echo '<th>TP2</th>';
+                    echo '<th>TP3</th>';
+                    echo '<th>TP4</th>';
+                    echo '<th>LM1</th>';
+                    echo '<th>LM2</th>';
+                    echo '<th>LM3</th>';
+                    echo '<th>LM4</th>';
+                    echo '<th>AVG</th>';
+                    echo '<th>STS</th>';
+                    echo '<th>SAS</th>';
                     echo '</tr>'; 
                     echo '</thead>';
                     echo '<tbody>';
 
-                    $queryPenerimaan = "SELECT
-                    s.nama AS nama_siswa,
-                    SUM(CASE WHEN subkat.nama_sub_kategori = '$namaKategori' THEN tms.penetapan ELSE 0 END) AS penetapan_subkat,
-                    SUM(CASE WHEN subkat.nama_sub_kategori = '$namaKategori' THEN tms.bulan_ini ELSE 0 END) AS bulan_ini_subkat,
-                    SUM(CASE WHEN subkat.nama_sub_kategori = '$namaKategori' THEN tms.tunggakan ELSE 0 END) AS tunggakan_subkat,
-                    SUM(CASE WHEN subkat.nama_sub_kategori = '$namaKategori' THEN tms.jumlah ELSE 0 END) AS jumlah_subkat
-                    
-                    FROM
-                        transaksi_masuk_siswa tms
-                    LEFT JOIN
-                        siswa s ON tms.id_siswa = s.id_siswa
-                    LEFT JOIN
-                        sub_kategori_siswa subkat ON tms.id_sub_kategori = subkat.id_sub_kategori
-                    WHERE
-                        tms.id_tahun_ajar = $idTahunAjar AND 
-                        MONTH(tms.tanggal) = $bulanNum AND
-                        s.id_kelas = $kelas
-                    GROUP BY
-                        s.nama;
-                    ";
+                    $query = mysqli_query($conn, "SELECT s.nis, s.nisn, s.nama,
+                        SUM(CASE WHEN nm.lingkup_materi = 'LM 1' AND nm.tujuan_pembelajaran = 'TP1' THEN nm.nilai ELSE 0 END) AS LM1_TP1,
+                        SUM(CASE WHEN nm.lingkup_materi = 'LM 1' AND nm.tujuan_pembelajaran = 'TP2' THEN nm.nilai ELSE 0 END) AS LM1_TP2,
+                        SUM(CASE WHEN nm.lingkup_materi = 'LM 1' AND nm.tujuan_pembelajaran = 'TP3' THEN nm.nilai ELSE 0 END) AS LM1_TP3,
+                        SUM(CASE WHEN nm.lingkup_materi = 'LM 1' AND nm.tujuan_pembelajaran = 'TP4' THEN nm.nilai ELSE 0 END) AS LM1_TP4,
+                        SUM(CASE WHEN nm.lingkup_materi = 'LM 2' AND nm.tujuan_pembelajaran = 'TP1' THEN nm.nilai ELSE 0 END) AS LM2_TP1,
+                        SUM(CASE WHEN nm.lingkup_materi = 'LM 2' AND nm.tujuan_pembelajaran = 'TP2' THEN nm.nilai ELSE 0 END) AS LM2_TP2,
+                        SUM(CASE WHEN nm.lingkup_materi = 'LM 2' AND nm.tujuan_pembelajaran = 'TP3' THEN nm.nilai ELSE 0 END) AS LM2_TP3,
+                        SUM(CASE WHEN nm.lingkup_materi = 'LM 2' AND nm.tujuan_pembelajaran = 'TP4' THEN nm.nilai ELSE 0 END) AS LM2_TP4,
+                        SUM(CASE WHEN nm.lingkup_materi = 'LM 3' AND nm.tujuan_pembelajaran = 'TP1' THEN nm.nilai ELSE 0 END) AS LM3_TP1,
+                        SUM(CASE WHEN nm.lingkup_materi = 'LM 3' AND nm.tujuan_pembelajaran = 'TP2' THEN nm.nilai ELSE 0 END) AS LM3_TP2,
+                        SUM(CASE WHEN nm.lingkup_materi = 'LM 3' AND nm.tujuan_pembelajaran = 'TP3' THEN nm.nilai ELSE 0 END) AS LM3_TP3,
+                        SUM(CASE WHEN nm.lingkup_materi = 'LM 3' AND nm.tujuan_pembelajaran = 'TP4' THEN nm.nilai ELSE 0 END) AS LM3_TP4,
+                        SUM(CASE WHEN nm.lingkup_materi = 'LM 4' AND nm.tujuan_pembelajaran = 'TP1' THEN nm.nilai ELSE 0 END) AS LM4_TP1,
+                        SUM(CASE WHEN nm.lingkup_materi = 'LM 4' AND nm.tujuan_pembelajaran = 'TP2' THEN nm.nilai ELSE 0 END) AS LM4_TP2,
+                        SUM(CASE WHEN nm.lingkup_materi = 'LM 4' AND nm.tujuan_pembelajaran = 'TP3' THEN nm.nilai ELSE 0 END) AS LM4_TP3,
+                        SUM(CASE WHEN nm.lingkup_materi = 'LM 4' AND nm.tujuan_pembelajaran = 'TP4' THEN nm.nilai ELSE 0 END) AS LM4_TP4,
+                        SUM(CASE WHEN nul.lingkup_materi = 'LM 1' THEN nul.nilai ELSE 0 END) AS LM1,
+                        SUM(CASE WHEN nul.lingkup_materi = 'LM 2' THEN nul.nilai ELSE 0 END) AS LM2,
+                        SUM(CASE WHEN nul.lingkup_materi = 'LM 3' THEN nul.nilai ELSE 0 END) AS LM3,
+                        SUM(CASE WHEN nul.lingkup_materi = 'LM 4' THEN nul.nilai ELSE 0 END) AS LM4,                        
+                        SUM(CASE WHEN nuj.ujian = 'STS' THEN nuj.nilai ELSE 0 END) AS STS,
+                        SUM(CASE WHEN nuj.ujian = 'SAS' THEN nuj.nilai ELSE 0 END) AS SAS
+                    FROM siswa s
+                    LEFT JOIN nilai_mapel nm ON s.id_siswa = nm.id_siswa
+                    LEFT JOIN nilai_ulangan nul ON s.id_siswa = nul.id_siswa
+                    LEFT JOIN nilai_ujian nuj ON s.id_siswa = nuj.id_siswa
+                    WHERE nm.kelas = '$kelas' AND
+                        nm.semester = '$semester' AND
+                        nm.id_mapel = '$idMapel' AND
+                        nm.id_tahun_ajar = '$idTahunAjar'
+                    GROUP BY s.nis, s.nisn, s.nama;
+                    ");
+
                     $i = 1;
-                    $totalPenetapanSubkat = 0;
-                    $totalBulanIniSubkat = 0;
-                    $totalTunggakanSubkat = 0;
-                    $totalJumlahSubkat = 0;
 
-                    $penerimaanSubkat = mysqli_query($conn, $queryPenerimaan);
-                    while($rowPenerimaan=mysqli_fetch_array($penerimaanSubkat)){
-                        $namaSiswa = $rowPenerimaan['nama_siswa'];                    
-                        $penetapanSubkat = $rowPenerimaan['penetapan_subkat'];
-                        $bulanIniSubkat = $rowPenerimaan['bulan_ini_subkat'];
-                        $tunggakanSubkat = $rowPenerimaan['tunggakan_subkat'];
-                        $jumlahSubkat = $rowPenerimaan['jumlah_subkat'];
+                    while ($row = mysqli_fetch_array($query)) {
+                        $nis = $row['nis'];
+                        $nisn = $row['nisn'];
+                        $namaSiswa = $row['nama'];
+                        $LM1_TP1 = $row['LM1_TP1'];
+                        $LM1_TP2 = $row['LM1_TP2'];
+                        $LM1_TP3 = $row['LM1_TP3'];
+                        $LM1_TP4 = $row['LM1_TP4'];
+                        $LM2_TP1 = $row['LM2_TP1'];
+                        $LM2_TP2 = $row['LM2_TP2'];
+                        $LM2_TP3 = $row['LM2_TP3'];
+                        $LM2_TP4 = $row['LM2_TP4'];
+                        $LM3_TP1 = $row['LM3_TP1'];
+                        $LM3_TP2 = $row['LM3_TP2'];
+                        $LM3_TP3 = $row['LM3_TP3'];
+                        $LM3_TP4 = $row['LM3_TP4'];
+                        $LM4_TP1 = $row['LM4_TP1'];
+                        $LM4_TP2 = $row['LM4_TP2'];
+                        $LM4_TP3 = $row['LM4_TP3'];
+                        $LM4_TP4 = $row['LM4_TP4'];
+                        $LM1 = $row['LM1'];
+                        $LM2 = $row['LM2'];
+                        $LM3 = $row['LM3'];
+                        $LM4 = $row['LM4'];
+                        $rerataUlangan = ($LM1 + $LM2 + $LM3 + $LM4)/4;
+                        $STS = $row['STS'];
+                        $SAS = $row['SAS'];
+                        $nilaiRapot = ((2 * $rerataUlangan) + $STS + (2 * $SAS)) / 5;
 
-                    echo '<tr>';
-                    echo '<td>' . $i++ . '</td>';
-                    echo '<td>' . $namaSiswa . '</td>';
-                    echo '<td>Rp. ' . number_format($penetapanSubkat, 0, ',', '.') . '</td>';
-                    echo '<td>Rp. ' . number_format($bulanIniSubkat, 0, ',', '.') . '</td>';
-                    echo '<td>Rp. ' . number_format($tunggakanSubkat, 0, ',', '.') . '</td>';
-                    echo '<td>Rp. ' . number_format($jumlahSubkat, 0, ',', '.') . '</td>';
-                    echo '</tr>';
-
-                    // Tambahkan nilai ke total
-                    $totalPenetapanSubkat += $penetapanSubkat;
-                    $totalBulanIniSubkat += $bulanIniSubkat;
-                    $totalTunggakanSubkat += $tunggakanSubkat;
-                    $totalJumlahSubkat += $jumlahSubkat;
-                
-                        // Tampilkan baris total
-                    echo '<tr>';
-                    echo '<td colspan="2">Total</td>';
-                    echo '<td><strong>Rp. ' . number_format($totalPenetapanSubkat, 0, ',', '.') . '</strong></td>';
-                    echo '<td><strong>Rp. ' . number_format($totalBulanIniSubkat, 0, ',', '.') . '</strong></td>';
-                    echo '<td><strong>Rp. ' . number_format($totalTunggakanSubkat, 0, ',', '.') . '</strong></td>';
-                    echo '<td><strong>Rp. ' . number_format($totalJumlahSubkat, 0, ',', '.') . '</strong></td>';
-                    echo '</tr>';                            
-                    echo '</tbody>';
-                    echo '</table>'; 
-                    echo '</div>';
-                    echo '</div>';
-                    echo '<br>';
-                }                       
-                
-                // Tampilkan tabel untuk total kolom per kelas
-                echo '<br>';
-                echo '<div class="card mb-4">';
-                echo '<div class="card-header">';
-                echo '<i class="fas fa-table me-1"></i>';
-                echo 'Rekapitulasi Penerimaan Uang SPP ';
-                echo '</div>';
-                echo '<div class="card-body">';
-                echo '<table id="datatablesSimple1" class="table table-bordered">';
-                echo '<thead>';
-                echo '<tr>';
-                echo '<th rowspan="2"  style="vertical-align: middle;">Kelas</th>';
-                echo '<th colspan="4" style="text-align: center;">Iuran ' . $namaKategori . '</th>';
-                echo '</tr>';
-                echo '<tr>';
-                echo '<td>Penetapan</td>';
-                echo '<td>Bulan ini</td>';
-                echo '<td>Tunggakan</td>';
-                echo '<td>Jumlah</td>';
-                echo '</tr>'; 
-                echo '</thead>';
-                echo '<tbody>';
-
-                // Simpan total kolom per kelas
-                $penetapanSubkatKelas = 0;
-                $bulanIniSubkatKelas = 0;
-                $tunggakanSubkatKelas = 0;
-                $totalSubkatKelas = 0;
-
-                $finalPenetapanSubkat = 0;
-                $finalBulanIniSubkat = 0;
-                $finalTunggakanSubkat = 0;
-                $finalJumlahSubkat = 0;
-
-                // Loop untuk menghitung total kolom per kelas
-                for ($kelas = 1; $kelas <= 6; $kelas++) {
-
-                $queryTotal = "SELECT
-                SUM(CASE WHEN s.id_kelas = $kelas AND subkat.nama_sub_kategori = '$namaKategori' THEN tms.penetapan ELSE 0 END) AS penetapan_subkat_kelas,
-                SUM(CASE WHEN s.id_kelas = $kelas AND subkat.nama_sub_kategori = '$namaKategori' THEN tms.bulan_ini ELSE 0 END) AS bulan_ini_subkat_kelas,
-                SUM(CASE WHEN s.id_kelas = $kelas AND subkat.nama_sub_kategori = '$namaKategori' THEN tms.tunggakan ELSE 0 END) AS tunggakan_subkat_kelas,
-                SUM(CASE WHEN s.id_kelas = $kelas AND subkat.nama_sub_kategori = '$namaKategori' THEN tms.jumlah ELSE 0 END) AS total_subkat_kelas,
-
-                FROM
-                    transaksi_masuk_siswa tms
-                LEFT JOIN
-                    siswa s ON tms.id_siswa = s.id_siswa
-                LEFT JOIN
-                    sub_kategori_siswa subkat ON tms.id_sub_kategori = subkat.id_sub_kategori
-                WHERE
-                    tms.id_tahun_ajar = $idTahunAjar AND 
-                    MONTH(tms.tanggal) = $bulanNum";
-                    
-                $resultTotal = mysqli_query($conn, $queryTotal);
-
-                $rowKelas=mysqli_fetch_array($resultTotal);
-                $penetapanSubkatKelas =  $rowKelas['penetapan_subkat_kelas'];
-                $bulanIniSubkatKelas = $rowKelas['bulan_ini_subkat_kelas'];
-                $tunggakanSubkatKelas = $rowKelas['tunggakan_subkat_kelas'];
-                $totalSubkatKelas = $rowKelas['total_subkat_kelas'];
-                
-                echo '<tr>';
-                echo '<td>Kelas ' . $kelas . '</td>';
-                echo '<td>Rp. ' . number_format($penetapanSubkatKelas, 0, ',', '.') . '</td>';
-                echo '<td>Rp. ' . number_format($bulanIniSubkatKelas, 0, ',', '.') . '</td>';
-                echo '<td>Rp. ' . number_format($tunggakanSubkatKelas, 0, ',', '.') . '</td>';
-                echo '<td>Rp. ' . number_format($totalSubkatKelas, 0, ',', '.') . '</td>';
-                echo '</tr>';
-                
-                // Tambahkan nilai ke total
-                $finalPenetapanSubkat += $penetapanSubkatKelas;
-                $finalBulanIniSubkat += $bulanIniSubkatKelas;
-                $finalTunggakanSubkat += $tunggakanSubkatKelas;
-                $finalJumlahSubkat += $totalSubkatKelas;
-                
+                        echo '<tr>';
+                        echo '<td>' . $i++ . '</td>';
+                        echo '<td>' . $nis . '</td>';
+                        echo '<td>' . $nisn . '</td>';
+                        echo '<td>' . $namaSiswa . '</td>';
+                        echo '<td>' . $LM1_TP1 . '</td>';
+                        echo '<td>' . $LM1_TP2 . '</td>';
+                        echo '<td>' . $LM1_TP3 . '</td>';
+                        echo '<td>' . $LM1_TP4 . '</td>';
+                        echo '<td>' . $LM2_TP1 . '</td>';
+                        echo '<td>' . $LM2_TP2 . '</td>';
+                        echo '<td>' . $LM2_TP3 . '</td>';
+                        echo '<td>' . $LM2_TP4 . '</td>';
+                        echo '<td>' . $LM3_TP1 . '</td>';
+                        echo '<td>' . $LM3_TP2 . '</td>';
+                        echo '<td>' . $LM3_TP3 . '</td>';
+                        echo '<td>' . $LM3_TP4 . '</td>';
+                        echo '<td>' . $LM4_TP1 . '</td>';
+                        echo '<td>' . $LM4_TP2 . '</td>';
+                        echo '<td>' . $LM4_TP3 . '</td>';
+                        echo '<td>' . $LM4_TP4 . '</td>';
+                        echo '<td>' . $LM1 . '</td>';
+                        echo '<td>' . $LM2 . '</td>';
+                        echo '<td>' . $LM3 . '</td>';
+                        echo '<td>' . $LM4 . '</td>';
+                        echo '<td>' . $rerataUlangan . '</td>';
+                        echo '<td>' . $STS . '</td>';
+                        echo '<td>' . $SAS . '</td>';
+                        echo '<td>' . $nilaiRapot . '</td>';
+                        echo '</tr>';
+                    }
+                        echo '</table>';
+                        echo '</div>';
+                        echo '</div>';
+                        echo '<div style="text-align: center;" class="sb-sidenav-footer">';
+                        echo '<form method="post" action="pdf_cover_daftar_nilai.php" target="_blank">';
+                        echo '<input type="hidden" name="idTahunAjar" value="' . $idTahunAjar . '">';
+                        echo '<input type="hidden" name="semester" value="' . $semester . '">';
+                        echo '<input type="hidden" name="kelas" value="' . $kelas . '">';
+                        echo '<input type="hidden" name="idMapel" value="' . $idMapel . '">';                        
+                        echo '<button type="submit" class="btn btn-primary" name="btnCetakDaftarNilai" id="btnCetakDaftarNilai">Cetak Cover</button>';
+                        echo '</form><br>';
+                        echo '<form method="post" action="pdf_daftar_nilai.php" target="_blank">';
+                        echo '<input type="hidden" name="idTahunAjar" value="' . $idTahunAjar . '">';
+                        echo '<input type="hidden" name="semester" value="' . $semester . '">';
+                        echo '<input type="hidden" name="kelas" value="' . $kelas . '">';
+                        echo '<input type="hidden" name="idMapel" value="' . $idMapel . '">';                        
+                        echo '<button type="submit" class="btn btn-primary" name="btnCetakDaftarNilai" id="btnCetakDaftarNilai">Cetak</button>';
+                        echo '</form>';
+                        echo '</div><br>';
                 }
 
-                echo '<tr>';
-                echo '<td><strong>Total</strong></td>';
-                echo '<td><strong>Rp. ' . number_format($finalPenetapanSubkat, 0, ',', '.') . '</strong></td>';
-                echo '<td><strong>Rp. ' . number_format($finalBulanIniSubkat, 0, ',', '.') . '</strong></strong></td>';
-                echo '<td><strong>Rp. ' . number_format($finalTunggakanSubkat, 0, ',', '.') . '</strong></strong></td>';
-                echo '<td><strong>Rp. ' . number_format($finalJumlahSubkat, 0, ',', '.') . '</strong></strong></td>';
-                echo '</tr>';
-
-                echo '</tbody>';
-                echo '</table>'; 
-                echo '</div>';
-                echo '</div>';
-                echo '<div style="text-align: center;" class="sb-sidenav-footer">';
-                echo '<form method="post" action="pdf_lap_siswa_lain.php" target="_blank">';
-                echo '<input type="hidden" name="idTahunAjar" value="' . $idTahunAjar . '">';
-                echo '<input type="hidden" name="bulan" value="' . $bulanNum . '>';
-                echo '<input type="hidden" name="idKategori" value="' . $idKategoriLap . '">';
-                echo '<button type="submit" class="btn btn-primary" name="btnCetakLapTunggal" id="btnCetakLapTunggal">Cetak</button>';  
-                echo '</form>';                      
-                echo '</div><br>';
-                
-                
                 ?>              
                 </main>
             </div>
