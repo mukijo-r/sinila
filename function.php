@@ -689,15 +689,14 @@
             }
 
             // Query SELECT untuk memeriksa apakah data sudah masuk ke database
-            $result = mysqli_query($conn, "SELECT * 
+            $queryCek = "SELECT * 
             FROM nilai_catatan
             WHERE 
-            tanggal='$tanggal' AND
             id_tahun_Ajar='$idTahunAjar' AND
             semester='$semester' AND
             id_siswa='$idSiswa' AND
-            catatan='$catatan'            
-            ");
+            catatan='$catatan'; ";
+            $result = mysqli_query($conn, $queryCek);
 
             if ($result && mysqli_num_rows($result) === 1) {
                 // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
@@ -711,7 +710,7 @@
             }
         } catch (Exception $e) {
             // Tangani exception jika terjadi kesalahan
-            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryUpdateNilaiCatatan . $e->getMessage();
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $e->getMessage();
             $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
             header('location:input_nilai_catatan.php');
             exit;
