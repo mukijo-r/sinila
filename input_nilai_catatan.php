@@ -88,7 +88,7 @@ $namaUser = $rowUser['nama_lengkap'];
                                     LEFT JOIN tahun_ajar ta ON nc.id_tahun_ajar = ta.id_tahun_ajar
                                     LEFT JOIN siswa s ON nc.id_siswa = s.id_siswa
                                     WHERE id_kelas = $kelas
-                                    ORDER BY nc.tanggal DESC;");
+                                    ORDER BY nc.id_nc DESC;");
 
                                     $totalEntries = mysqli_num_rows($dataNilaiCatatan);
                                     $i = $totalEntries;
