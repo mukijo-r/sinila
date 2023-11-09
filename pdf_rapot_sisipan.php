@@ -6,23 +6,24 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
 // Extend the TCPDF class to create custom Header and Footer
 class MYPDF extends TCPDF {
     public function Header() {
-        // Logo
         // Tambahkan baris baru
         $this->SetCellPaddings(0, 0.2);
         $this->Ln(50); // Pindahkan ke posisi tertentu sebelum menambahkan gambar latar belakang
-
+    
         // Gambar latar belakang (di tengah halaman)
-        
         $backgroundImage = K_PATH_IMAGES.'bg_rapot2.jpg';
         $this->Image($backgroundImage, 0, 68, 150, 180, '', '', '', true, 300, 'C', false, false, false);
-
+    
+        // Logo
         $image_file = K_PATH_IMAGES.'logo.jpg';
-        $this->Image($image_file, 30, 8, 20, '', 'JPG', '', 'T', false, 50, '', false, false, 0, false, false, false);
-
+        $this->Image($image_file, 30, 8, 20, '', 'JPG', '', 'T', true, 50, '', false, false, 0, false, false, false);
+    
+        // Geser ke posisi baru untuk tulisan
+        $this->SetXY(10, 12);
+    
         // Tambahkan baris baru
         $this->SetCellPaddings(0, 0);
-
-        $this->Ln(); 
+    
         $this->SetFont('helvetica', '', 20);
         $this->Cell(0, 0, 'SD KATOLIK BHAKTI', 0, false, 'C', 0, '', 0, false, 'M', 'M');
         $this->Ln();  
@@ -33,10 +34,10 @@ class MYPDF extends TCPDF {
         $this->Cell(0, 6, 'ROGOJAMPI - BANYUWANGI 68462', 0, false, 'C', 0, '', 0, false, 'M', 'M');
         $this->SetLineWidth(0); // Atur ketebalan garis
         $this->Line(10, 32, 200, 32); // Koordinat untuk garis mendatar
-        $this->Line(10, 33, 200, 33);
+        $this->Line(10, 31, 200, 31);
         $this->Ln();
-
     }
+    
 
 }
 
