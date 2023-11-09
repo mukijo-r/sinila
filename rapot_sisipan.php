@@ -222,12 +222,12 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                         </div><br><br>              
                         <?php
 
-                        tabelDaftarNilai($idTahunAjar, $semester, $kelas, $idSiswa, $tplm1, $tplm2);
+                        tabelDaftarNilai($idTahunAjar, $semester, $kelas, $idSiswa, $nomorUrut, $tplm1, $tplm2);
                     }               
                     ?>
                 </div>
                 <?php
-                function tabelDaftarNilai($idTahunAjar, $semester, $kelas, $idSiswa, $tplm1, $tplm2) {
+                function tabelDaftarNilai($idTahunAjar, $semester, $kelas, $idSiswa, $nomorUrut, $tplm1, $tplm2) {
                     $conn = mysqli_connect("localhost:3306", "root", "", "sdk");
 
                     $queryRapotSisipan = "SELECT m.id_mapel, m.mapel,
@@ -519,17 +519,16 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                     
                     echo '</div><br><br>';
 
-                    
-
-
-
-
                     echo '<div style="text-align: center;" class="sb-sidenav-footer">';
-                    echo '<form method="post" action="pdf_daftar_nilai.php" target="_blank">';
+                    echo '<form method="post" action="pdf_rapot_sisipan.php" target="_blank">';
                     echo '<input type="hidden" name="idTahunAjar" value="' . $idTahunAjar . '">';
                     echo '<input type="hidden" name="semester" value="' . $semester . '">';
-                    echo '<input type="hidden" name="kelas" value="' . $kelas . '">';                        
-                    echo '<button type="submit" class="btn btn-primary" name="btnCetakDaftarNilai" id="btnCetakDaftarNilai">Cetak</button>';
+                    echo '<input type="hidden" name="kelas" value="' . $kelas . '">';
+                    echo '<input type="hidden" name="idSiswa" value="' . $idSiswa . '">'; 
+                    echo '<input type="hidden" name="tplm1" value="' . $tplm1 . '">'; 
+                    echo '<input type="hidden" name="tplm2" value="' . $tplm2 . '">';
+                    echo '<input type="hidden" name="nomorUrut" value="' . $nomorUrut . '">';                       
+                    echo '<button type="submit" class="btn btn-primary" name="btnCetakRapotSisipan" id="btnCetakRapotSisipan">Cetak</button>';
                     echo '</form>';
                     echo '</div><br>';
                 }
