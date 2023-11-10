@@ -16,7 +16,7 @@ $namaUser = $rowUser['nama_lengkap'];
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Halaman Input Nilai</title>
+        <title>Halaman Menaikkan Kelas</title>
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
@@ -151,8 +151,8 @@ $namaUser = $rowUser['nama_lengkap'];
                                                                 <label for="kenaikan">Status :</label>
                                                                 <select name="kenaikan" class="form-select" id="kenaikan" aria-label="Kenaikkan" required>
                                                                     <option value="<?=$status;?>"><?=$status;?></option>
-                                                                    <option value="Naik Kelas">Naik Kelas</option>
-                                                                    <option value="Tidak Naik Kelas">Tidak Naik Kelas</option>
+                                                                    <option value="Naik">Naik Kelas</option>
+                                                                    <option value="Tidak Naik">Tidak Naik Kelas</option>
                                                                 </select>
                                                             </div>
                                                             <div class="text-center">
@@ -248,8 +248,8 @@ $namaUser = $rowUser['nama_lengkap'];
                             <label for="kenaikan">Status :</label>
                             <select name="kenaikan" class="form-select" id="kenaikan" aria-label="Kenaikkan" required>
                                 <option selected disabled>Naik/Tidak Naik</option>
-                                <option value="Naik Kelas">Naik Kelas</option>
-                                <option value="Tidak Naik Kelas">Tidak Naik Kelas</option>
+                                <option value="Naik">Naik Kelas</option>
+                                <option value="Tidak Naik">Tidak Naik Kelas</option>
                             </select>
                         </div>
                         <div class="text-center">
