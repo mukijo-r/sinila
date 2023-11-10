@@ -105,7 +105,10 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                                                 <option value="4">4</option>
                                             </select>
                                         </div>
-                                    </div>                                    
+                                    </div>
+                                    <div class="col">
+                                        <a data-bs-toggle="modal" data-bs-target="#modalInfo"><img src="assets/img/question.png" width="30px"></a>
+                                    </div>                                     
                                     <div class="col">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         <button type="submit" class="btn btn-primary" name="btnTampilLapSiswa" id="btnTampilLapSiswa">
                                             Tampilkan
@@ -569,3 +572,34 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
     
     </body>
 </html>
+
+<!-- Modal Info-->
+<div class="modal fade" id="modalInfo">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Info</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <!-- Modal body -->      
+                <form method="post">
+                <div class="modal-body">
+                    <h6>Jumlah TP untuk setiap LM opsional. Bila tidak dipilih, TP1 dan TP2 pada Daftar Nilai akan dipakai untuk setiap LM.</h6>
+                    <h6>Formula bila dipilih :</h6> 
+                    <h6><u>Jumlah TP 2 :</u></h6>
+                    <h6>TP1 diambil dari TP1 pada Daftar Nilai</h6>
+                    <h6>TP2 diambil dari TP2 pada Daftar Nilai</h6>   
+                    <h6><u>Jumlah TP 3 :</u></h6>
+                    <h6>TP1 dihitung dari rata-rata TP1 dan TP2 pada Daftar Nilai</h6>
+                    <h6>TP2 dihitung dari rata-rata TP2 dan TP3 pada Daftar Nilai</h6>  
+                    <h6><u>Jumlah TP 4 :</u></h6>
+                    <h6>TP1 dihitung dari rata-rata TP1 dan TP2 pada Daftar Nilai</h6>
+                    <h6>TP2 dihitung dari rata-rata TP3 dan TP4 pada Daftar Nilai</h6>                 
+                </div>
+                <br> 
+            </form>   
+        </div>
+    </div>
+</div> 
