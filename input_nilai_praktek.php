@@ -232,9 +232,9 @@ $namaUser = $rowUser['nama_lengkap'];
         <script src="js/datatables-simple-demo.js"></script>   
     </body>   
 
-    <!-- Modal Tambah Nilai Praktek Siswa -->
-    <div class="modal fade" id="modalTambahNilaiPraktek">
-        <div class="modal-dialog">
+    <!-- Modal Tambah Nilai Siswa -->
+    <div class="modal fade bd-example-modal-lg" id="modalTambahNilaiPraktek" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <!-- Modal Header -->
                 <div class="modal-header">
@@ -244,48 +244,68 @@ $namaUser = $rowUser['nama_lengkap'];
                 <!-- Modal Body -->
                 <form method="post">
                     <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="semester">Semester :</label><br>
+                                    <select class="form-select" name="semester" id="semester" aria-label="Semester" required>
+                                        <option selected>Pilih semester</option>
+                                        <option value="Ganjil">Ganjil</option>
+                                        <option value="Genap">Genap</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="kategoriPraktek">Ketegori Praktek :</label>
+                                    <select class="form-select" name="kategoriPraktek" id="kategoriPraktek" aria-label="kategoriPraktek" required>
+                                        <option selected disabled>Pilih Kategori</option>                         
+                                        <option value="Seni Tari">Seni Tari</option>
+                                        <option value="Seni Rupa">Seni Rupa</option>
+                                        <option value="Seni Teater">Seni Teater</option>
+                                        <option value="Seni Musik">Seni Musik</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>                                       
+
+                        <!-- Displaying a list of students with input fields for grades -->
                         <div class="mb-3">
-                            <label for="semester">Semester :</label><br>
-                            <select class="form-select" name="semester" id="semester" aria-label="Semester" required>>
-                                <option selected>Pilih semester</option>                            
-                                <option value="Ganjil">Ganjil</option>
-                                <option value="Genap">Genap</option>
-                            </select>
-                        </div>      
-                        <div class="mb-3">
-                            <label for="siswa">Siswa :</label>
-                            <select name="siswa" class="form-select" id="siswa" aria-label="Siswa" required>>
-                                <option selected disabled>Pilih Siswa</option>
-                                <?php
-                                // Ambil data siswa dari tabel siswa
-                                $querySiswa = mysqli_query($conn, "SELECT id_siswa, nama FROM siswa WHERE id_kelas = $kelas");
+                            <label for="siswa">Nilai Siswa :</label>
+                            <?php
+                            // Ambil data siswa dari tabel siswa
+                            $querySiswa = mysqli_query($conn, "SELECT id_siswa, nama FROM siswa WHERE id_kelas = $kelas");
+                            
+                            // Check if there are students
+                            if (mysqli_num_rows($querySiswa) > 0) {
+                                $counter = 1; // Initialize a counter variable
+
                                 while ($rowSiswa = mysqli_fetch_assoc($querySiswa)) {
-                                    echo '<option value="' . $rowSiswa['id_siswa'] . '">' . $rowSiswa['nama'] . '</option>';
+                                    // Display each student's name and sequential number
+                                    echo '<div class="row mb-3">';
+                                    echo '<div class="col-md-1">' . $counter . '.</div>';
+                                    echo '<div class="col-md-6">' . $rowSiswa['nama'] . '</div>';
+                                    
+                                    // Input field for each student's grade
+                                    echo '<div class="col-md-2">';
+                                    echo '<select name="nilai_' . $rowSiswa['id_siswa'] . '" class="form-select" required>';
+                                    echo '<option value="A">A</option>';
+                                    echo '<option value="B">B</option>';
+                                    echo '<option value="C">C</option>';
+                                    echo '<option value="D">D</option>';
+                                    echo '<option value="E">E</option>';
+                                    echo '</select>';
+                                    echo '</div>';                                    
+                                    echo '</div>';
+
+                                    $counter++; 
                                 }
-                                ?>
-                            </select>
-                        </div>                        
-                        <div class="mb-3">
-                            <label for="kategoriPraktek">Kategori Praktek :</label>
-                            <select class="form-select" name="kategoriPraktek" id="kategoriPraktek" aria-label="kategoriPraktek" required>
-                                <option selected disabled>Pilih Kategori</option>                         
-                                <option value="Seni Tari">Seni Tari</option>
-                                <option value="Seni Rupa">Seni Rupa</option>
-                                <option value="Seni Teater">Seni Teater</option>
-                                <option value="Seni Musik">Seni Musik</option>
-                            </select>
+                            } else {
+                                echo '<p>No students found.</p>';
+                            }
+                            ?>
                         </div>
-                        <div class="mb-3">
-                            <label for="nilai">Nilai :</label>                        
-                            <select class="form-select" name="nilai" id="nilai" aria-label="nilai" required>
-                                <option selected disabled>Pilih Nilai</option>                         
-                                <option value="A">A</option>
-                                <option value="B">B</option>
-                                <option value="C">C</option>
-                                <option value="D">D</option>
-                                <option value="E">E</option>
-                            </select>                 
-                        </div>
+
                         <div class="text-center">
                             <input type="hidden" name="namaUser" value="<?=$namaUser;?>">
                             <button type="submit" class="btn btn-primary" name="tambahNilaiPraktek">Simpan</button>

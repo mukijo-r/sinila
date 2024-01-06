@@ -332,38 +332,51 @@
     // 7. Tambah Nilai Praktek
     if(isset($_POST['tambahNilaiPraktek'])){
         $semester = $_POST['semester'];
-        $idSiswa = $_POST['siswa'];
         $kategoriPraktek = $_POST['kategoriPraktek'];
-        $nilai = $_POST['nilai'];
         $namaUser = $_POST['namaUser'];
 
         $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
         $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
         $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];
 
+        $lastIdSiswa = null;
+        $lastValue = null;
+
         try {
-            $queryInsertNilaiPraktek = "INSERT INTO `nilai_praktek`
-            (`tanggal`, `id_tahun_Ajar`, `semester`, `kelas`, `id_siswa`, `kategori_praktek`, `nilai`, `guru_penilai`) 
-            VALUES ('$tanggal','$idTahunAjar','$semester','$kelas','$idSiswa','$kategoriPraktek','$nilai','$namaUser')";
-                
-            $insertNilaiPraktek = mysqli_query($conn, $queryInsertNilaiPraktek);
+
+            $dataNilai = [];
+
+            foreach ($_POST as $key => $value) {
+                if (strpos($key, 'nilai_') !== false) {
+                    $idSiswa = substr($key, 6);
+                    $lastIdSiswa = $idSiswa; // Store the last id_siswa
+                    $dataNilai[$idSiswa] = $value;
+                    $lastValue = $value; // Store the last value
+                    $queryInsertNilaiPraktek = "INSERT INTO `nilai_praktek`
+                    (`tanggal`, `id_tahun_Ajar`, `semester`, `kelas`, `id_siswa`, `kategori_praktek`, `nilai`, `guru_penilai`) 
+                    VALUES ('$tanggal','$idTahunAjar','$semester','$kelas','$idSiswa','$kategoriPraktek','$value','$namaUser')";
+                        
+                    $insertNilaiPraktek = mysqli_query($conn, $queryInsertNilaiPraktek);
+                }
+            } 
 
             if (!$insertNilaiPraktek) {
                 throw new Exception("Query insert gagal"); // Lempar exception jika query gagal
             }
 
             // Query SELECT untuk memeriksa apakah data sudah masuk ke database
-            $result = mysqli_query($conn, "SELECT * 
+            $queryCek = "SELECT * 
             FROM nilai_praktek 
             WHERE 
             tanggal='$tanggal' AND
             id_tahun_Ajar='$idTahunAjar' AND
             semester='$semester' AND
             kelas='$kelas' AND
-            id_siswa='$idSiswa' AND
+            id_siswa='$lastIdSiswa' AND
             kategori_praktek='$kategoriPraktek' AND
-            nilai='$nilai'            
-            ");
+            nilai='$lastValue'";
+            
+            $result = mysqli_query($conn, $queryCek);
 
             if ($result && mysqli_num_rows($result) === 1) {
                 // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
@@ -377,7 +390,7 @@
             }
         } catch (Exception $e) {
             // Tangani exception jika terjadi kesalahan
-            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryInsertNilaiPraktek . $e->getMessage();
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $e->getMessage();
             $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
             header('location:input_nilai_praktek.php');
             exit;
