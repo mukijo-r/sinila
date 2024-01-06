@@ -1231,19 +1231,32 @@
         $idSiswa = $_POST['siswa'];
         $idMapel = $_POST['mapel'];
         $lingkupMateri = $_POST['lingkupMateri'];
-        $nilai = $_POST['nilai'];
         $namaUser = $_POST['namaUser'];
 
         $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
         $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
         $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];
 
+        $lastIdSiswa = null;
+        $lastValue = null;
+
         try {
-            $queryInsertNilaiUlangan = "INSERT INTO `nilai_ulangan`
-            (`tanggal`, `id_tahun_Ajar`, `semester`, `id_siswa`, `kelas`, `id_mapel`, `lingkup_materi`, `nilai`, `guru_penilai`) 
-            VALUES ('$tanggal','$idTahunAjar','$semester','$idSiswa', '$kelas', '$idMapel','$lingkupMateri','$nilai','$namaUser')";
-                
-            $insertNilaiUlangan = mysqli_query($conn, $queryInsertNilaiUlangan);
+
+            $dataNilai = [];
+
+            foreach ($_POST as $key => $value) {
+                if (strpos($key, 'nilai_') !== false) {
+                    $idSiswa = substr($key, 6);
+                    $lastIdSiswa = $idSiswa; // Store the last id_siswa
+                    $dataNilai[$idSiswa] = $value;
+                    $lastValue = $value; // Store the last value
+                    $queryInsertNilaiUlangan = "INSERT INTO `nilai_ulangan`
+                    (`tanggal`, `id_tahun_Ajar`, `semester`, `id_siswa`, `kelas`, `id_mapel`, `lingkup_materi`, `nilai`, `guru_penilai`) 
+                    VALUES ('$tanggal','$idTahunAjar','$semester','$idSiswa', '$kelas', '$idMapel','$lingkupMateri','$value','$namaUser')";
+                        
+                    $insertNilaiUlangan = mysqli_query($conn, $queryInsertNilaiUlangan);
+                }
+            }    
 
             if (!$insertNilaiUlangan) {
                 throw new Exception("Query insert gagal"); // Lempar exception jika query gagal
@@ -1256,11 +1269,11 @@
             tanggal='$tanggal' AND
             id_tahun_Ajar='$idTahunAjar' AND
             semester='$semester' AND
-            id_siswa='$idSiswa' AND
+            id_siswa='$lastIdSiswa' AND
             kelas='$kelas' AND
             id_mapel='$idMapel' AND
             lingkup_materi='$lingkupMateri' AND
-            nilai='$nilai'            
+            nilai='$lastValue'            
             ");
 
             if ($result && mysqli_num_rows($result) === 1) {
