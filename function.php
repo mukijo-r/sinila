@@ -490,37 +490,50 @@
     // 7. Tambah Nilai Kepribadian
     if(isset($_POST['tambahNilaiKepribadian'])){
         $semester = $_POST['semester'];
-        $idSiswa = $_POST['siswa'];
         $kategoriKepribadian = $_POST['kategoriKepribadian'];
-        $nilai = $_POST['nilai'];
         $namaUser = $_POST['namaUser'];
 
         $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
         $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
         $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];
 
+        $lastIdSiswa = null;
+        $lastValue = null;
+
         try {
-            $queryInsertNilaiKepribadian = "INSERT INTO `nilai_kepribadian`
-            (`tanggal`, `id_tahun_Ajar`, `semester`, `kelas`, `id_siswa`, `kategori_kepribadian`, `nilai`, `guru_penilai`) 
-            VALUES ('$tanggal','$idTahunAjar','$semester','$kelas','$idSiswa','$kategoriKepribadian','$nilai','$namaUser')";
-                
-            $insertNilaiKepribadian = mysqli_query($conn, $queryInsertNilaiKepribadian);
+
+            $dataNilai = [];
+
+            foreach ($_POST as $key => $value) {
+                if (strpos($key, 'nilai_') !== false) {
+                    $idSiswa = substr($key, 6);
+                    $lastIdSiswa = $idSiswa; // Store the last id_siswa
+                    $dataNilai[$idSiswa] = $value;
+                    $lastValue = $value; // Store the last value
+                    $queryInsertNilaiKepribadian = "INSERT INTO `nilai_kepribadian`
+                    (`tanggal`, `id_tahun_Ajar`, `semester`, `kelas`, `id_siswa`, `kategori_kepribadian`, `nilai`, `guru_penilai`) 
+                    VALUES ('$tanggal','$idTahunAjar','$semester','$kelas','$idSiswa','$kategoriKepribadian','$value','$namaUser')";
+                        
+                    $insertNilaiKepribadian = mysqli_query($conn, $queryInsertNilaiKepribadian);
+                }
+            }
 
             if (!$insertNilaiKepribadian) {
                 throw new Exception("Query insert gagal"); // Lempar exception jika query gagal
             }
 
             // Query SELECT untuk memeriksa apakah data sudah masuk ke database
-            $result = mysqli_query($conn, "SELECT * 
+            $queryCek = "SELECT * 
             FROM nilai_kepribadian 
             WHERE 
             tanggal='$tanggal' AND
             id_tahun_Ajar='$idTahunAjar' AND
             semester='$semester' AND
-            id_siswa='$idSiswa' AND
+            id_siswa='$lastIdSiswa' AND
             kategori_kepribadian='$kategoriKepribadian' AND
-            nilai='$nilai'            
-            ");
+            nilai='$lastValue'            
+            ";
+            $result = mysqli_query($conn, $queryCek);
 
             if ($result && mysqli_num_rows($result) === 1) {
                 // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
@@ -534,7 +547,7 @@
             }
         } catch (Exception $e) {
             // Tangani exception jika terjadi kesalahan
-            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $e->getMessage();
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryCek . $e->getMessage();
             $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
             header('location:input_nilai_kepribadian.php');
             exit;
