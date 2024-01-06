@@ -42,7 +42,7 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
             <div id="layoutSidenav_content" class="layoutSidenav_content">
                 <main >
                     <div class="container-fluid px-4">
-                        <h3 class="mt-4">Daftar Nilai</h3>
+                        <h3 class="mt-4">Rapot Sisipan</h3>
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item active">Laporan / Rapor Sisipan</li>    
                         </ol>  
@@ -77,9 +77,14 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                                                 ?>
                                             </select>
                                         </div>
-                                    </div>         
+                                    </div>
+                                    <div class="col">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <button type="submit" class="btn btn-primary" name="btnTampilLapSiswa" id="btnTampilLapSiswa">
+                                            Tampilkan
+                                        </button>
+                                    </div>           
                                 </div>
-                                <div class="row row-cols-auto">
+                                <!-- <div class="row row-cols-auto">
                                     <div class="col">
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
@@ -109,12 +114,8 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                                     <div class="col">
                                         <a data-bs-toggle="modal" data-bs-target="#modalInfo"><img src="assets/img/question.png" width="30px"></a>
                                     </div>                                     
-                                    <div class="col">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        <button type="submit" class="btn btn-primary" name="btnTampilLapSiswa" id="btnTampilLapSiswa">
-                                            Tampilkan
-                                        </button>
-                                    </div>            
-                                </div>
+                                              
+                                </div> -->
                             </form> 
                         </div>
                     </div><br> 
@@ -138,8 +139,8 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                     if (isset($_POST['btnTampilLapSiswa'])) {
                         $semester = $_POST['semester'];
                         $idSiswa = $_POST['siswa'];
-                        $tplm1 = $_POST['tplm1'];
-                        $tplm2 = $_POST['tplm2'];
+                        // $tplm1 = $_POST['tplm1'];
+                        // $tplm2 = $_POST['tplm2'];
                 
                         $querySiswa = mysqli_query($conn, "SELECT nama, nis, nisn FROM siswa WHERE id_siswa='$idSiswa'");
                         $rowSiswa = mysqli_fetch_assoc($querySiswa); 
@@ -160,7 +161,7 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                                 <h5>LAPORAN PENILAIAN HASIL BELAJAR</h5>
                                 <h5>TENGAH SEMESTER <?=$semester;?></h5>
                                 <h5>TAHUN PELAJARAN <?=$tahunAjar;?></h5>
-                                <h6><?=$tplm2;?></h6>                                
+                                
                             </div>
                         </div><br>
                         <div class="row" style="text-transform: uppercase;">
@@ -233,29 +234,29 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                 function tabelDaftarNilai($idTahunAjar, $semester, $kelas, $idSiswa, $nomorUrut, $tplm1, $tplm2) {
                     $conn = mysqli_connect("localhost:3306", "root", "", "sdk");
 
-                    $queryRapotSisipan = "SELECT m.id_mapel, m.mapel,
-                    (CASE WHEN nm.lingkup_materi = 'LM 1' AND nm.tujuan_pembelajaran = 'TP1' THEN nm.nilai ELSE 0 END) AS LM1_TP1,
-                    (CASE WHEN nm.lingkup_materi = 'LM 1' AND nm.tujuan_pembelajaran = 'TP2' THEN nm.nilai ELSE 0 END) AS LM1_TP2,
-                    (CASE WHEN nm.lingkup_materi = 'LM 1' AND nm.tujuan_pembelajaran = 'TP3' THEN nm.nilai ELSE 0 END) AS LM1_TP3,
-                    (CASE WHEN nm.lingkup_materi = 'LM 1' AND nm.tujuan_pembelajaran = 'TP4' THEN nm.nilai ELSE 0 END) AS LM1_TP4,
-                    (CASE WHEN nm.lingkup_materi = 'LM 2' AND nm.tujuan_pembelajaran = 'TP1' THEN nm.nilai ELSE 0 END) AS LM2_TP1,
-                    (CASE WHEN nm.lingkup_materi = 'LM 2' AND nm.tujuan_pembelajaran = 'TP2' THEN nm.nilai ELSE 0 END) AS LM2_TP2,
-                    (CASE WHEN nm.lingkup_materi = 'LM 2' AND nm.tujuan_pembelajaran = 'TP3' THEN nm.nilai ELSE 0 END) AS LM2_TP3,
-                    (CASE WHEN nm.lingkup_materi = 'LM 2' AND nm.tujuan_pembelajaran = 'TP4' THEN nm.nilai ELSE 0 END) AS LM2_TP4,
-                    (CASE WHEN nm.lingkup_materi = 'LM 3' AND nm.tujuan_pembelajaran = 'TP1' THEN nm.nilai ELSE 0 END) AS LM3_TP1,
-                    (CASE WHEN nm.lingkup_materi = 'LM 3' AND nm.tujuan_pembelajaran = 'TP2' THEN nm.nilai ELSE 0 END) AS LM3_TP2,
-                    (CASE WHEN nm.lingkup_materi = 'LM 3' AND nm.tujuan_pembelajaran = 'TP3' THEN nm.nilai ELSE 0 END) AS LM3_TP3,
-                    (CASE WHEN nm.lingkup_materi = 'LM 3' AND nm.tujuan_pembelajaran = 'TP4' THEN nm.nilai ELSE 0 END) AS LM3_TP4,
-                    (CASE WHEN nm.lingkup_materi = 'LM 4' AND nm.tujuan_pembelajaran = 'TP1' THEN nm.nilai ELSE 0 END) AS LM4_TP1,
-                    (CASE WHEN nm.lingkup_materi = 'LM 4' AND nm.tujuan_pembelajaran = 'TP2' THEN nm.nilai ELSE 0 END) AS LM4_TP2,
-                    (CASE WHEN nm.lingkup_materi = 'LM 4' AND nm.tujuan_pembelajaran = 'TP3' THEN nm.nilai ELSE 0 END) AS LM4_TP3,
-                    (CASE WHEN nm.lingkup_materi = 'LM 4' AND nm.tujuan_pembelajaran = 'TP4' THEN nm.nilai ELSE 0 END) AS LM4_TP4,
-                    (CASE WHEN nul.lingkup_materi = 'LM 1' THEN nul.nilai ELSE 0 END) AS LM1,
-                    (CASE WHEN nul.lingkup_materi = 'LM 2' THEN nul.nilai ELSE 0 END) AS LM2,
-                    (CASE WHEN nul.lingkup_materi = 'LM 3' THEN nul.nilai ELSE 0 END) AS LM3,
-                    (CASE WHEN nul.lingkup_materi = 'LM 4' THEN nul.nilai ELSE 0 END) AS LM4,                        
-                    (CASE WHEN nuj.ujian = 'STS' THEN nuj.nilai ELSE 0 END) AS STS,
-                    (CASE WHEN nuj.ujian = 'SAS' THEN nuj.nilai ELSE 0 END) AS SAS
+                    $queryNilaiHarian = "SELECT m.id_mapel, m.mapel,
+                    MAX(CASE WHEN nm.lingkup_materi = 'LM 1' AND nm.tujuan_pembelajaran = 'TP1' THEN nm.nilai ELSE 0 END) AS LM1_TP1,
+                    MAX(CASE WHEN nm.lingkup_materi = 'LM 1' AND nm.tujuan_pembelajaran = 'TP2' THEN nm.nilai ELSE 0 END) AS LM1_TP2,
+                    MAX(CASE WHEN nm.lingkup_materi = 'LM 1' AND nm.tujuan_pembelajaran = 'TP3' THEN nm.nilai ELSE 0 END) AS LM1_TP3,
+                    MAX(CASE WHEN nm.lingkup_materi = 'LM 1' AND nm.tujuan_pembelajaran = 'TP4' THEN nm.nilai ELSE 0 END) AS LM1_TP4,
+                    MAX(CASE WHEN nm.lingkup_materi = 'LM 2' AND nm.tujuan_pembelajaran = 'TP1' THEN nm.nilai ELSE 0 END) AS LM2_TP1,
+                    MAX(CASE WHEN nm.lingkup_materi = 'LM 2' AND nm.tujuan_pembelajaran = 'TP2' THEN nm.nilai ELSE 0 END) AS LM2_TP2,
+                    MAX(CASE WHEN nm.lingkup_materi = 'LM 2' AND nm.tujuan_pembelajaran = 'TP3' THEN nm.nilai ELSE 0 END) AS LM2_TP3,
+                    MAX(CASE WHEN nm.lingkup_materi = 'LM 2' AND nm.tujuan_pembelajaran = 'TP4' THEN nm.nilai ELSE 0 END) AS LM2_TP4,
+                    MAX(CASE WHEN nm.lingkup_materi = 'LM 3' AND nm.tujuan_pembelajaran = 'TP1' THEN nm.nilai ELSE 0 END) AS LM3_TP1,
+                    MAX(CASE WHEN nm.lingkup_materi = 'LM 3' AND nm.tujuan_pembelajaran = 'TP2' THEN nm.nilai ELSE 0 END) AS LM3_TP2,
+                    MAX(CASE WHEN nm.lingkup_materi = 'LM 3' AND nm.tujuan_pembelajaran = 'TP3' THEN nm.nilai ELSE 0 END) AS LM3_TP3,
+                    MAX(CASE WHEN nm.lingkup_materi = 'LM 3' AND nm.tujuan_pembelajaran = 'TP4' THEN nm.nilai ELSE 0 END) AS LM3_TP4,
+                    MAX(CASE WHEN nm.lingkup_materi = 'LM 4' AND nm.tujuan_pembelajaran = 'TP1' THEN nm.nilai ELSE 0 END) AS LM4_TP1,
+                    MAX(CASE WHEN nm.lingkup_materi = 'LM 4' AND nm.tujuan_pembelajaran = 'TP2' THEN nm.nilai ELSE 0 END) AS LM4_TP2,
+                    MAX(CASE WHEN nm.lingkup_materi = 'LM 4' AND nm.tujuan_pembelajaran = 'TP3' THEN nm.nilai ELSE 0 END) AS LM4_TP3,
+                    MAX(CASE WHEN nm.lingkup_materi = 'LM 4' AND nm.tujuan_pembelajaran = 'TP4' THEN nm.nilai ELSE 0 END) AS LM4_TP4,
+                    MAX(CASE WHEN nul.lingkup_materi = 'LM 1' THEN nul.nilai ELSE 0 END) AS LM1,
+                    MAX(CASE WHEN nul.lingkup_materi = 'LM 2' THEN nul.nilai ELSE 0 END) AS LM2,
+                    MAX(CASE WHEN nul.lingkup_materi = 'LM 3' THEN nul.nilai ELSE 0 END) AS LM3,
+                    MAX(CASE WHEN nul.lingkup_materi = 'LM 4' THEN nul.nilai ELSE 0 END) AS LM4,                        
+                    MAX(CASE WHEN nuj.ujian = 'STS' THEN nuj.nilai ELSE 0 END) AS STS,
+                    MAX(CASE WHEN nuj.ujian = 'SAS' THEN nuj.nilai ELSE 0 END) AS SAS
                     FROM mapel m
                     LEFT JOIN nilai_mapel nm ON m.id_mapel = nm.id_mapel
                     LEFT JOIN nilai_ulangan nul ON m.id_mapel = nul.id_mapel
@@ -274,8 +275,7 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                         nuj.id_tahun_ajar = '$idTahunAjar'
                     GROUP BY  m.id_mapel, m.mapel;
                     ";
-
-                    $query = mysqli_query($conn, $queryRapotSisipan);
+                    $nilaiHarian = mysqli_query($conn, $queryNilaiHarian);
 
                     echo '<div class="card mb-4">';
                     echo '<div class="card-header">';
@@ -315,7 +315,7 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                     
                     $i = 1;
                 
-                    while ($row = mysqli_fetch_array($query)) {
+                    while ($row = mysqli_fetch_array($nilaiHarian)) {
                         $idMapel = $row['id_mapel'];
                         $mapel = $row['mapel'];
                         $LM1_TP1 = $row['LM1_TP1'];
@@ -343,39 +343,39 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                         $SAS = $row['SAS'];
                         $nilaiRapot = ((2 * $rerataUlangan) + $STS + (2 * $SAS)) / 5;
 
-                        if ($tplm1 == 3) {
-                            $lm1tp1 = ($LM1_TP1 + $LM1_TP2)/2;
-                            $lm1tp2 = ($LM1_TP2 + $LM1_TP3)/2;                            
-                        } elseif ($tplm1 == 4) {
-                            $lm1tp1 = ($LM1_TP1 + $LM1_TP2)/2;
-                            $lm1tp2 = ($LM1_TP3 + $LM1_TP4)/2;
-                        } else {
-                            $lm1tp1 = $LM1_TP1;
-                            $lm1tp2 = $LM1_TP2;
-                        }
+                        // if ($tplm1 == 3) {
+                        //     $lm1tp1 = ($LM1_TP1 + $LM1_TP2)/2;
+                        //     $lm1tp2 = ($LM1_TP2 + $LM1_TP3)/2;                            
+                        // } elseif ($tplm1 == 4) {
+                        //     $lm1tp1 = ($LM1_TP1 + $LM1_TP2)/2;
+                        //     $lm1tp2 = ($LM1_TP3 + $LM1_TP4)/2;
+                        // } else {
+                        //     $lm1tp1 = $LM1_TP1;
+                        //     $lm1tp2 = $LM1_TP2;
+                        // }
 
-                        if ($tplm2 == 3) {
-                            $lm2tp1 = ($LM2_TP1 + $LM2_TP2)/2;
-                            $lm2tp2 = ($LM2_TP2 + $LM2_TP3)/2;
-                        } elseif ($tplm2 == 4) {
-                            $lm2tp1 = ($LM2_TP1 + $LM2_TP2)/2;
-                            $lm2tp2 = ($LM2_TP3 + $LM2_TP4)/2;
-                        } else {
-                            $lm2tp1 = $LM2_TP1;
-                            $lm2tp2 = $LM2_TP2;
-                        }
+                        // if ($tplm2 == 3) {
+                        //     $lm2tp1 = ($LM2_TP1 + $LM2_TP2)/2;
+                        //     $lm2tp2 = ($LM2_TP2 + $LM2_TP3)/2;
+                        // } elseif ($tplm2 == 4) {
+                        //     $lm2tp1 = ($LM2_TP1 + $LM2_TP2)/2;
+                        //     $lm2tp2 = ($LM2_TP3 + $LM2_TP4)/2;
+                        // } else {
+                        //     $lm2tp1 = $LM2_TP1;
+                        //     $lm2tp2 = $LM2_TP2;
+                        // }
 
                         echo '<tr>';
                         echo '<td>' . $i++ . '</td>';
                         echo '<td style="text-align: left;">' . $mapel . '</td>';
-                        echo '<td>' . $lm1tp1 . '</td>';
-                        echo '<td>' . $lm1tp2 . '</td>';
-                        echo '<td>' . $lm2tp1 . '</td>';
-                        echo '<td>' . $lm2tp2 . '</td>';
-                        echo '<td></td>';
-                        echo '<td></td>';
-                        echo '<td></td>';
-                        echo '<td></td>';
+                        echo '<td>' . $LM1_TP1 . '</td>';
+                        echo '<td>' . $LM1_TP2 . '</td>';
+                        echo '<td>' . $LM2_TP1 . '</td>';
+                        echo '<td>' . $LM2_TP2 . '</td>';
+                        echo '<td>' . $LM3_TP1 . '</td>';
+                        echo '<td>' . $LM3_TP2 . '</td>';
+                        echo '<td>' . $LM4_TP1 . '</td>';
+                        echo '<td>' . $LM4_TP2 . '</td>';
                         echo '<td>' . $LM1 . '</td>';
                         echo '<td>' . $LM2 . '</td>';
                         echo '<td>' . $STS . '</td>';
@@ -499,15 +499,14 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                     `id_siswa`='$idSiswa'
                     ;";
 
-                    $i = 1;
                     $catatanSiswa = mysqli_query($conn, $queryCatatan);
-                    $rowCatatan = mysqli_fetch_array($catatanSiswa);
-                    $Catatan = $rowCatatan['catatan'];
+                    while ($rowCatatan = mysqli_fetch_array($catatanSiswa)) {
+                    $catatan = $rowCatatan['catatan'];
 
                         echo '<tr>';
-                        echo '<td>' . $Catatan  . '</td>';   
+                        echo '<td>' . $catatan  . '</td>';   
                         echo '</tr>';
-                   
+                    }
                     echo '</tr>';    
                     echo '</table>';
                     echo '</div>';
