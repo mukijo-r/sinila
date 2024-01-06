@@ -170,19 +170,32 @@
         $idMapel = $_POST['mapel'];
         $lingkupMateri = $_POST['lingkupMateri'];
         $tujuanPembelajaran = $_POST['tujuanPembelajaran'];
-        $nilai = $_POST['nilai'];
         $namaUser = $_POST['namaUser'];
 
         $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
         $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
-        $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];
+        $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];       
+
+        // Initialize variables outside the loop
+        $lastIdSiswa = null;
+        $lastValue = null;
 
         try {
-            $queryInsertNilaiMapel = "INSERT INTO `nilai_mapel`
-            (`tanggal`, `id_tahun_Ajar`, `semester`, `id_siswa`, `kelas`, `id_mapel`, `lingkup_materi`, `tujuan_pembelajaran`, `nilai`, `guru_penilai`) 
-            VALUES ('$tanggal','$idTahunAjar','$semester','$idSiswa', '$kelas', '$idMapel','$lingkupMateri','$tujuanPembelajaran','$nilai','$namaUser')";
-                
-            $insertNilaiMapel = mysqli_query($conn, $queryInsertNilaiMapel);
+            $dataNilai = [];
+
+            foreach ($_POST as $key => $value) {
+                if (strpos($key, 'nilai_') !== false) {
+                    $idSiswa = substr($key, 6);
+                    $lastIdSiswa = $idSiswa; // Store the last id_siswa
+                    $dataNilai[$idSiswa] = $value;
+                    $lastValue = $value; // Store the last value
+                    $queryInsertNilaiMapel = "INSERT INTO `nilai_mapel`
+                        (`tanggal`, `id_tahun_Ajar`, `semester`, `id_siswa`, `kelas`, `id_mapel`, `lingkup_materi`, `tujuan_pembelajaran`, `nilai`, `guru_penilai`) 
+                        VALUES ('$tanggal','$idTahunAjar','$semester','$idSiswa', '$kelas', '$idMapel','$lingkupMateri','$tujuanPembelajaran','$value','$namaUser')";
+                        
+                    $insertNilaiMapel = mysqli_query($conn, $queryInsertNilaiMapel);
+                }
+            }            
 
             if (!$insertNilaiMapel) {
                 throw new Exception("Query insert gagal"); // Lempar exception jika query gagal
@@ -190,17 +203,17 @@
 
             // Query SELECT untuk memeriksa apakah data sudah masuk ke database
             $result = mysqli_query($conn, "SELECT * 
-            FROM nilai_mapel 
-            WHERE 
-            tanggal='$tanggal' AND
-            id_tahun_Ajar='$idTahunAjar' AND
-            semester='$semester' AND
-            id_siswa='$idSiswa' AND
-            kelas='$kelas' AND
-            id_mapel='$idMapel' AND
-            lingkup_materi='$lingkupMateri' AND
-            tujuan_pembelajaran='$tujuanPembelajaran' AND
-            nilai='$nilai'            
+                FROM nilai_mapel 
+                WHERE 
+                tanggal='$tanggal' AND
+                id_tahun_Ajar='$idTahunAjar' AND
+                semester='$semester' AND
+                id_siswa='$lastIdSiswa' AND
+                kelas='$kelas' AND
+                id_mapel='$idMapel' AND
+                lingkup_materi='$lingkupMateri' AND
+                tujuan_pembelajaran='$tujuanPembelajaran' AND
+                nilai='$lastValue'            
             ");
 
             if ($result && mysqli_num_rows($result) === 1) {
@@ -215,7 +228,7 @@
             }
         } catch (Exception $e) {
             // Tangani exception jika terjadi kesalahan
-            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryInsertNilaiMapel . $e->getMessage();
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $e->getMessage();
             $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
             header('location:input_nilai_mapel.php');
             exit;
