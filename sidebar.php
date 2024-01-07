@@ -96,7 +96,7 @@ if (isset($_SESSION['kelas'])) {
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="daftar_nilai.php">Daftar Nilai</a>
                                     <a class="nav-link" href="rapot_sisipan.php">Rapot Sisipan</a>
-                                    <a class="nav-link" href="#.php">Rapot Semester</a>
+                                    <a class="nav-link" href="rapot_semester.php">Rapot Semester</a>
                                 </nav>
                             </div>
                             <div class="sb-sidenav-menu-heading">Master</div>
