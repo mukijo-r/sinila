@@ -265,115 +265,116 @@ $namaUser = $rowUser['nama_lengkap'];
     </body>   
 
     <!-- Modal Tambah Nilai Siswa -->
-<div class="modal fade bd-example-modal-lg" id="modalTambahNilaiMapel" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h4 class="modal-title">Tambah Nilai Harian Siswa kelas <?=$kelas;?></h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <!-- Modal Body -->
-            <form method="post">
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="semester">Semester :</label><br>
-                                <select class="form-select" name="semester" id="semester" aria-label="Semester" required>
-                                    <option selected>Pilih semester</option>
-                                    <option value="Ganjil">Ganjil</option>
-                                    <option value="Genap">Genap</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="mapel">Mata Pelajaran :</label>
-                                <select class="form-select" name="mapel" id="mapel" aria-label="mapel" required>
-                                    <option selected disabled>Pilih Mapel</option>
-                                    <?php
-                                    // Ambil data kelas dari tabel kelas
-                                    $queryMapel = mysqli_query($conn, "SELECT id_mapel, mapel FROM mapel");
-                                    while ($rowMapel = mysqli_fetch_assoc($queryMapel)) {
-                                        echo '<option value="' . $rowMapel['id_mapel'] . '">' . $rowMapel['mapel'] . '</option>';
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="lingkupMateri">Lingkup Materi :</label>
-                                <select class="form-select" name="lingkupMateri" id="lingkupMateri" aria-label="lingkupMateri" required>
-                                    <option selected disabled>Pilih LM</option>
-                                    <option value="LM 1">LM 1</option>
-                                    <option value="LM 2">LM 2</option>
-                                    <option value="LM 3">LM 3</option>
-                                    <option value="LM 4">LM 4</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="tujuanPembelajaran">Tujuan Pembelajaran :</label>
-                                <select class="form-select" name="tujuanPembelajaran" id="tujuanPembelajaran" aria-label="tujuanPembelajaran" required>
-                                    <option selected disabled>Pilih TP</option>
-                                    <option value="TP1">TP 1</option>
-                                    <option value="TP2">TP 2</option>
-                                    <option value="TP3">TP 3</option>
-                                    <option value="TP4">TP 4</option>
-                                    <option value="TP5">TP 5</option>
-                                    <option value="TP6">TP 6</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>                    
-
-                    <!-- Displaying a list of students with input fields for grades -->
-                    <div class="mb-3">
-                        <label for="siswa">Nilai Siswa :</label>
-                        <?php
-                        // Ambil data siswa dari tabel siswa
-                        $querySiswa = mysqli_query($conn, "SELECT id_siswa, nama FROM siswa WHERE id_kelas = $kelas");
-                        
-                        // Check if there are students
-                        if (mysqli_num_rows($querySiswa) > 0) {
-                            $counter = 1; // Initialize a counter variable
-
-                            while ($rowSiswa = mysqli_fetch_assoc($querySiswa)) {
-                                // Display each student's name and sequential number
-                                echo '<div class="row mb-3">';
-                                echo '<div class="col-md-1">' . $counter . '.</div>';
-                                echo '<div class="col-md-6">' . $rowSiswa['nama'] . '</div>';
-                                
-                                // Input field for each student's grade
-                                echo '<div class="col-md-2">';
-                                echo '<input type="number" name="nilai_' . $rowSiswa['id_siswa'] . '" class="form-control" required max="99999">';
-                                echo '</div>';
-                                
-                                echo '</div>';
-
-                                $counter++; // Increment the counter
-                            }
-                        } else {
-                            echo '<p>No students found.</p>';
-                        }
-                        ?>
-                    </div>
-
-                    <div class="text-center">
-                        <input type="hidden" name="namaUser" value="<?=$namaUser;?>">
-                        <button type="submit" class="btn btn-primary" name="tambahNilaiMapel">Simpan</button>
-                    </div>
+    <div class="modal fade bd-example-modal-lg" id="modalTambahNilaiMapel" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Tambah Nilai Harian Siswa kelas <?=$kelas;?></h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-            </form>
+                <!-- Modal Body -->
+                <form method="post">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="semester">Semester :</label><br>
+                                    <select class="form-select" name="semester" id="semester" aria-label="Semester" required>
+                                        <option selected>Pilih semester</option>
+                                        <option value="Ganjil">Ganjil</option>
+                                        <option value="Genap">Genap</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="mapel">Mata Pelajaran :</label>
+                                    <select class="form-select" name="mapel" id="mapel" aria-label="mapel" required>
+                                        <option selected disabled>Pilih Mapel</option>
+                                        <?php
+                                        // Ambil data kelas dari tabel kelas
+                                        $queryMapel = mysqli_query($conn, "SELECT id_mapel, mapel FROM mapel");
+                                        while ($rowMapel = mysqli_fetch_assoc($queryMapel)) {
+                                            echo '<option value="' . $rowMapel['id_mapel'] . '">' . $rowMapel['mapel'] . '</option>';
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="lingkupMateri">Lingkup Materi :</label>
+                                    <select class="form-select" name="lingkupMateri" id="lingkupMateri" aria-label="lingkupMateri" required>
+                                        <option selected disabled>Pilih LM</option>
+                                        <option value="LM 1">LM 1</option>
+                                        <option value="LM 2">LM 2</option>
+                                        <option value="LM 3">LM 3</option>
+                                        <option value="LM 4">LM 4</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="tujuanPembelajaran">Tujuan Pembelajaran :</label>
+                                    <select class="form-select" name="tujuanPembelajaran" id="tujuanPembelajaran" aria-label="tujuanPembelajaran" required>
+                                        <option selected disabled>Pilih TP</option>
+                                        <option value="TP1">TP 1</option>
+                                        <option value="TP2">TP 2</option>
+                                        <option value="TP3">TP 3</option>
+                                        <option value="TP4">TP 4</option>
+                                        <option value="TP5">TP 5</option>
+                                        <option value="TP6">TP 6</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>                    
+
+                        <!-- Displaying a list of students with input fields for grades -->
+                        <div class="mb-3">
+                            <label for="siswa">Nilai Siswa :</label>
+                            <?php
+                            // Ambil data siswa dari tabel siswa
+                            $querySiswa = mysqli_query($conn, "SELECT id_siswa, nama FROM siswa WHERE id_kelas = $kelas");
+                            
+                            // Check if there are students
+                            if (mysqli_num_rows($querySiswa) > 0) {
+                                $counter = 1; // Initialize a counter variable
+
+                                while ($rowSiswa = mysqli_fetch_assoc($querySiswa)) {
+                                    // Display each student's name and sequential number
+                                    echo '<div class="row mb-3">';
+                                    echo '<div class="col-md-6">' . $counter . '.  ' . $rowSiswa['nama'] . '</div>';
+                                    
+                                    // Input field for each student's grade
+                                    echo '<div class="col-md-2">';
+                                    echo '<input type="number" name="nilai_' . $rowSiswa['id_siswa'] . '" class="form-control" required max="99999">';
+                                    echo '</div>';
+                                    
+                                    echo '</div>';
+
+                                    $counter++; 
+                                }
+                            } else {
+                                echo '<p>No students found.</p>';
+                            }
+                            ?>
+                        </div>
+
+                        <div class="text-center">
+                            <input type="hidden" name="namaUser" value="<?=$namaUser;?>">
+                            <button type="submit" class="btn btn-primary" name="tambahNilaiMapel">Simpan</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
+
+
 
     <script>
         // Mendapatkan nilai input

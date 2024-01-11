@@ -286,7 +286,7 @@ $namaUser = $rowUser['nama_lengkap'];
                                     // Display each student's name and sequential number
                                     echo '<div class="row mb-3">';
                                     echo '<div class="col-md-1">' . $counter . '.</div>';
-                                    echo '<div class="col-md-6">' . $rowSiswa['nama'] . '</div>';
+                                    echo '<div class="col-md-6">' . $counter . '.  ' . $rowSiswa['nama'] . '</div>';
                                     
                                     // Input field for each student's grade
                                     echo '<div class="col-md-2">';
