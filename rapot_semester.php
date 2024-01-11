@@ -42,7 +42,7 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
             <div id="layoutSidenav_content" class="layoutSidenav_content">
                 <main >
                     <div class="container-fluid px-4">
-                        <h3 class="mt-4">Daftar Nilai</h3>
+                        <h3 class="mt-4">Rapot Semester</h3>
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item active">Laporan / Rapor Semester</li>    
                         </ol>  
@@ -77,9 +77,14 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                                                 ?>
                                             </select>
                                         </div>
+                                    </div>
+                                    <div class="col">&nbsp;
+                                        <button type="submit" class="btn btn-primary" name="btnTampilLapSiswa" id="btnTampilLapSiswa">
+                                            Tampilkan
+                                        </button>
                                     </div>         
                                 </div>                                
-                                <div class="row row-cols-auto">
+                                <!-- <div class="row row-cols-auto">
                                     <div class="col">
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
@@ -131,17 +136,11 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                                                 <option value="4">4</option>
                                             </select>
                                         </div>
-                                    </div>
+                                    </div> 
                                     <div class="col">
                                         <a data-bs-toggle="modal" data-bs-target="#modalInfo"><img src="assets/img/question.png" width="30px"></a>
-                                    </div>                                     
-                                    <div class="col">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        <button type="submit" class="btn btn-primary" name="btnTampilLapSiswa" id="btnTampilLapSiswa">
-                                            Tampilkan
-                                        </button>
-                                    </div> 
-                                              
-                                </div>
+                                    </div>                                              
+                                </div> -->
                             </form> 
                         </div><br>                         
                     </div><br> 
@@ -167,10 +166,10 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                     if (isset($_POST['btnTampilLapSiswa'])) {
                         $semester = $_POST['semester'];
                         $idSiswa = $_POST['siswa'];
-                        $tplm1 = $_POST['tplm1'];
-                        $tplm2 = $_POST['tplm2'];
-                        $tplm3 = $_POST['tplm3'];
-                        $tplm4 = $_POST['tplm4'];
+                        // $tplm1 = $_POST['tplm1'];
+                        // $tplm2 = $_POST['tplm2'];
+                        // $tplm3 = $_POST['tplm3'];
+                        // $tplm4 = $_POST['tplm4'];
                 
                         $querySiswa = mysqli_query($conn, "SELECT nama, nis, nisn FROM siswa WHERE id_siswa='$idSiswa'");
                         $rowSiswa = mysqli_fetch_assoc($querySiswa); 
