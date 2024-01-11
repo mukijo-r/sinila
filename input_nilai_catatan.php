@@ -215,8 +215,8 @@ $namaUser = $rowUser['nama_lengkap'];
     </body>   
 
     <!-- Modal Tambah Nilai Catatan Siswa -->
-    <div class="modal fade" id="modalTambahNilaiCatatan">
-        <div class="modal-dialog">
+    <div class="modal fade bd-example-modal-lg" id="modalTambahNilaiCatatan" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <!-- Modal Header -->
                 <div class="modal-header">
@@ -235,21 +235,33 @@ $namaUser = $rowUser['nama_lengkap'];
                             </select>
                         </div>      
                         <div class="mb-3">
-                            <label for="siswa">Siswa :</label>
-                            <select name="siswa" class="form-select" id="siswa" aria-label="Siswa" required>
-                                <option selected disabled>Pilih Siswa</option>
-                                <?php
-                                // Ambil data siswa dari tabel siswa
-                                $querySiswa = mysqli_query($conn, "SELECT id_siswa, nama FROM siswa WHERE id_kelas = $kelas");
+                            <label for="siswa">Catatan Siswa :</label>
+                            <?php
+                            // Ambil data siswa dari tabel siswa
+                            $querySiswa = mysqli_query($conn, "SELECT id_siswa, nama FROM siswa WHERE id_kelas = $kelas");
+                            
+                            // Check if there are students
+                            if (mysqli_num_rows($querySiswa) > 0) {
+                                $counter = 1; // Initialize a counter variable
+
                                 while ($rowSiswa = mysqli_fetch_assoc($querySiswa)) {
-                                    echo '<option value="' . $rowSiswa['id_siswa'] . '">' . $rowSiswa['nama'] . '</option>';
+                                    // Display each student's name and sequential number
+                                    echo '<div class="row mb-3">';
+                                    echo '<div class="col-md-6">' . $counter . '.  ' . $rowSiswa['nama'] . ' :</div><br>';
+                                    
+                                    // Input field for each student's grade
+                                    echo '<div class="col-md-12">';
+                                    echo '<input type="text" name="nilai_' . $rowSiswa['id_siswa'] . '" class="form-control" required max="99999">';
+                                    echo '</div>';
+                                    
+                                    echo '</div>';
+
+                                    $counter++; 
                                 }
-                                ?>
-                            </select>
-                        </div>                        
-                        <div class="mb-3">
-                            <label for="catatan">Catatan :</label>
-                            <input type="text" name="catatan" id="catatan" class="form-control" required>
+                            } else {
+                                echo '<p>No students found.</p>';
+                            }
+                            ?>
                         </div>
                         <div class="text-center">
                         <input type="hidden" name="namaUser" value="<?=$namaUser;?>">

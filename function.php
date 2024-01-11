@@ -647,21 +647,33 @@
     // 7. Tambah Nilai Catatan
     if(isset($_POST['tambahNilaiCatatan'])){
         $semester = $_POST['semester'];
-        $idSiswa = $_POST['siswa'];
-        $catatan = $_POST['catatan'];
         $namaUser = $_POST['namaUser'];
 
         $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
         $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
         $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];
 
-        try {
-            $queryInsertNilaiCatatan = "INSERT INTO `nilai_catatan`
-            (`tanggal`, `id_tahun_Ajar`, `semester`, `kelas`, `id_siswa`, `catatan`, `guru_penilai`) 
-            VALUES ('$tanggal','$idTahunAjar','$semester','$kelas','$idSiswa','$catatan','$namaUser')";
-                
-            $insertNilaiCatatan = mysqli_query($conn, $queryInsertNilaiCatatan);
+        $lastIdSiswa = null;
+        $lastValue = null;
 
+        try {
+            
+            $dataNilai = [];
+
+            foreach ($_POST as $key => $value) {
+                if (strpos($key, 'nilai_') !== false) {
+                    $idSiswa = substr($key, 6);
+                    $lastIdSiswa = $idSiswa; // Store the last id_siswa
+                    $dataNilai[$idSiswa] = $value;
+                    $lastValue = $value; // Store the last value
+                    $queryInsertNilaiCatatan = "INSERT INTO `nilai_catatan`
+                    (`tanggal`, `id_tahun_Ajar`, `semester`, `kelas`, `id_siswa`, `catatan`, `guru_penilai`) 
+                    VALUES ('$tanggal','$idTahunAjar','$semester','$kelas','$idSiswa','$value','$namaUser')";
+                        
+                    $insertNilaiCatatan = mysqli_query($conn, $queryInsertNilaiCatatan);
+                }
+            }            
+            
             if (!$insertNilaiCatatan) {
                 throw new Exception("Query insert gagal"); // Lempar exception jika query gagal
             }
@@ -674,8 +686,8 @@
             id_tahun_Ajar='$idTahunAjar' AND
             semester='$semester' AND
             kelas='$kelas' AND
-            id_siswa='$idSiswa' AND
-            catatan='$catatan'            
+            id_siswa='$lastIdSiswa' AND
+            catatan='$lastValue'            
             ");
 
             if ($result && mysqli_num_rows($result) === 1) {
@@ -690,7 +702,7 @@
             }
         } catch (Exception $e) {
             // Tangani exception jika terjadi kesalahan
-            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryInsertNilaiCatatan . $e->getMessage();
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $e->getMessage();
             $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
             header('location:input_nilai_catatan.php');
             exit;

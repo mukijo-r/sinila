@@ -214,8 +214,8 @@ $namaUser = $rowUser['nama_lengkap'];
     </body>   
 
     <!-- Modal Naikkan Siswa -->
-    <div class="modal fade" id="modalKenaikanKelas">
-        <div class="modal-dialog">
+    <div class="modal fade bd-example-modal-lg" id="modalKenaikanKelas" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <!-- Modal Header -->
                 <div class="modal-header">
@@ -231,26 +231,36 @@ $namaUser = $rowUser['nama_lengkap'];
                             <input type="date" name="tanggalKenaikan" value="<?=$tanggalSaatIni;?>" class="form-control">
                         </div>   
                         <div class="mb-3">
-                            <label for="siswa">Siswa :</label>
-                            <select name="siswa" class="form-select" id="siswa" aria-label="Siswa" required>
-                                <option selected disabled>Pilih Siswa</option>
-                                <option value="semua">Semua Siswa</option>
-                                <?php
-                                // Ambil data siswa dari tabel siswa
-                                $querySiswa = mysqli_query($conn, "SELECT id_siswa, nama FROM siswa WHERE id_kelas = $kelas");
+                            <label for="siswa">Nilai Siswa :</label>
+                            <?php
+                            // Ambil data siswa dari tabel siswa
+                            $querySiswa = mysqli_query($conn, "SELECT id_siswa, nama FROM siswa WHERE id_kelas = $kelas");
+                            
+                            // Check if there are students
+                            if (mysqli_num_rows($querySiswa) > 0) {
+                                $counter = 1; // Initialize a counter variable
+
                                 while ($rowSiswa = mysqli_fetch_assoc($querySiswa)) {
-                                    echo '<option value="' . $rowSiswa['id_siswa'] . '">' . $rowSiswa['nama'] . '</option>';
+                                    // Display each student's name and sequential number
+                                    echo '<div class="row mb-3">';
+                                    echo '<div class="col-md-1">' . $counter . '.</div>';
+                                    echo '<div class="col-md-6">' . $rowSiswa['nama'] . '</div>';
+                                    
+                                    // Input field for each student's grade
+                                    echo '<div class="col-md-3">';
+                                    echo '<select name="nilai_' . $rowSiswa['id_siswa'] . '" class="form-select" required>';
+                                    echo '<option value="Naik">Naik Kelas</option>';
+                                    echo '<option value="Tidak Naik">Tidak Naik Kelas</option>';
+                                    echo '</select>';
+                                    echo '</div>';                                    
+                                    echo '</div>';
+
+                                    $counter++; 
                                 }
-                                ?>
-                            </select>
-                        </div>                        
-                        <div class="mb-3">
-                            <label for="kenaikan">Status :</label>
-                            <select name="kenaikan" class="form-select" id="kenaikan" aria-label="Kenaikkan" required>
-                                <option selected disabled>Naik/Tidak Naik</option>
-                                <option value="Naik">Naik Kelas</option>
-                                <option value="Tidak Naik">Tidak Naik Kelas</option>
-                            </select>
+                            } else {
+                                echo '<p>No students found.</p>';
+                            }
+                            ?>
                         </div>
                         <div class="text-center">
                             <input type="hidden" name="namaUser" value="<?=$namaUser;?>">
