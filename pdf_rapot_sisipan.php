@@ -444,8 +444,29 @@ $queryRapotSisipan = "SELECT m.id_mapel, m.mapel,
                     $html .= '<tr>';
                     $html .= '<td style="width: 5%"></td>';
                     $html .= '<td style="width: 55%">Orang Tua / Wali Siswa</td>';
-                    setlocale(LC_TIME, 'id_ID');
-                    $tanggal = strftime("%d %B %Y");
+                    // setlocale(LC_TIME, 'id_ID');
+                    // $tanggal = strftime("%d %B %Y");
+                    // $html .= '<td style="width: 35%">Tanggal ' . $tanggal . '</td>';
+                    $tanggal = date('d F Y');
+                    $bulan = [
+                        'January' => 'Januari',
+                        'February' => 'Februari',
+                        'March' => 'Maret',
+                        'April' => 'April',
+                        'May' => 'Mei',
+                        'June' => 'Juni',
+                        'July' => 'Juli',
+                        'August' => 'Agustus',
+                        'September' => 'September',
+                        'October' => 'Oktober',
+                        'November' => 'November',
+                        'December' => 'Desember'
+                    ];
+
+                    foreach ($bulan as $english => $indonesian) {
+                        $tanggal = str_replace($english, $indonesian, $tanggal);
+                    }
+                    
                     $html .= '<td style="width: 35%">Tanggal ' . $tanggal . '</td>';
                     $html .= '</tr>';
                     $html .= '<tr>';

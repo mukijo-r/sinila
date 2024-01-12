@@ -188,9 +188,8 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                             </div>
                             <div class="col-md-6" style="text-transform: uppercase;">
                                 <h5>LAPORAN PENILAIAN HASIL BELAJAR</h5>
-                                <h5>TENGAH SEMESTER <?=$semester;?></h5>
-                                <h5>TAHUN PELAJARAN <?=$tahunAjar;?></h5>
-                                <h6><?=$tplm2;?></h6>                                
+                                <h5>AKHIR SEMESTER <?=$semester;?></h5>
+                                <h5>TAHUN PELAJARAN <?=$tahunAjar;?></h5>                            
                             </div>
                         </div><br>
                         <div class="row" style="text-transform: uppercase;">

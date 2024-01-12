@@ -45,7 +45,7 @@ $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, 'A4', true, 'UTF-8', false);
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
 $pdf->SetAuthor('Mukijo');
-$pdf->SetTitle('Rapot Sisipan');
+$pdf->SetTitle('Rapot Semester');
 $pdf->SetSubject('TCPDF');
 $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 
@@ -126,7 +126,7 @@ $pdf->SetFont('helvetica', '', 10);
 $txt = <<<EOD
 
 LAPORAN PENILAIAN HASIL BELAJAR
-TENGAH SEMESTER  $semCap
+AKHIR SEMESTER  $semCap
 TAHUN PELAJARAN $tahunAjar
 
 
@@ -521,8 +521,29 @@ $queryRapotSisipan = "SELECT m.id_mapel, m.mapel,
                     $html .= '<tr>';
                     $html .= '<td style="width: 5%"></td>';
                     $html .= '<td style="width: 55%">Orang Tua / Wali Siswa</td>';
-                    setlocale(LC_TIME, 'id_ID');
-                    $tanggal = strftime("%d %B %Y");
+                    // setlocale(LC_TIME, 'id_ID');
+                    // $tanggal = strftime("%d %B %Y");
+                    // $html .= '<td style="width: 35%">Tanggal ' . $tanggal . '</td>';
+                    $tanggal = date('d F Y');
+                    $bulan = [
+                        'January' => 'Januari',
+                        'February' => 'Februari',
+                        'March' => 'Maret',
+                        'April' => 'April',
+                        'May' => 'Mei',
+                        'June' => 'Juni',
+                        'July' => 'Juli',
+                        'August' => 'Agustus',
+                        'September' => 'September',
+                        'October' => 'Oktober',
+                        'November' => 'November',
+                        'December' => 'Desember'
+                    ];
+
+                    foreach ($bulan as $english => $indonesian) {
+                        $tanggal = str_replace($english, $indonesian, $tanggal);
+                    }
+                    
                     $html .= '<td style="width: 35%">Tanggal ' . $tanggal . '</td>';
                     $html .= '</tr>';
                     $html .= '<tr>';
