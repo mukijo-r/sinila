@@ -197,40 +197,49 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                     echo '</thead>';
                     echo '<tbody>';
 
-                    $query = mysqli_query($conn, "SELECT s.nis, s.nisn, s.nama,
-                        MAX(CASE WHEN nm.lingkup_materi = 'LM 1' AND nm.tujuan_pembelajaran = 'TP1' THEN nm.nilai ELSE 0 END) AS LM1_TP1,
-                        MAX(CASE WHEN nm.lingkup_materi = 'LM 1' AND nm.tujuan_pembelajaran = 'TP2' THEN nm.nilai ELSE 0 END) AS LM1_TP2,
-                        MAX(CASE WHEN nm.lingkup_materi = 'LM 1' AND nm.tujuan_pembelajaran = 'TP3' THEN nm.nilai ELSE 0 END) AS LM1_TP3,
-                        MAX(CASE WHEN nm.lingkup_materi = 'LM 1' AND nm.tujuan_pembelajaran = 'TP4' THEN nm.nilai ELSE 0 END) AS LM1_TP4,
-                        MAX(CASE WHEN nm.lingkup_materi = 'LM 2' AND nm.tujuan_pembelajaran = 'TP1' THEN nm.nilai ELSE 0 END) AS LM2_TP1,
-                        MAX(CASE WHEN nm.lingkup_materi = 'LM 2' AND nm.tujuan_pembelajaran = 'TP2' THEN nm.nilai ELSE 0 END) AS LM2_TP2,
-                        MAX(CASE WHEN nm.lingkup_materi = 'LM 2' AND nm.tujuan_pembelajaran = 'TP3' THEN nm.nilai ELSE 0 END) AS LM2_TP3,
-                        MAX(CASE WHEN nm.lingkup_materi = 'LM 2' AND nm.tujuan_pembelajaran = 'TP4' THEN nm.nilai ELSE 0 END) AS LM2_TP4,
-                        MAX(CASE WHEN nm.lingkup_materi = 'LM 3' AND nm.tujuan_pembelajaran = 'TP1' THEN nm.nilai ELSE 0 END) AS LM3_TP1,
-                        MAX(CASE WHEN nm.lingkup_materi = 'LM 3' AND nm.tujuan_pembelajaran = 'TP2' THEN nm.nilai ELSE 0 END) AS LM3_TP2,
-                        MAX(CASE WHEN nm.lingkup_materi = 'LM 3' AND nm.tujuan_pembelajaran = 'TP3' THEN nm.nilai ELSE 0 END) AS LM3_TP3,
-                        MAX(CASE WHEN nm.lingkup_materi = 'LM 3' AND nm.tujuan_pembelajaran = 'TP4' THEN nm.nilai ELSE 0 END) AS LM3_TP4,
-                        MAX(CASE WHEN nm.lingkup_materi = 'LM 4' AND nm.tujuan_pembelajaran = 'TP1' THEN nm.nilai ELSE 0 END) AS LM4_TP1,
-                        MAX(CASE WHEN nm.lingkup_materi = 'LM 4' AND nm.tujuan_pembelajaran = 'TP2' THEN nm.nilai ELSE 0 END) AS LM4_TP2,
-                        MAX(CASE WHEN nm.lingkup_materi = 'LM 4' AND nm.tujuan_pembelajaran = 'TP3' THEN nm.nilai ELSE 0 END) AS LM4_TP3,
-                        MAX(CASE WHEN nm.lingkup_materi = 'LM 4' AND nm.tujuan_pembelajaran = 'TP4' THEN nm.nilai ELSE 0 END) AS LM4_TP4,
-                        MAX(CASE WHEN nul.lingkup_materi = 'LM 1' THEN nul.nilai ELSE 0 END) AS LM1,
-                        MAX(CASE WHEN nul.lingkup_materi = 'LM 2' THEN nul.nilai ELSE 0 END) AS LM2,
-                        MAX(CASE WHEN nul.lingkup_materi = 'LM 3' THEN nul.nilai ELSE 0 END) AS LM3,
-                        MAX(CASE WHEN nul.lingkup_materi = 'LM 4' THEN nul.nilai ELSE 0 END) AS LM4,                        
-                        MAX(CASE WHEN nuj.ujian = 'STS' THEN nuj.nilai ELSE 0 END) AS STS,
-                        MAX(CASE WHEN nuj.ujian = 'SAS' THEN nuj.nilai ELSE 0 END) AS SAS
-                    FROM siswa s
-                    LEFT JOIN nilai_mapel nm ON s.id_siswa = nm.id_siswa
-                    LEFT JOIN nilai_ulangan nul ON s.id_siswa = nul.id_siswa
-                    LEFT JOIN nilai_ujian nuj ON s.id_siswa = nuj.id_siswa
-                    WHERE nm.kelas = '$kelas' AND
-                        nm.semester = '$semester' AND
-                        nm.id_mapel = '$idMapel' AND
-                        nm.id_tahun_ajar = '$idTahunAjar'
-                    GROUP BY s.nis, s.nisn, s.nama;
-                    ");
+                    $quer = "SELECT s.nis, s.nisn, s.nama,
+                    MAX(CASE WHEN nm.lingkup_materi = 'LM 1' AND nm.tujuan_pembelajaran = 'TP1' THEN nm.nilai ELSE 0 END) AS LM1_TP1,
+                    MAX(CASE WHEN nm.lingkup_materi = 'LM 1' AND nm.tujuan_pembelajaran = 'TP2' THEN nm.nilai ELSE 0 END) AS LM1_TP2,
+                    MAX(CASE WHEN nm.lingkup_materi = 'LM 1' AND nm.tujuan_pembelajaran = 'TP3' THEN nm.nilai ELSE 0 END) AS LM1_TP3,
+                    MAX(CASE WHEN nm.lingkup_materi = 'LM 1' AND nm.tujuan_pembelajaran = 'TP4' THEN nm.nilai ELSE 0 END) AS LM1_TP4,
+                    MAX(CASE WHEN nm.lingkup_materi = 'LM 2' AND nm.tujuan_pembelajaran = 'TP1' THEN nm.nilai ELSE 0 END) AS LM2_TP1,
+                    MAX(CASE WHEN nm.lingkup_materi = 'LM 2' AND nm.tujuan_pembelajaran = 'TP2' THEN nm.nilai ELSE 0 END) AS LM2_TP2,
+                    MAX(CASE WHEN nm.lingkup_materi = 'LM 2' AND nm.tujuan_pembelajaran = 'TP3' THEN nm.nilai ELSE 0 END) AS LM2_TP3,
+                    MAX(CASE WHEN nm.lingkup_materi = 'LM 2' AND nm.tujuan_pembelajaran = 'TP4' THEN nm.nilai ELSE 0 END) AS LM2_TP4,
+                    MAX(CASE WHEN nm.lingkup_materi = 'LM 3' AND nm.tujuan_pembelajaran = 'TP1' THEN nm.nilai ELSE 0 END) AS LM3_TP1,
+                    MAX(CASE WHEN nm.lingkup_materi = 'LM 3' AND nm.tujuan_pembelajaran = 'TP2' THEN nm.nilai ELSE 0 END) AS LM3_TP2,
+                    MAX(CASE WHEN nm.lingkup_materi = 'LM 3' AND nm.tujuan_pembelajaran = 'TP3' THEN nm.nilai ELSE 0 END) AS LM3_TP3,
+                    MAX(CASE WHEN nm.lingkup_materi = 'LM 3' AND nm.tujuan_pembelajaran = 'TP4' THEN nm.nilai ELSE 0 END) AS LM3_TP4,
+                    MAX(CASE WHEN nm.lingkup_materi = 'LM 4' AND nm.tujuan_pembelajaran = 'TP1' THEN nm.nilai ELSE 0 END) AS LM4_TP1,
+                    MAX(CASE WHEN nm.lingkup_materi = 'LM 4' AND nm.tujuan_pembelajaran = 'TP2' THEN nm.nilai ELSE 0 END) AS LM4_TP2,
+                    MAX(CASE WHEN nm.lingkup_materi = 'LM 4' AND nm.tujuan_pembelajaran = 'TP3' THEN nm.nilai ELSE 0 END) AS LM4_TP3,
+                    MAX(CASE WHEN nm.lingkup_materi = 'LM 4' AND nm.tujuan_pembelajaran = 'TP4' THEN nm.nilai ELSE 0 END) AS LM4_TP4,
+                    MAX(CASE WHEN nul.lingkup_materi = 'LM 1' THEN nul.nilai ELSE 0 END) AS LM1,
+                    MAX(CASE WHEN nul.lingkup_materi = 'LM 2' THEN nul.nilai ELSE 0 END) AS LM2,
+                    MAX(CASE WHEN nul.lingkup_materi = 'LM 3' THEN nul.nilai ELSE 0 END) AS LM3,
+                    MAX(CASE WHEN nul.lingkup_materi = 'LM 4' THEN nul.nilai ELSE 0 END) AS LM4,                        
+                    MAX(CASE WHEN nuj.ujian = 'STS' THEN nuj.nilai ELSE 0 END) AS STS,
+                    MAX(CASE WHEN nuj.ujian = 'SAS' THEN nuj.nilai ELSE 0 END) AS SAS
+                FROM siswa s
+                LEFT JOIN nilai_mapel nm ON s.id_siswa = nm.id_siswa
+                LEFT JOIN nilai_ulangan nul ON s.id_siswa = nul.id_siswa
+                LEFT JOIN nilai_ujian nuj ON s.id_siswa = nuj.id_siswa
+                WHERE nm.kelas = '$kelas' AND
+                    nm.semester = '$semester' AND
+                    nm.id_mapel = '$idMapel' AND
+                    nm.id_tahun_ajar = '$idTahunAjar' AND
+                    nul.kelas = '$kelas' AND
+                    nul.semester = '$semester' AND
+                    nul.id_mapel = '$idMapel' AND
+                    nul.id_tahun_ajar = '$idTahunAjar' AND
+                    nuj.kelas = '$kelas' AND
+                    nuj.semester = '$semester' AND
+                    nuj.id_mapel = '$idMapel' AND
+                    nuj.id_tahun_ajar = '$idTahunAjar'
+                GROUP BY s.nis, s.nisn, s.nama;
+                ";
 
+                    $query = mysqli_query($conn, $quer);
                     $i = 1;
 
                     while ($row = mysqli_fetch_array($query)) {
@@ -261,7 +270,7 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                         $STS = $row['STS'];
                         $SAS = $row['SAS'];
                         $nilaiRapot = ((2 * $rerataUlangan) + $STS + (2 * $SAS)) / 5;
-
+                        
                         echo '<tr>';
                         echo '<td>' . $i++ . '</td>';
                         echo '<td>' . $nis . '</td>';
