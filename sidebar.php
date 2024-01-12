@@ -71,7 +71,7 @@ if (isset($_SESSION['kelas'])) {
                             </div>
                             <div class="sb-sidenav-menu-heading">Proses</div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                                <div class="sb-nav-link-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fa-regular fa-keyboard"></i></div>
                                 Input Data
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
@@ -88,7 +88,7 @@ if (isset($_SESSION['kelas'])) {
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts1" aria-expanded="false" aria-controls="collapseLayouts1">
-                                <div class="sb-nav-link-icon"><i class="fa-solid fa-piggy-bank"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fa-regular fa-file-lines"></i></div>
                                 Asesmen Kualitatif
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
@@ -98,7 +98,7 @@ if (isset($_SESSION['kelas'])) {
                                     <a class="nav-link" href="input_nilai_kualitatif_genap.php">Semester Genap</a>                                </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts2" aria-expanded="false" aria-controls="collapseLayouts2">
-                                <div class="sb-nav-link-icon"><i class="fa-solid fa-piggy-bank"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-book"></i></div>
                                 Laporan
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
@@ -107,11 +107,12 @@ if (isset($_SESSION['kelas'])) {
                                     <a class="nav-link" href="daftar_nilai.php">Daftar Nilai</a>
                                     <a class="nav-link" href="rapot_sisipan.php">Rapot Sisipan</a>
                                     <a class="nav-link" href="rapot_semester.php">Rapot Semester</a>
+                                    <a class="nav-link" href="rapot_akhir.php">Rapot Akhir</a>
                                 </nav>
                             </div>
                             <div class="sb-sidenav-menu-heading">Master</div>
                             <a class="nav-link" href="guru.php" >
-                                <div class="sb-nav-link-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-person-chalkboard"></i></div>
                                 Guru
                             </a>
                             <a class="nav-link" href="siswa.php">
