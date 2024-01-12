@@ -1441,7 +1441,7 @@
         $mapel = $_POST['mapel'];
         $kelas = $_POST['kelas'];
         $deskripsi = $_POST['deskripsi'];
-        $deskripsi = ucfirst($deskripsi);
+        $deskripsi = lcfirst($deskripsi);
         $deskripsi = rtrim($deskripsi, '.');
 
         try {
