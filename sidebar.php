@@ -89,10 +89,20 @@ if (isset($_SESSION['kelas'])) {
                             </div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts1" aria-expanded="false" aria-controls="collapseLayouts1">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-piggy-bank"></i></div>
-                                Laporan
+                                Asesmen Kualitatif
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
                             <div class="collapse" id="collapseLayouts1" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="input_nilai_kualitatif_ganjil.php">Semester Ganjil</a>
+                                    <a class="nav-link" href="input_nilai_kualitatif_genap.php">Semester Genap</a>                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts2" aria-expanded="false" aria-controls="collapseLayouts2">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-piggy-bank"></i></div>
+                                Laporan
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseLayouts2" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="daftar_nilai.php">Daftar Nilai</a>
                                     <a class="nav-link" href="rapot_sisipan.php">Rapot Sisipan</a>
