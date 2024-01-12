@@ -453,7 +453,7 @@
         }
     }
 
-    // 6. Hapus Nilai Praktek
+    // 9. Hapus Nilai Praktek
     if(isset($_POST['hapusNilaiPraktek'])){
         $idNilaiPraktek = $_POST['idNilaiPraktek'];
 
@@ -487,7 +487,7 @@
         }
     } 
 
-    // 7. Tambah Nilai Kepribadian
+    // 10. Tambah Nilai Kepribadian
     if(isset($_POST['tambahNilaiKepribadian'])){
         $semester = $_POST['semester'];
         $kategoriKepribadian = $_POST['kategoriKepribadian'];
@@ -554,7 +554,7 @@
         }
     }
 
-    // 8. Ubah Nilai Kepribadian
+    // 11. Ubah Nilai Kepribadian
     if(isset($_POST['ubahNilaiKepribadian'])){
         $idNilaiKepribadian = $_POST['idNilaiKepribadian'];
         $semester = $_POST['semester'];
@@ -610,7 +610,7 @@
         }
     }
 
-    // 6. Hapus Nilai Kepribadian
+    // 12. Hapus Nilai Kepribadian
     if(isset($_POST['hapusNilaiKepribadian'])){
         $idNilaiKepribadian = $_POST['idNilaiKepribadian'];
 
@@ -644,7 +644,7 @@
         }
     }
     
-    // 7. Tambah Nilai Catatan
+    // 13. Tambah Nilai Catatan
     if(isset($_POST['tambahNilaiCatatan'])){
         $semester = $_POST['semester'];
         $namaUser = $_POST['namaUser'];
@@ -709,7 +709,7 @@
         }
     }
 
-    // 8. Ubah Nilai Catatan
+    // 14. Ubah Nilai Catatan
     if(isset($_POST['ubahNilaiCatatan'])){
         $idNilaiCatatan = $_POST['idNilaiCatatan'];
         $semester = $_POST['semester'];
@@ -767,7 +767,7 @@
         }
     }
 
-    // 9. Hapus Nilai Catatan
+    // 15. Hapus Nilai Catatan
     if(isset($_POST['hapusNilaiCatatan'])){
         $idNilaiCatatan = $_POST['idNilaiCatatan'];
 
@@ -801,7 +801,7 @@
         }
     }
 
-    // 10. Tambah Absen
+    // 16. Tambah Absen
     if(isset($_POST['tambahAbsen'])){
         $tanggalAbsen = $_POST['tanggalAbsen'];
         $tanggalInput = date("Y-m-d", strtotime($tanggalAbsen));
@@ -859,7 +859,7 @@
         }
     }    
 
-    // 11. Ubah Absen
+    // 17. Ubah Absen
     if(isset($_POST['ubahAbsen'])){
         $idAbsen = $_POST['idAbsen'];
         $tanggalAbsen = $_POST['tanggalAbsen'];
@@ -926,7 +926,7 @@
         }
     }
     
-    // 12. Hapus Absen
+    // 18. Hapus Absen
     if(isset($_POST['hapusAbsen'])){
         $idAbsen = $_POST['idAbsen'];
 
@@ -960,7 +960,7 @@
         }
     }
 
-    // 13. Tambah Status Naik/Tinggal Kelas
+    // 19. Tambah Status Naik/Tinggal Kelas
     if(isset($_POST['tambahKenaikkanKelas'])){
         $tanggalKenaikan = $_POST['tanggalKenaikan'];
         $tanggalInput = date("Y-m-d", strtotime($tanggalKenaikan));
@@ -1016,7 +1016,7 @@
         }
     }
 
-    // 14. Ubah Status Naik/Tinggal Kelas
+    // 20. Ubah Status Naik/Tinggal Kelas
     if(isset($_POST['ubahKenaikkanKelas'])){
         $idKenaikkanKelas = $_POST['idKenaikkanKelas'];
         $tanggalKenaikan = $_POST['tanggalKenaikan'];
@@ -1078,7 +1078,7 @@
         }
     }
 
-    // 15. Hapus Status Naik/Tinggal Kelas
+    // 21. Hapus Status Naik/Tinggal Kelas
     if(isset($_POST['hapusKenaikkanKelas'])){
         $idKenaikanKelas = $_POST['idKenaikanKelas'];
 
@@ -1112,7 +1112,7 @@
         }
     }
 
-    // 16. Tambah Nilai Ujian
+    // 22. Tambah Nilai Ujian
     if(isset($_POST['tambahNilaiUjian'])){
         $semester = $_POST['semester'];
         $idMapel = $_POST['mapel'];
@@ -1181,7 +1181,7 @@
         }
     }
 
-    // 17. Edit Nilai Ujian
+    // 23. Edit Nilai Ujian
     if(isset($_POST['ubahNilaiUjian'])){
         $idNilaiUjian = $_POST['idNilaiUjian'];
         $semester = $_POST['semester'];
@@ -1240,7 +1240,7 @@
         }
     }
 
-    // 18. Hapus Nilai Ujian
+    // 24. Hapus Nilai Ujian
     if(isset($_POST['hapusNilaiUjian'])){
         $idNilaiUjian = $_POST['idNilaiUjian'];
 
@@ -1274,7 +1274,7 @@
         }
     }
 
-    // 19. Tambah Nilai Ulangan
+    // 25. Tambah Nilai Ulangan
     if(isset($_POST['tambahNilaiUlangan'])){
         $semester = $_POST['semester'];
         $idMapel = $_POST['mapel'];
@@ -1343,7 +1343,7 @@
         }
     }
 
-    // 20. Edit Nilai Ulangan
+    // 26. Edit Nilai Ulangan
     if(isset($_POST['ubahNilaiUlangan'])){
         $idNilaiUlangan = $_POST['idNilaiUlangan'];
         $semester = $_POST['semester'];
@@ -1401,7 +1401,7 @@
         }
     }
     
-    // 6. Hapus Nilai Ulangan
+    // 27. Hapus Nilai Ulangan
     if(isset($_POST['hapusNilaiUlangan'])){
         $idNilaiUlangan = $_POST['idNilaiUlangan'];
 
@@ -1435,6 +1435,184 @@
         }
     }
 
+    // 28. Tambah Deskripsi
+    if(isset($_POST['tambahDeskripsi'])){
+        $semester = $_POST['semester'];
+        $mapel = $_POST['mapel'];
+        $kelas = $_POST['kelas'];
+        $deskripsi = $_POST['deskripsi'];
+        $deskripsi = ucfirst($deskripsi);
+        $deskripsi = rtrim($deskripsi, '.');
+
+        try {
+            
+            $queryInsertDeskripsi = "INSERT INTO `asesmen`
+            (`semester`, `id_mapel`, `id_kelas`, `deskripsi`) 
+            VALUES ('$semester','$mapel','$kelas','$deskripsi');";
+                
+            $insertDeskripsi = mysqli_query($conn, $queryInsertDeskripsi);
+          
+            
+            if (!$insertDeskripsi) {
+                throw new Exception("Query insert gagal"); // Lempar exception jika query gagal
+            }
+
+            // Query SELECT untuk memeriksa apakah data sudah masuk ke database
+            $result = mysqli_query($conn, "SELECT * 
+            FROM asesmen
+            WHERE 
+            `semester` = '$semester' AND
+            `id_mapel` = '$mapel' AND
+            `id_kelas` = '$kelas' AND
+            `deskripsi` ='$deskripsi'            
+            ");
+
+            if ($result && mysqli_num_rows($result) === 1) {
+                // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
+                $_SESSION['flash_message'] = 'Tambah deskripsi berhasil';
+                $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
+                if ($semester == 'Ganjil') {
+                    header('location:input_nilai_kualitatif_ganjil.php');
+                } elseif ($semester == 'Genap') {
+                    header('location:input_nilai_kualitatif_genap.php'); 
+                }
+                exit;
+            } else {
+                // Data tidak ada dalam database, itu berarti gagal
+                throw new Exception("Data tidak ditemukan setelah ditambahkan");
+            }
+        } catch (Exception $e) {
+            // Tangani exception jika terjadi kesalahan
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $e->getMessage();
+            $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
+            if ($semester == 'Ganjil') {
+                header('location:input_nilai_kualitatif_ganjil.php');
+            } elseif ($semester == 'Genap') {
+                header('location:input_nilai_kualitatif_genap.php'); 
+            }
+            exit;
+        }
+    }
+
+    // 29. Ubah Deskripsi
+    if(isset($_POST['ubahDeskripsi'])){
+        $semester = $_POST['semester'];
+        $kelas = $_POST['kelas'];
+        $idMapel = $_POST['idMapel'];
+
+        try {
+            
+            foreach ($_POST as $key => $value) {
+                // Check if the form field is related to deskripsi
+                if (strpos($key, 'deskripsi_') !== false) {
+                    // Extract id_asesmen from the form field name
+                    $idAsesmen = substr($key, strlen('deskripsi_'));
+                    $lastId = $idAsesmen;
+                    // Sanitize and update the database
+                    $newDeskripsi = mysqli_real_escape_string($conn, $value);
+                    $newDeskripsi = rtrim($newDeskripsi, '.');
+                    $lastValue = $newDeskripsi;
+                    $updateQuery = "UPDATE asesmen SET deskripsi = '$newDeskripsi' WHERE id_asesmen = $idAsesmen";
+                    $updateDeskripsi = mysqli_query($conn, $updateQuery);
+                }
+            }       
+            
+            if (!$updateDeskripsi) {
+                throw new Exception("Query update gagal"); // Lempar exception jika query gagal
+            }
+
+            // Query SELECT untuk memeriksa apakah data sudah masuk ke database
+            $result = mysqli_query($conn, "SELECT * 
+            FROM asesmen
+            WHERE
+            `id_asesmen` = '$lastId' AND
+            `semester` = '$semester' AND
+            `id_mapel` = '$idMapel' AND
+            `id_kelas` = '$kelas' AND
+            `deskripsi` ='$lastValue'            
+            ");
+
+            if ($result && mysqli_num_rows($result) === 1) {
+                // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
+                $_SESSION['flash_message'] = 'Ubah deskripsi berhasil';
+                $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
+                if ($semester == 'Ganjil') {
+                    header('location:input_nilai_kualitatif_ganjil.php');
+                } elseif ($semester == 'Genap') {
+                    header('location:input_nilai_kualitatif_genap.php'); 
+                }
+                exit;
+            } else {
+                // Data tidak ada dalam database, itu berarti gagal
+                throw new Exception("Data tidak berubah");
+            }
+        } catch (Exception $e) {
+            // Tangani exception jika terjadi kesalahan
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $e->getMessage();
+            $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
+            if ($semester == 'Ganjil') {
+                header('location:input_nilai_kualitatif_ganjil.php');
+            } elseif ($semester == 'Genap') {
+                header('location:input_nilai_kualitatif_genap.php'); 
+            }
+            exit;
+        }
+    }
+
+    // 30. Hapus Deskripsi
+    if(isset($_POST['hapusAsesmen'])){
+        $semester = $_POST['semester'];
+        $kelas = $_POST['kelas'];
+        $idMapel = $_POST['idMapel'];
+        $idAsesmen = $_POST['deskripsi'];      
+
+        try {           
+
+            $deleteQuery = "DELETE FROM asesmen WHERE id_asesmen = $idAsesmen";
+            $deleteDeskripsi = mysqli_query($conn, $deleteQuery);
+
+    
+            
+            if (!$deleteDeskripsi) {
+                throw new Exception("Query hapus gagal"); // Lempar exception jika query gagal
+            }
+
+            // Query SELECT untuk memeriksa apakah data sudah masuk ke database
+            $result = mysqli_query($conn, "SELECT * 
+            FROM asesmen
+            WHERE
+            `id_asesmen` = '$idAsesmen' AND
+            `semester` = '$semester' AND
+            `id_mapel` = '$idMapel' AND
+            `id_kelas` = '$kelas'           
+            ");
+
+            if ($result && mysqli_num_rows($result) === 0) {
+                // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
+                $_SESSION['flash_message'] = 'Hapus deskripsi berhasil';
+                $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
+                if ($semester == 'Ganjil') {
+                    header('location:input_nilai_kualitatif_ganjil.php');
+                } elseif ($semester == 'Genap') {
+                    header('location:input_nilai_kualitatif_genap.php'); 
+                }
+                exit;
+            } else {
+                // Data tidak ada dalam database, itu berarti gagal
+                throw new Exception("Data tidak terhapus");
+            }
+        } catch (Exception $e) {
+            // Tangani exception jika terjadi kesalahan
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $deleteQuery . $e->getMessage();
+            $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
+            if ($semester == 'Ganjil') {
+                header('location:input_nilai_kualitatif_ganjil.php');
+            } elseif ($semester == 'Genap') {
+                header('location:input_nilai_kualitatif_genap.php'); 
+            }
+            exit;
+        }
+    }
 
     
 
