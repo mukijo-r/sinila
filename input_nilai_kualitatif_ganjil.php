@@ -39,10 +39,15 @@ $semester = 'Ganjil';
                         <br>
                         <div class="container-fluid px-4">
                             <div class="row">
-                                <div class="col-md-2">
+                                <div class="col-md-1">
                                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalTambahDeskripsi">
                                         Deskripsi Baru
                                     </button>
+                                </div>
+                                <div class="col-md-1"><a href="capaian_kompetensi_siswa_ganjil.php">
+                                    <button type="button" class="btn btn-primary">
+                                        Asesmen Siswa
+                                    </button></a>
                                 </div>
                                 <div class="col-md-8">
                                     <?php
@@ -242,6 +247,8 @@ $semester = 'Ganjil';
                                     </div>
 
                                     
+
+                                    
                                     <?php
                                     };
                                     ?>
@@ -260,6 +267,12 @@ $semester = 'Ganjil';
         <script src="assets/demo/chart-bar-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="js/datatables-simple-demo.js"></script>   
+        <script>
+            var myModal = new bootstrap.Modal(document.getElementById('modalPilihMapel'));
+            var myModal2 = new bootstrap.Modal(document.getElementById('exampleModalToggle2'));
+        </script>
+
+
     </body>   
 
     <!-- Modal Tambah Deskripsi Asesmen -->
@@ -272,7 +285,6 @@ $semester = 'Ganjil';
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <!-- Modal Body -->
-                <form method="post">
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-6">
@@ -301,9 +313,139 @@ $semester = 'Ganjil';
                             <button type="submit" class="btn btn-primary" name="tambahDeskripsi">Simpan</button>
                         </div>
                     </div>
-                </form>
             </div>
         </div>
     </div>
+    
+    <!-- Modal Pilih Mapel
+    <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+        <div class="modal-dialog modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalToggleLabel">Capaian Kompetensi Siswa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post">
+                <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="idMapel">Pilih Mata Pelajaran:</label>
+                        <select class="form-select" name="idMapel" id="idMapel" aria-label="idMapel" required>
+                        <option selected disabled>Pilih Mapel</option>
+                        <?php
+                        // Ambil data kelas dari tabel kelas
+                        $queryMapel = mysqli_query($conn, "SELECT id_mapel, mapel FROM mapel");
+                        while ($rowMapel = mysqli_fetch_assoc($queryMapel)) {
+                            echo '<option value="' . $rowMapel['id_mapel'] . '">' . $rowMapel['mapel'] . '</option>';
+                        }
+                        ?>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                    <input type="hidden" name="idMap" id="idMap" class="form-control">
+                    </div>
+                    </div>
+                </div>
+                </div>
+                <div class="modal-footer">
+                <button class="btn btn-primary" name="lanjut" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal">Lanjut</button>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div> -->
+
+    <!-- Modal Pilih Capaian Kompetensi -->
+    <!-- <div class="modal fade bd-example-modal-lg" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalToggleLabel2">Capaian Kompetensi Siswa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                
+                <label>Pilih deskripsi sesuai capaian kompetensi setiap siswa :</label><br>
+                <?php
+                if(isset($_POST['lanjut'])) {
+                    // Ambil nilai idMap dari formulir
+                    $idMap = $_POST['idMap'];
+
+                    // Sekarang, Anda dapat menggunakan nilai $idMap di sini sesuai kebutuhan
+                    echo "Nilai idMap yang dikirim: " . $idMap;
+
+                }
+                ?>
+                <label>id mata pelajaran : <?=$idMap;?></label>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">                            
+                            <?php
+                            $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
+                            $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
+                            $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];
+
+                            $queryCk = "SELECT
+                            ck.id_siswa,
+                            s.nama,
+                            ck.id_asesmen,
+                            a.deskripsi,
+                            ck.capaian
+                            FROM 
+                            `capaian_kompetensi` ck
+                            LEFT JOIN asesmen a ON ck.id_asesmen = a.id_asesmen  
+                            LEFT JOIN siswa s ON ck.id_siswa = s.id_siswa                                  
+                            WHERE
+                            id_tahun_ajar = '$idTahunAjar' AND
+                            semester = 'Ganjil' AND
+                            a.id_kelas = '$kelas' AND
+                            a.id_mapel = '$idMapel'  
+                            ORDER BY ck.id_siswa ASC;";
+
+                            $capaianKompetensi = mysqli_query($conn, $queryCk); 
+                            
+                            echo $queryCk;
+
+                            while ($rowCapKom = mysqli_fetch_assoc($capaianKompetensi)) {
+                                $siswa = $rowCapKom['id_tahun_ajar'];
+                                $deskripsi = $rowCapKom['deskripsi'];
+                                $capaian = $rowCapKom['capaian'];
+
+                                // Menentukan status checklist berdasarkan nilai capaian
+                                $checked = ($capaian == 1) ? 'checked' : '';
+
+                                // Menampilkan data siswa dan checklist
+                                echo '<div>';
+                                echo '<p>'.$siswa.'</p>';
+                                echo '<input type="checkbox" '.$checked.'>'.$deskripsi;
+                                echo '</div>';
+                            }
+                            ?>                          
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal" data-bs-dismiss="modal">Kembali</button>
+                <button class="btn btn-success" name="updateCapaianKompetensi" data-bs-toggle="modal" data-bs-dismiss="modal">Simpan</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Temukan elemen "kelas" dan "siswa" pada Tambah Transaksi Tabungan
+        var mapelDropdown = document.getElementById('idMapel');
+        var idInput = document.getElementById('idMap');
+
+        mapelDropdown.addEventListener('change', function() {
+            // updateIdMapel();
+            idInput.value = mapelDropdown.value;
+        });       
+    
+    });
+    </script> -->
 
 </html>
