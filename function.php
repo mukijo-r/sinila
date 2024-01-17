@@ -1448,10 +1448,38 @@
             
             $queryInsertDeskripsi = "INSERT INTO `asesmen`
             (`semester`, `id_mapel`, `id_kelas`, `deskripsi`) 
-            VALUES ('$semester','$mapel','$kelas','$deskripsi');";
+            VALUES ('$semester','$mapel','$kelas','$deskripsi');";           
                 
             $insertDeskripsi = mysqli_query($conn, $queryInsertDeskripsi);
-          
+
+            $queryIdAsesmen = "SELECT `id_asesmen` FROM `asesmen` WHERE `deskripsi` = '$deskripsi'";
+            $dataIdAsesmen = mysqli_query($conn, $queryIdAsesmen);
+            while($data=mysqli_fetch_array($dataIdAsesmen)){
+                $idAsesemen = $data['id_asesmen'];
+            }
+            
+            $querySiswa = "SELECT id_siswa FROM siswa WHERE id_kelas = '$kelas'";
+            $siswa = mysqli_query($conn, $querySiswa);
+
+            $siswaArray = []; // Buat array untuk menyimpan data siswa
+                        
+            while ($row = mysqli_fetch_assoc($siswa)) {
+                $siswaArray[] = $row['id_siswa']; // Tambahkan id_siswa ke dalam array
+            }
+
+            $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
+            $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
+            $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];
+
+            for ($i = 0; $i < count($siswaArray); $i++) {
+                $idSiswa = $siswaArray[$i];
+                $queryInsertCapaianKompetensi = "INSERT INTO `capaian_kompetensi`
+                (`id_tahun_ajar`, `semester`, `id_siswa`, `id_asesmen`, `capaian`) 
+                VALUES 
+                ('$idTahunAjar','$semester','$idSiswa','$idAsesemen','0')";
+
+                $setCapaianKompetensi = mysqli_query($conn, $queryInsertCapaianKompetensi);
+            }           
             
             if (!$insertDeskripsi) {
                 throw new Exception("Query insert gagal"); // Lempar exception jika query gagal
@@ -1568,10 +1596,11 @@
 
         try {           
 
-            $deleteQuery = "DELETE FROM asesmen WHERE id_asesmen = $idAsesmen";
-            $deleteDeskripsi = mysqli_query($conn, $deleteQuery);
+            $queryDeleteCapaianKompetensi = "DELETE FROM `capaian_kompetensi` WHERE  `id_asesmen` = $idAsesmen";
+            $deleteCapaianKompetensi = mysqli_query($conn, $queryDeleteCapaianKompetensi);
 
-    
+            $deleteQuery = "DELETE FROM asesmen WHERE id_asesmen = $idAsesmen";
+            $deleteDeskripsi = mysqli_query($conn, $deleteQuery);            
             
             if (!$deleteDeskripsi) {
                 throw new Exception("Query hapus gagal"); // Lempar exception jika query gagal
