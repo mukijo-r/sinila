@@ -71,7 +71,21 @@ $semester = 'Ganjil'
                                         <button type="submit" class="btn btn-primary" name="btnTampilLapSiswa" id="btnTampilLapSiswa">
                                             Tampilkan
                                         </button>
-                                    </div>            
+                                    </div>                                              
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-2"></div>
+                                    <div class="col-md-8">
+                                    <?php
+                                    if (isset($_SESSION['flash_message'])) {
+                                        $message_class = isset($_SESSION['flash_message_class']) ? $_SESSION['flash_message_class'] : 'alert-success';
+                                        echo '<div class="alert ' . $message_class . ' text-center">' . $_SESSION['flash_message'] . '</div>';
+                                        unset($_SESSION['flash_message']); // Hapus pesan flash setelah ditampilkan
+                                    }
+                                    
+                                    ?>                                    
+                                    </div>
+                                    <div class="col-md-2"></div>  
                                 </div>
                             </form> 
                         </div>
@@ -88,23 +102,17 @@ $semester = 'Ganjil'
                         $namaMapel = $rowMapel['mapel'];
                 
                         ?><br>
-                        <div class="row"> 
-                            <?php 
-                            $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
-                            $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
-                            $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];
-                            ?>   
+                        <div class="row">
                             <h5>Pilih deskripsi sesuai capaian kompetensi setiap siswa :</h5>
- 
                         </div>
                         <?php
 
-                        capaianKompetensi($idTahunAjar, $semester, $kelas, $idMapel);
+                        capaianKompetensi($kelas, $idMapel);
                     }               
                     ?>
                 </div>
                 <?php
-                function capaianKompetensi($idTahunAjar, $semester, $kelas, $idMapel) {
+                function capaianKompetensi($kelas, $idMapel) {
                     $conn = mysqli_connect("localhost:3306", "root", "", "sdk");
 
                     $queryCk = "SELECT
@@ -118,8 +126,8 @@ $semester = 'Ganjil'
                         LEFT JOIN asesmen a ON ck.id_asesmen = a.id_asesmen  
                         LEFT JOIN siswa s ON ck.id_siswa = s.id_siswa                                  
                         WHERE
-                        id_tahun_ajar = '$idTahunAjar' AND
                         semester = 'Ganjil' AND
+                        s.id_kelas = '$kelas' AND
                         a.id_kelas = '$kelas' AND
                         a.id_mapel = '$idMapel'  
                         ORDER BY ck.id_siswa ASC;";
@@ -129,11 +137,16 @@ $semester = 'Ganjil'
                     $nomorSiswa = 0; // Inisialisasi nomor siswa
                     $currentSiswa = '';
 
+                    echo '<form method="post" action="">';
                     while ($rowCapKom = mysqli_fetch_assoc($capaianKompetensi)) {
+                        $idSiswa = $rowCapKom['id_siswa'];
+                        $idAsesmen = $rowCapKom['id_asesmen'];
                         $siswa = $rowCapKom['nama'];
                         $deskripsi = $rowCapKom['deskripsi'];
+                        $deskripsi = ucfirst($deskripsi);
                         $capaian = $rowCapKom['capaian'];
 
+                        echo '<input type="hidden" name="id_siswa[]" value="'.$idSiswa.'">';
                         // Jika siswa berubah, update nomor siswa dan tampilkan header siswa
                         if ($siswa != $currentSiswa) {
                             $currentSiswa = $siswa;
@@ -149,14 +162,19 @@ $semester = 'Ganjil'
 
                         // Menampilkan deskripsi dan checklist
                         echo '<div style="font-size: 1.1em;" class="form-check form-switch">';
-                        echo '<input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" '.$checked.'>'.$deskripsi;
+                        echo '<input type="hidden" name="capaian['.$idSiswa.']['.$idAsesmen.']" value="0">';
+
+                        // Ubah checkbox agar menggunakan array pada nama                        
+                        echo '<input class="form-check-input" type="checkbox" id="checkbox_'.$idAsesmen.'" name="capaian['.$idSiswa.']['.$idAsesmen.']" value="1" '.($capaian == 1 ? 'checked' : '').'>'.$deskripsi.'.';
+
                         echo '</div>';                        
                     }
                     echo '<br>';
                     echo '<br>';
                     echo '<div style="text-align: center;" class="sb-sidenav-footer">';
                     echo '<button type="submit" class="btn btn-primary" name="btnSimpanCapKom" id="btnSimpanCapKom">Simpan</button>';               
-                    echo '</div>'; 
+                    echo '</div>';
+                    echo '</form>'; 
                     echo '<br>';
                     echo '<br>';
                 }
