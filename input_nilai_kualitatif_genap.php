@@ -39,7 +39,7 @@ $semester = 'Genap';
                         <br>
                         <div class="container-fluid px-4">
                             <div class="row">
-                                <div class="col-md-2">
+                                <div class="col-md-1">
                                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalTambahDeskripsi">
                                         Deskripsi Baru
                                     </button>
@@ -92,7 +92,7 @@ $semester = 'Genap';
                                     WHERE 
                                     semester = '$semester' AND
                                     id_kelas = '$kelas'
-                                    ORDER BY mapel;");   
+                                    ORDER BY mapel, id_asesmen;");   
                                     
                                     while($data=mysqli_fetch_array($dataAsesmen)){
                                         $idAsesemen = $data['id_asesmen'];                                       
@@ -119,12 +119,9 @@ $semester = 'Genap';
                                         `mapel` = '$namaMapel'
                                         ;";
 
-                                        $queryMapel = mysqli_query($conn, "SELECT id_mapel
-                                        FROM mapel                  
-                                        WHERE 
-                                        `mapel` = '$namaMapel';");
+                                        $mapel = mysqli_query($conn, $queryMapel);
 
-                                        while ($rowMapel = mysqli_fetch_array($queryMapel)){
+                                        while ($rowMapel = mysqli_fetch_array($mapel)){
                                         $id_mapel = $rowMapel['id_mapel'];
                                         }
                                         echo '<tr>';

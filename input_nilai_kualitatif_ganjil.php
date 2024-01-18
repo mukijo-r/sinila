@@ -92,13 +92,14 @@ $semester = 'Ganjil';
                                     WHERE 
                                     semester = '$semester' AND
                                     id_kelas = '$kelas'
-                                    ORDER BY mapel;");   
+                                    ORDER BY mapel, id_asesmen;");   
                                     
                                     while($data=mysqli_fetch_array($dataAsesmen)){
                                         $idAsesemen = $data['id_asesmen'];                                       
                                         $idMapel = $data['id_mapel'];
                                         $mapel = $data['mapel'];
                                         $deskripsi = $data['deskripsi'];
+                                        $deskripsi = ucfirst($deskripsi);
 
                                         if (!isset($groupedDescriptions[$idMapel])) {
                                             $groupedDescriptions[$idMapel] = ['mapel' => $mapel, 'descriptions' => []];
