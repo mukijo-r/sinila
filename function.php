@@ -1491,7 +1491,7 @@
             `deskripsi` ='$deskripsi'            
             ");
 
-            if ($result && mysqli_num_rows($result) === 1) {
+            if ($result && mysqli_num_rows($result) > 0) {
                 // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
                 $_SESSION['flash_message'] = 'Tambah deskripsi berhasil';
                 $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
