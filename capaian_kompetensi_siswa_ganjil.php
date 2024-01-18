@@ -130,7 +130,7 @@ $semester = 'Ganjil'
                         s.id_kelas = '$kelas' AND
                         a.id_kelas = '$kelas' AND
                         a.id_mapel = '$idMapel'  
-                        ORDER BY ck.id_siswa ASC;";
+                        ORDER BY ck.id_siswa, ck.id_asesmen ASC;";
 
                     $capaianKompetensi = mysqli_query($conn, $queryCk);
 
