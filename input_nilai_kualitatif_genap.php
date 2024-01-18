@@ -44,6 +44,11 @@ $semester = 'Genap';
                                         Deskripsi Baru
                                     </button>
                                 </div>
+                                <div class="col-md-1"><a href="capaian_kompetensi_siswa_genap.php">
+                                    <button type="button" class="btn btn-primary">
+                                        Asesmen Siswa
+                                    </button></a>
+                                </div>
                                 <div class="col-md-8">
                                     <?php
                                     if (isset($_SESSION['flash_message'])) {

@@ -285,6 +285,7 @@ $semester = 'Ganjil';
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <!-- Modal Body -->
+                <form method="post">
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-6">
@@ -313,6 +314,7 @@ $semester = 'Ganjil';
                             <button type="submit" class="btn btn-primary" name="tambahDeskripsi">Simpan</button>
                         </div>
                     </div>
+                </form>
             </div>
         </div>
     </div>
