@@ -214,27 +214,63 @@ while ($row = mysqli_fetch_array($nilai)) {
     $idMapel = $rowMapel['id_mapel'];
     }
 
-    $queryDeskripsi = "SELECT GROUP_CONCAT(deskripsi SEPARATOR ', ') AS combined_deskripsi
-    FROM asesmen                                   
-    WHERE 
-    id_mapel = '$idMapel' AND 
-    semester = '$semester' AND
-    id_kelas = '$kelas'";
+    $queryDeskripsi1 = "SELECT GROUP_CONCAT(a.deskripsi SEPARATOR ', ') AS combined_deskripsi1
+                        FROM
+                        `capaian_kompetensi` ck
+                        LEFT JOIN asesmen a ON ck.id_asesmen = a.id_asesmen  
+                        LEFT JOIN siswa s ON ck.id_siswa = s.id_siswa                                  
+                        WHERE
+                        a.semester = '$semester' AND
+                        ck.id_siswa = '$idSiswa' AND
+                        ck.capaian = '1' AND
+                        a.id_kelas = '$kelas' AND
+                        a.id_mapel = '$idMapel';";
 
-    $result = mysqli_query($conn, $queryDeskripsi);
+    $result1 = mysqli_query($conn, $queryDeskripsi1);
 
-    if ($result) {
-        $row = mysqli_fetch_assoc($result);
-        $combinedDeskripsi = $row['combined_deskripsi'];
+    if ($result1) {
+        $row1 = mysqli_fetch_assoc($result1);
+        $combinedDeskripsi1 = $row1['combined_deskripsi1'];
     }
+
+    $queryDeskripsi0 = "SELECT GROUP_CONCAT(a.deskripsi SEPARATOR ', ') AS combined_deskripsi0
+    FROM
+    `capaian_kompetensi` ck
+    LEFT JOIN asesmen a ON ck.id_asesmen = a.id_asesmen  
+    LEFT JOIN siswa s ON ck.id_siswa = s.id_siswa                                  
+    WHERE
+    a.semester = '$semester' AND
+    ck.id_siswa = '$idSiswa' AND
+    ck.capaian = '0' AND
+    a.id_kelas = '$kelas' AND
+    a.id_mapel = '$idMapel';";
+
+    $result0 = mysqli_query($conn, $queryDeskripsi0);
+
+    if ($result0) {
+        $row0 = mysqli_fetch_assoc($result0);
+        $combinedDeskripsi0 = $row0['combined_deskripsi0'];
+    }                        
+
     $html  .= '<tr>';
-    $html  .= '<td style="padding-top: 10px;">' . $i++ . '</td>';
-    $html  .= '<td style="text-align: left;">' . $mapel . '</td>';
-    $html  .= '<td>' . $nilaiRapot . '</td>';
-    if ($nilaiRapot > 74){
-        $html  .= '<td style="text-align: left;">'. $namaSiswa . ' mampu ' . $combinedDeskripsi .'</td>';
+    $html  .= '<td rowspan="2">' . $i++ . '</td>';
+    $html  .= '<td rowspan="2" style="text-align: left;">' . $mapel . '</td>';
+    $html  .= '<td rowspan="2">' . $nilaiRapot . '</td>';
+    if ($combinedDeskripsi1 <> '') {
+        if ($nilaiRapot > 74){
+            $html  .= '<td style="text-align: left;">'. $namaSiswa . ' mampu ' . $combinedDeskripsi1 .'.</td>';
+        } else {
+            $html  .= '<td style="text-align: left;">'. $namaSiswa . ' membutuhkan bantuan dalam ' . $combinedDeskripsi1 .'.</td>';
+        } 
     } else {
-        $html  .= '<td style="text-align: left;">'. $namaSiswa . ' membutuhkan bantuan dalam ' . $combinedDeskripsi .'</td>';
+        $html  .= '<td style="text-align: left;"></td>';
+    }
+    $html  .= '</tr>';
+    $html  .= '<tr>';
+    if ($combinedDeskripsi0 <> '') {
+            $html  .= '<td style="text-align: left;">'. $namaSiswa . ' membutuhkan bantuan dalam ' . $combinedDeskripsi0 .'.</td>';
+    } else {
+        $html  .= '<td style="text-align: left;"></td>';
     }
     $html  .= '</tr>';
 }
