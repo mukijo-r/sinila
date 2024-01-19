@@ -963,39 +963,51 @@
     // 19. Tambah Status Naik/Tinggal Kelas
     if(isset($_POST['tambahKenaikkanKelas'])){
         $tanggalKenaikan = $_POST['tanggalKenaikan'];
-        $tanggalInput = date("Y-m-d", strtotime($tanggalKenaikan));
-        $semester = "Genap";
-        $idSiswa = $_POST['siswa'];
-        $kenaikan = $_POST['kenaikan']; 
-        $namaUser = $_POST['namaUser'];       
+        $tanggalInput = date("Y-m-d", strtotime($tanggalKenaikan)); 
+        $namaUser = $_POST['namaUser']; 
 
         $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
         $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
         $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];
 
+        $lastIdSiswa = null;
+        $lastValue = null;
+
         try {
-            $queryInsertKenaikkanKelas = "INSERT INTO `kenaikan_kelas`
-            (`tanggal`, `id_tahun_ajar`, `semester`, `kelas`, `id_siswa`, `status`, `guru_pencatat`) 
-            VALUES 
-            ('$tanggalInput ','$idTahunAjar','$semester','$kelas','$idSiswa','$kenaikan','$namaUser')";
-                
-            $insertKenaikkanKelas = mysqli_query($conn, $queryInsertKenaikkanKelas);
+            
+            $dataNilai = [];
+
+            foreach ($_POST as $key => $value) {
+                if (strpos($key, 'nilai_') !== false) {
+                    $idSiswa = substr($key, 6);
+                    $lastIdSiswa = $idSiswa; // Store the last id_siswa
+                    $dataNilai[$idSiswa] = $value;
+                    $lastValue = $value; // Store the last value
+                    $queryInsertKenaikkanKelas = "INSERT INTO `kenaikan_kelas`
+                    (`tanggal`, `id_tahun_ajar`, `semester`, `kelas`, `id_siswa`, `status`, `guru_pencatat`) 
+                    VALUES ('$tanggalInput','$idTahunAjar','Genap','$kelas','$idSiswa','$value','$namaUser')";
+                        
+                    $insertKenaikkanKelas = mysqli_query($conn, $queryInsertKenaikkanKelas);
+                }
+            };
 
             if (!$insertKenaikkanKelas) {
                 throw new Exception("Query insert gagal"); // Lempar exception jika query gagal
             }
 
             // Query SELECT untuk memeriksa apakah data sudah masuk ke database
-            $result = mysqli_query($conn, "SELECT * 
+            $queryCek = "SELECT * 
             FROM kenaikan_kelas
             WHERE 
             tanggal='$tanggalInput' AND
             id_tahun_Ajar='$idTahunAjar' AND
-            semester='$semester' AND
+            semester='Genap' AND
             kelas='$kelas' AND
-            id_siswa='$idSiswa' AND
-            `status`='$kenaikan'            
-            ");
+            id_siswa='$lastIdSiswa' AND
+            `status`='$lastValue'            
+            ";
+
+            $result = mysqli_query($conn, $queryCek);
 
             if ($result && mysqli_num_rows($result) === 1) {
                 // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
@@ -1009,7 +1021,7 @@
             }
         } catch (Exception $e) {
             // Tangani exception jika terjadi kesalahan
-            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryInsertKenaikkanKelas . $e->getMessage();
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryCek . $e->getMessage();
             $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
             header('location:input_naik_kelas.php');
             exit;
