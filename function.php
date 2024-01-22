@@ -18,6 +18,10 @@
     $kelas = $_SESSION['kelas'];
     }
 
+    if (isset($_SESSION['previous_user'])) {
+        $previousUsername = $_SESSION['previous_user'];
+    }
+
     // 1. Ganti Password User
     if (isset($_POST['gantiPassword'])) {
         $username = $_POST['username'];
@@ -717,14 +721,9 @@
         $catatan = $_POST['catatan'];
         $namaUser = $_POST['namaUser'];
 
-        $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
-        $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
-        $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];
-
         try {
             $queryUpdateNilaiCatatan = "UPDATE `nilai_catatan` 
             SET
-            `id_tahun_ajar`='$idTahunAjar',
             `semester`='$semester',
             `id_siswa`='$idSiswa',
             `catatan`='$catatan'
@@ -869,14 +868,9 @@
         $absen = $_POST['absen'];
         $namaUser = $_POST['namaUser'];
 
-        $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
-        $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
-        $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];
-
         try {
             $queryUpdateAbsen = "UPDATE `absensi` 
             SET 
-            `id_tahun_ajar`='$idTahunAjar',
             `semester`='$semester',
             `kelas`='$kelas',
             `id_siswa`='$idSiswa',
@@ -1037,15 +1031,10 @@
         $kenaikan = $_POST['kenaikan']; 
         $namaUser = $_POST['namaUser'];       
 
-        $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
-        $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
-        $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];
-
         try {
             $queryUpdateKenaikkanKelas = "UPDATE `kenaikan_kelas` 
             SET             
             `tanggal`='$tanggalInput',
-            `id_tahun_ajar`='$idTahunAjar',
             `kelas`='$kelas',
             `id_siswa`='$idSiswa',
             `status`='$kenaikan',
@@ -1673,7 +1662,218 @@
         }
         header("Location: capaian_kompetensi_siswa_ganjil.php");
         exit();
+    }    
+
+    // 32. Tambah User
+    if (isset($_POST['tambahUser'])) {
+        $nama = $_POST['nama'];
+        $username = $_POST['username'];
+        $password1 = $_POST['password'];
+        $password2 = $_POST['confirmPassword'];
+        $role = $_POST['role'];
+        if ($password1 == $password2) {
+                $password = password_hash($password1, PASSWORD_BCRYPT);
+            
+            // Coba jalankan query insert
+            $addUser = mysqli_query($conn, "INSERT INTO `users`(`username`, `password`, `nama_lengkap`, `role`) 
+            VALUES ('$username', '$password', '$nama', '$role')");
+
+            $checkUserQuery = "SELECT * FROM `users` WHERE `username` = '$username'";
+            $checkUserResult = mysqli_query($conn, $checkUserQuery);
+
+            // Setelah berhasil menambahkan akun baru
+            if (mysqli_num_rows($checkUserResult) == 1) {
+
+                if (isset($_SESSION['previous_user'])) {
+                    $_SESSION['user'] = $_SESSION['previous_user'];
+                }
+
+                $sweetAlert = "Swal.fire({
+                    title: 'Sukses!',
+                    text: 'Akun berhasil ditambahkan.',
+                    icon: 'success',
+                    timer: 2000,
+                    timerProgressBar: true,
+                    showConfirmButton: false
+                });";
+
+            } else {
+                // Gagal menambahkan akun
+                $sweetAlert = "Swal.fire({
+                    title: 'Gagal!',
+                    text: 'Tambah akun gagal.',
+                    icon: 'error',
+                    timer: 2000,
+                    timerProgressBar: true,
+                    showConfirmButton: false
+                });";
+            }
+        } else {
+            $sweetAlert = "Swal.fire({
+                title: 'Gagal!',
+                text: 'Password tidak sama. Tambah akun gagal.',
+                icon: 'error',
+                timer: 2000,
+                timerProgressBar: true,
+                showConfirmButton: false
+            });";
+        }
     }
-    
+
+    // 33. Tambah Nilai Catatan Ekstrakurikuler
+    if(isset($_POST['tambahCatatanEkstra'])){
+        $semester = $_POST['semester'];
+        $namaUser = $_POST['namaUser'];
+        $idEkstra = $_POST['ekstra'];
+
+        $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
+        $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
+        $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];
+
+        $lastIdSiswa = null;
+        $lastValue = null;
+
+        try {
+            
+            $dataNilai = [];
+
+            foreach ($_POST as $key => $value) {
+                if (strpos($key, 'nilai_') !== false) {
+                    $idSiswa = substr($key, 6);
+                    $lastIdSiswa = $idSiswa; // Store the last id_siswa
+                    $dataNilai[$idSiswa] = $value;
+                    $lastValue = $value; // Store the last value
+                    $queryInsertCatatanEkstra = "INSERT INTO `nilai_catatan_ekstrakurikuler`
+                    (`tanggal`, `id_tahun_ajar`, `semester`, `kelas`, `id_ek`, `id_siswa`, `catatan`, `guru_penilai`)
+                    VALUES ('$tanggal','$idTahunAjar','$semester','$kelas','$idEkstra','$idSiswa','$value','$namaUser')";
+                        
+                    $insertCatatanEkstra = mysqli_query($conn, $queryInsertCatatanEkstra);
+                }
+            }            
+            
+            if (!$insertCatatanEkstra) {
+                throw new Exception("Query insert gagal"); // Lempar exception jika query gagal
+            }
+
+            // Query SELECT untuk memeriksa apakah data sudah masuk ke database
+            $result = mysqli_query($conn, "SELECT * 
+            FROM nilai_catatan_ekstrakurikuler
+            WHERE 
+            tanggal='$tanggal' AND
+            id_tahun_Ajar='$idTahunAjar' AND
+            semester='$semester' AND
+            kelas='$kelas' ANDidEkstra
+            id_ek='$idEkstra' AND
+            id_siswa='$lastIdSiswa' AND
+            catatan='$lastValue'            
+            ");
+
+            if ($result && mysqli_num_rows($result) === 1) {
+                // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
+                $_SESSION['flash_message'] = 'Tambah catatan berhasil';
+                $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
+                header('location:input_nilai_catatan_ekstrakurikuler.php');
+                exit;
+            } else {
+                // Data tidak ada dalam database, itu berarti gagal
+                throw new Exception("Data tidak ditemukan atau duplikat");
+            }
+        } catch (Exception $e) {
+            // Tangani exception jika terjadi kesalahan
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $e->getMessage();
+            $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
+            header('location:input_nilai_catatan_ekstrakurikuler.php');
+            exit;
+        }
+    }
+
+    // 34. Ubah Nilai Catatan
+    if(isset($_POST['ubahNilaiCatatanEkstra'])){
+        $idNilaiCatatan = $_POST['idNilaiCatatan'];
+        $semester = $_POST['semester'];
+        $idSiswa = $_POST['siswa'];
+        $idEkstra = $_POST['ekstra'];
+        $catatan = $_POST['catatan'];
+        $namaUser = $_POST['namaUser'];
+
+        try {
+            $queryUpdateCatatanEkstra = "UPDATE `nilai_catatan_ekstrakurikuler` 
+            SET
+            `semester`='$semester',
+            `id_siswa`='$idSiswa',
+            `id_ek`='$idEkstra',
+            `catatan`='$catatan'
+            WHERE 
+            `id_nce`='$idNilaiCatatan'
+            ";
+                
+            $updateCatatanEkstra = mysqli_query($conn, $queryUpdateCatatanEkstra);
+
+            if (!$updateCatatanEkstra) {
+                throw new Exception("Query update gagal"); // Lempar exception jika query gagal
+            }
+
+            // Query SELECT untuk memeriksa apakah data sudah masuk ke database
+            $queryCek = "SELECT * 
+            FROM nilai_catatan_ekstrakurikuler
+            WHERE 
+            semester='$semester' AND
+            id_ek='$idEkstra' AND
+            id_siswa='$idSiswa' AND
+            catatan='$catatan'; ";
+            $result = mysqli_query($conn, $queryCek);
+
+            if ($result && mysqli_num_rows($result) === 1) {
+                // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
+                $_SESSION['flash_message'] = 'Ubah catatan berhasil';
+                $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
+                header('location:input_nilai_catatan_ekstrakurikuler.php');
+                exit;
+            } else {
+                // Data tidak ada dalam database, itu berarti gagal
+                throw new Exception("Data tidak ditemukan setelah diubah");
+            }
+        } catch (Exception $e) {
+            // Tangani exception jika terjadi kesalahan
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryCek . $e->getMessage();
+            $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
+            header('location:input_nilai_catatan_ekstrakurikuler.php');
+            exit;
+        }
+    }
+
+    // 35. Hapus Nilai Catatan
+    if(isset($_POST['hapusCatatanEkstra'])){
+        $idNilaiCatatan = $_POST['idCatatanEkstra'];
+
+        try {
+            $queryHapusCatatanEkstra = "DELETE FROM `nilai_catatan_ekstrakurikuler` WHERE `id_nce`='$idNilaiCatatan'";          
+            $hapusCatatanEkstra = mysqli_query($conn, $queryHapusCatatanEkstra);
+
+            if (!$hapusCatatanEkstra) {
+                throw new Exception("Query hapus gagal"); // Lempar exception jika query gagal
+            }
+
+            // Query SELECT untuk memeriksa apakah data sudah masuk ke database
+            $result = mysqli_query($conn, "SELECT * FROM `nilai_catatan_ekstrakurikuler` WHERE `id_nce`='$idNilaiCatatan'");
+
+            if ($result && mysqli_num_rows($result) === 0) {
+                // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
+                $_SESSION['flash_message'] = 'Hapus catatan berhasil';
+                $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
+                header('location:input_nilai_catatan_ekstrakurikuler.php');
+                exit;
+            } else {
+                // Data masih ada dalam database, itu berarti gagal
+                throw new Exception("Data masih ada setelah dihapus");
+            }
+        } catch (Exception $e) {
+            // Tangani exception jika terjadi kesalahan
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $e->getMessage();
+            $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
+            header('location:input_nilai_catatan_ekstrakurikuler.php');
+            exit;
+        }
+    }
 
 ?>
