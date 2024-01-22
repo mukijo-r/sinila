@@ -19,6 +19,7 @@ if (isset($_POST['login'])) {
             // Kata sandi cocok, beri izin login
             $_SESSION['user'] = $username; // Simpan nama user dalam sesi
             $_SESSION['log'] = 'True';
+            $_SESSION['previous_user'] = $username;  
             $_SESSION['tahunAjar'] = $tahunAjar;
             $_SESSION['kelas'] = $kelas;
             header('location:index.php');
@@ -120,15 +121,20 @@ if (isset($_POST['login'])) {
                                                     ?>
                                                 </select>
                                             </div>
-                                            </div>     
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                            <div class="d-flex justify-content-center mt-1 mb-0">
                                             <div class="form-check mb-3">
                                                 <input class="form-check-input" id="inputRememberPassword" type="checkbox" value="" />
                                                 <label class="form-check-label" for="inputRememberPassword">Remember Password</label>
                                             </div>
-                                            <div class="d-flex justify-content-center mt-4 mb-0">
+                                            </div>
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                            <div class="d-flex justify-content-center mt-1 mb-1">
                                                 <a class="small" href="#.html"></a>
                                                 <button class="btn btn-primary mx-auto" name="login">Login</button>
-                                                
+                                            </div>   
                                             </div>
                                         </form>
                                     </div>
