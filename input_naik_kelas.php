@@ -226,12 +226,12 @@ $namaUser = $rowUser['nama_lengkap'];
                 <form method="post">
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="tanggalKenaikan">Tanggal Naik Kelas :</label>       
+                            <label for="tanggalKenaikan">Tanggal :</label>       
                             <?php $tanggalSaatIni = date('Y-m-d');?>
                             <input type="date" name="tanggalKenaikan" value="<?=$tanggalSaatIni;?>" class="form-control">
                         </div>   
                         <div class="mb-3">
-                            <label for="siswa">Nilai Siswa :</label>
+                            <label for="siswa">Status Siswa :</label>
                             <?php
                             // Ambil data siswa dari tabel siswa
                             $querySiswa = mysqli_query($conn, "SELECT id_siswa, nama FROM siswa WHERE id_kelas = $kelas");
@@ -249,8 +249,15 @@ $namaUser = $rowUser['nama_lengkap'];
                                     // Input field for each student's grade
                                     echo '<div class="col-md-3">';
                                     echo '<select name="nilai_' . $rowSiswa['id_siswa'] . '" class="form-select" required>';
+
+                                    if ($kelas == 6) {                                        
+                                        echo '<option value="Lulus">Lulus</option>';
+                                        echo '<option value="Tidak Lulus">Tidak Lulus</option>';
+                                    } else {
                                     echo '<option value="Naik">Naik Kelas</option>';
                                     echo '<option value="Tidak Naik">Tidak Naik Kelas</option>';
+                                    }
+
                                     echo '</select>';
                                     echo '</div>';                                    
                                     echo '</div>';

@@ -35,8 +35,17 @@ $namaUser = $rowUser['nama_lengkap'];
                         <h2 class="mt-4">Input Data</h2>
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item active">PROSES / Input Data / Nilai Catatan</li>                            
-                        </ol>                        
-                        <br>
+                        </ol>
+                        <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Catatan Siswa</a>                            
+                        </li>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="input_nilai_catatan_ekstrakurikuler.php">Ekstrakurikuler</a>
+                        </li>
+                        </ul>
+                        <br><br>
                         <div class="container-fluid px-4">
                             <div class="row">
                                 <div class="col-md-2">
