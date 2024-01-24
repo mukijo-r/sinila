@@ -1438,45 +1438,44 @@
 
     // 28. Tambah Deskripsi
     if(isset($_POST['tambahDeskripsi'])){
-        $semester = $_POST['semester'];
         $mapel = $_POST['mapel'];
-        $kelas = $_POST['kelas'];
+        $fase = $_POST['fase'];
         $deskripsi = $_POST['deskripsi'];
         $deskripsi = lcfirst($deskripsi);
         $deskripsi = rtrim($deskripsi, '.');
 
         try {
             
-            $queryInsertDeskripsi = "INSERT INTO `asesmen`
-            (`semester`, `id_mapel`, `id_kelas`, `deskripsi`) 
-            VALUES ('$semester','$mapel','$kelas','$deskripsi');";           
+            $queryInsertDeskripsi = "INSERT INTO `capaian_kompetensi`
+            (`id_mapel`,`fase`,`deskripsi`) 
+            VALUES ('$mapel','$fase','$deskripsi');";           
                 
             $insertDeskripsi = mysqli_query($conn, $queryInsertDeskripsi);
 
-            $queryIdAsesmen = "SELECT `id_asesmen` FROM `asesmen` WHERE `deskripsi` = '$deskripsi'";
-            $dataIdAsesmen = mysqli_query($conn, $queryIdAsesmen);
-            while($data=mysqli_fetch_array($dataIdAsesmen)){
-                $idAsesmen = $data['id_asesmen'];
-            }
+            // $queryIdAsesmen = "SELECT `id_asesmen` FROM `capaian_kompetensi` WHERE `deskripsi` = '$deskripsi'";
+            // $dataIdAsesmen = mysqli_query($conn, $queryIdAsesmen);
+            // while($data=mysqli_fetch_array($dataIdAsesmen)){
+            //     $idAsesmen = $data['id_asesmen'];
+            // }
             
-            $querySiswa = "SELECT id_siswa FROM siswa";
-            $siswa = mysqli_query($conn, $querySiswa);
+            // $querySiswa = "SELECT id_siswa FROM siswa";
+            // $siswa = mysqli_query($conn, $querySiswa);
 
-            $siswaArray = []; // Buat array untuk menyimpan data siswa
+            // $siswaArray = []; // Buat array untuk menyimpan data siswa
                         
-            while ($row = mysqli_fetch_assoc($siswa)) {
-                $siswaArray[] = $row['id_siswa']; // Tambahkan id_siswa ke dalam array
-            }
+            // while ($row = mysqli_fetch_assoc($siswa)) {
+            //     $siswaArray[] = $row['id_siswa']; // Tambahkan id_siswa ke dalam array
+            // }
 
-            for ($i = 0; $i < count($siswaArray); $i++) {
-                $idSiswa = $siswaArray[$i];
-                $queryInsertCapaianKompetensi = "INSERT INTO `capaian_kompetensi`
-                (`id_siswa`, `id_asesmen`, `capaian`) 
-                VALUES 
-                ('$idSiswa','$idAsesmen','0')";
+            // for ($i = 0; $i < count($siswaArray); $i++) {
+            //     $idSiswa = $siswaArray[$i];
+            //     $queryInsertCapaianKompetensi = "INSERT INTO `capaian_kompetensi`
+            //     (`id_siswa`, `id_asesmen`, `capaian`) 
+            //     VALUES 
+            //     ('$idSiswa','$idAsesmen','0')";
 
-                $setCapaianKompetensi = mysqli_query($conn, $queryInsertCapaianKompetensi);
-            }           
+            //     $setCapaianKompetensi = mysqli_query($conn, $queryInsertCapaianKompetensi);
+            // }           
             
             if (!$insertDeskripsi) {
                 throw new Exception("Query insert gagal"); // Lempar exception jika query gagal
@@ -1484,11 +1483,10 @@
 
             // Query SELECT untuk memeriksa apakah data sudah masuk ke database
             $result = mysqli_query($conn, "SELECT * 
-            FROM asesmen
+            FROM capaian_kompetensi
             WHERE 
-            `semester` = '$semester' AND
+            `fase` = '$fase' AND
             `id_mapel` = '$mapel' AND
-            `id_kelas` = '$kelas' AND
             `deskripsi` ='$deskripsi'            
             ");
 
@@ -1496,11 +1494,7 @@
                 // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
                 $_SESSION['flash_message'] = 'Tambah deskripsi berhasil';
                 $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
-                if ($semester == 'Ganjil') {
-                    header('location:input_nilai_kualitatif_ganjil.php');
-                } elseif ($semester == 'Genap') {
-                    header('location:input_nilai_kualitatif_genap.php'); 
-                }
+                header('location:input_capaian_kompetensi.php');
                 exit;
             } else {
                 // Data tidak ada dalam database, itu berarti gagal
@@ -1508,21 +1502,16 @@
             }
         } catch (Exception $e) {
             // Tangani exception jika terjadi kesalahan
-            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $e->getMessage();
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryInsertDeskripsi . $e->getMessage();
             $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
-            if ($semester == 'Ganjil') {
-                header('location:input_nilai_kualitatif_ganjil.php');
-            } elseif ($semester == 'Genap') {
-                header('location:input_nilai_kualitatif_genap.php'); 
-            }
-            exit;
+            header('location:input_capaian_kompetensi.php');
+                exit;
         }
     }
 
     // 29. Ubah Deskripsi
     if(isset($_POST['ubahDeskripsi'])){
-        $semester = $_POST['semester'];
-        $kelas = $_POST['kelas'];
+        $fase = $_POST['kelas'];
         $idMapel = $_POST['idMapel'];
 
         try {
@@ -1537,7 +1526,7 @@
                     $newDeskripsi = mysqli_real_escape_string($conn, $value);
                     $newDeskripsi = rtrim($newDeskripsi, '.');
                     $lastValue = $newDeskripsi;
-                    $updateQuery = "UPDATE asesmen SET deskripsi = '$newDeskripsi' WHERE id_asesmen = $idAsesmen";
+                    $updateQuery = "UPDATE capaian_kompetensi SET deskripsi = '$newDeskripsi' WHERE id_ck = $idAsesmen";
                     $updateDeskripsi = mysqli_query($conn, $updateQuery);
                 }
             }       
@@ -1547,25 +1536,20 @@
             }
 
             // Query SELECT untuk memeriksa apakah data sudah masuk ke database
-            $result = mysqli_query($conn, "SELECT * 
-            FROM asesmen
+            $queryResult = "SELECT * 
+            FROM capaian_kompetensi
             WHERE
-            `id_asesmen` = '$lastId' AND
-            `semester` = '$semester' AND
+            `id_ck` = '$lastId' AND
             `id_mapel` = '$idMapel' AND
-            `id_kelas` = '$kelas' AND
             `deskripsi` ='$lastValue'            
-            ");
+            ";
+            $result = mysqli_query($conn, $queryResult);
 
             if ($result && mysqli_num_rows($result) === 1) {
                 // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
                 $_SESSION['flash_message'] = 'Ubah deskripsi berhasil';
                 $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
-                if ($semester == 'Ganjil') {
-                    header('location:input_nilai_kualitatif_ganjil.php');
-                } elseif ($semester == 'Genap') {
-                    header('location:input_nilai_kualitatif_genap.php'); 
-                }
+                header('location:input_capaian_kompetensi.php');
                 exit;
             } else {
                 // Data tidak ada dalam database, itu berarti gagal
@@ -1573,55 +1557,42 @@
             }
         } catch (Exception $e) {
             // Tangani exception jika terjadi kesalahan
-            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $e->getMessage();
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryResult . $e->getMessage();
             $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
-            if ($semester == 'Ganjil') {
-                header('location:input_nilai_kualitatif_ganjil.php');
-            } elseif ($semester == 'Genap') {
-                header('location:input_nilai_kualitatif_genap.php'); 
-            }
+            header('location:input_capaian_kompetensi.php');
             exit;
         }
     }
 
     // 30. Hapus Deskripsi
-    if(isset($_POST['hapusAsesmen'])){
-        $semester = $_POST['semester'];
-        $kelas = $_POST['kelas'];
+    if(isset($_POST['hapusDeskripsi'])){
+        $fase = $_POST['fase'];
         $idMapel = $_POST['idMapel'];
-        $idAsesmen = $_POST['deskripsi'];      
+        $idCapkom = $_POST['deskripsi'];      
 
         try {           
 
-            $queryDeleteCapaianKompetensi = "DELETE FROM `capaian_kompetensi` WHERE  `id_asesmen` = $idAsesmen";
-            $deleteCapaianKompetensi = mysqli_query($conn, $queryDeleteCapaianKompetensi);
-
-            $deleteQuery = "DELETE FROM asesmen WHERE id_asesmen = $idAsesmen";
-            $deleteDeskripsi = mysqli_query($conn, $deleteQuery);            
+            $queryDeleteCapaianKompetensi = "DELETE FROM `capaian_kompetensi` WHERE  `id_ck` = $idCapkom";
+            $deleteCapaianKompetensi = mysqli_query($conn, $queryDeleteCapaianKompetensi);          
             
-            if (!$deleteDeskripsi) {
+            if (!$deleteCapaianKompetensi) {
                 throw new Exception("Query hapus gagal"); // Lempar exception jika query gagal
             }
 
-            // Query SELECT untuk memeriksa apakah data sudah masuk ke database
+            // Query SELECT untuk memeriksa apakah data sudah dihapus dari database
             $result = mysqli_query($conn, "SELECT * 
-            FROM asesmen
+            FROM capaian_kompetensi
             WHERE
-            `id_asesmen` = '$idAsesmen' AND
-            `semester` = '$semester' AND
+            `id_ck` = '$idCapkom' AND
             `id_mapel` = '$idMapel' AND
-            `id_kelas` = '$kelas'           
+            `fase` = '$fase'           
             ");
 
             if ($result && mysqli_num_rows($result) === 0) {
                 // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
                 $_SESSION['flash_message'] = 'Hapus deskripsi berhasil';
                 $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
-                if ($semester == 'Ganjil') {
-                    header('location:input_nilai_kualitatif_ganjil.php');
-                } elseif ($semester == 'Genap') {
-                    header('location:input_nilai_kualitatif_genap.php'); 
-                }
+                header('location:input_capaian_kompetensi.php');
                 exit;
             } else {
                 // Data tidak ada dalam database, itu berarti gagal
@@ -1629,27 +1600,36 @@
             }
         } catch (Exception $e) {
             // Tangani exception jika terjadi kesalahan
-            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $e->getMessage();
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryDeleteCapaianKompetensi . $e->getMessage();
             $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
-            if ($semester == 'Ganjil') {
-                header('location:input_nilai_kualitatif_ganjil.php');
-            } elseif ($semester == 'Genap') {
-                header('location:input_nilai_kualitatif_genap.php'); 
-            }
+            header('location:input_capaian_kompetensi.php');
             exit;
         }
     }
 
     // 31. Update Capaian Kompetensi
-    if (isset($_POST['btnSimpanCapKom'])) {
+    if (isset($_POST['btnSimpanAsesmen'])) {
+        $semester = $_POST['semester'];
+
+        $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
+        $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
+        $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];
         try {
             $capaianArray = $_POST['capaian'];
     
             foreach ($capaianArray as $idSiswa => $asesmenArray) {
-                foreach ($asesmenArray as $idAsesmen => $value) {
+                foreach ($asesmenArray as $idCk => $value) {
                     $capaianValue = ($value == 1) ? 1 : 0;
     
-                    $sqlUpdate = "UPDATE capaian_kompetensi SET capaian = '$capaianValue' WHERE id_siswa = '$idSiswa' AND id_asesmen = '$idAsesmen'";
+                    $sqlUpdate = "UPDATE asesmen_capkom 
+                    SET 
+                    capaian = '$capaianValue' 
+                    WHERE 
+                    id_tahun_ajar =  '$idTahunAjar' AND
+                    semester = '$semester' AND
+                    kelas = '$kelas' AND
+                    id_siswa = '$idSiswa' AND 
+                    id_ck = '$idCk'";
                     if (!mysqli_query($conn, $sqlUpdate)) {
                         throw new Exception(mysqli_error($conn));
                     }
@@ -1660,7 +1640,7 @@
         } catch (Exception $e) {
             $_SESSION['flash_message'] = "Error: " . $e->getMessage();
         }
-        header("Location: capaian_kompetensi_siswa_ganjil.php");
+        header("Location: capkom_siswa_ganjil.php");
         exit();
     }    
 
@@ -1762,7 +1742,7 @@
             tanggal='$tanggal' AND
             id_tahun_Ajar='$idTahunAjar' AND
             semester='$semester' AND
-            kelas='$kelas' ANDidEkstra
+            kelas='$kelas' AND
             id_ek='$idEkstra' AND
             id_siswa='$lastIdSiswa' AND
             catatan='$lastValue'            
@@ -1875,5 +1855,144 @@
             exit;
         }
     }
+
+    //36. Tambah Kategori Ekstrakurikuler
+    if(isset($_POST['tambahEkstrakurikuler'])){
+        $namaEkstra = $_POST['ekstra'];
+
+        try {
+
+            $insertEkstra = mysqli_query($conn, "INSERT INTO `ekstrakurikuler`(`nama_ek`) VALUES ('$namaEkstra')");
+
+            $queryCheckEkstra = "SELECT * FROM `ekstrakurikuler` WHERE `nama_ek` = '$namaEkstra'";
+            $checkEkstra = mysqli_query($conn, $queryCheckEkstra);
+
+            if ($checkEkstra && mysqli_num_rows($checkEkstra) === 1) {
+                $_SESSION['flash_message'] = 'Tambah kategori ekstrakurikuler berhasil';
+                $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
+                header('location:input_nilai_catatan_ekstrakurikuler.php');
+                exit;
+            } else {
+                throw new Exception("Data tidak ditemukan atau duplikat");
+            }
+
+        } catch (Exception $e) {
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $e->getMessage();
+            $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
+            header('location:input_nilai_catatan_ekstrakurikuler.php');
+            exit;
+        }
+    }
+
+    //37. Tambah Asesmen Capaian Kompetensi
+    if (isset($_POST['btnCapkomLanjut'])) {
+        $idMapel = $_POST['idMapel'];
+        $kelas = $_POST['kelas'];
+        $semester = $_POST['semester'];
+
+        if ($kelas == 1 || $kelas == 2) {
+            $fase = 'A';
+        } elseif ($kelas == 3 || $kelas == 4) {
+            $fase = 'B';
+        } elseif ($kelas == 5 || $kelas == 6) {
+            $fase = 'C';
+        }
+        
+        $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
+        $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
+        $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];
+
+        try {
+            $querySiswa = "SELECT id_siswa FROM siswa WHERE id_kelas = '$kelas'";
+            $siswaResult = mysqli_query($conn, $querySiswa);
+
+            $siswaArray = [];
+            while ($row = mysqli_fetch_assoc($siswaResult)) {
+                $siswaArray[] = $row['id_siswa'];
+            }
+    
+            $queryCk = "SELECT id_ck, deskripsi FROM `capaian_kompetensi` WHERE id_mapel = '$idMapel' AND fase = '$fase' ORDER BY id_ck ASC;";           
+            $capaianKompetensi = mysqli_query($conn, $queryCk);
+
+            foreach ($_POST['checkbox'] as $idCapkom => $checkboxValues) {
+                foreach ($siswaArray as $idSiswa) {
+                    foreach ($checkboxValues as $checkboxValue) {
+                        $queryCheckExistence = "SELECT * FROM `asesmen_capkom`
+                            WHERE 
+                            `id_tahun_ajar` = '$idTahunAjar' AND
+                            `semester` = '$semester' AND
+                            `id_siswa` = '$idSiswa' AND
+                            `id_ck` = '$idCapkom' AND
+                            `kelas` = '$kelas';";
+                
+                        $resultExistence = mysqli_query($conn, $queryCheckExistence);
+                    
+                        if (!$resultExistence) {
+                            throw new Exception("Query select gagal: " . mysqli_error($conn));
+                        }
+                    
+                        if (mysqli_num_rows($resultExistence) > 0) {
+                            // If the combination already exists, perform an update
+                            $queryUpdateDeskripsi = "UPDATE `asesmen_capkom`
+                                SET
+                                `tampil` = '$checkboxValue'
+                                WHERE 
+                                `id_tahun_ajar` = '$idTahunAjar' AND
+                                `semester` = '$semester' AND
+                                `id_siswa` = '$idSiswa' AND
+                                `id_ck` = '$idCapkom' AND
+                                `kelas` = '$kelas';";
+                    
+                            $updateDeskripsi = mysqli_query($conn, $queryUpdateDeskripsi);
+                    
+                            if (!$updateDeskripsi) {
+                                throw new Exception("Query update gagal: " . mysqli_error($conn));
+                            }
+                        } else {
+                            // If the combination doesn't exist, perform an insert
+                            $queryInsertDeskripsi = "INSERT INTO `asesmen_capkom`
+                                (`id_tahun_ajar`, `semester`, `id_siswa`, `id_ck`, `kelas`, `tampil`, `capaian`)
+                                VALUES 
+                                ('$idTahunAjar', '$semester', '$idSiswa', '$idCapkom', '$kelas', '$checkboxValue', '0');";
+                    
+                            $insertDeskripsi = mysqli_query($conn, $queryInsertDeskripsi);
+                    
+                            if (!$insertDeskripsi) {
+                                throw new Exception("Query insert gagal: " . mysqli_error($conn));
+                            }
+                        }
+                    }
+                }                
+            }
+    
+            // Check if data exists in the database
+            $queryCek = "SELECT * FROM asesmen_capkom WHERE `id_ck` = '$idCapkom'";
+            $result = mysqli_query($conn, $queryCek);
+    
+            if (!$result) {
+                throw new Exception("Query SELECT gagal: " . mysqli_error($conn));
+            }
+    
+            if (mysqli_num_rows($result) > 0) {
+                $_SESSION['flash_message'] = 'Tambah deskripsi berhasil';
+                $_SESSION['flash_message_class'] = 'alert-success'; 
+                header('location: asesmen_cp.php?idMapel=' . $idMapel . '&semester=' . $semester);
+                exit;
+            } else {
+                throw new Exception("Data tidak ditemukan setelah ditambahkan");
+            }
+        } catch (Exception $e) {
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $e->getMessage();
+            $_SESSION['flash_message_class'] = 'alert-danger';
+            if ($semester == 'Ganjil') {
+                header('location:capkom_siswa_ganjil.php');
+            } elseif ($semester == 'Genap') {
+                header('location:capkom_siswa_genap.php');
+            }            
+            exit;
+        }
+    }
+    
+    
 
 ?>
