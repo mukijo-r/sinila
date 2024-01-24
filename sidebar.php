@@ -84,18 +84,29 @@ if (isset($_SESSION['kelas'])) {
                                     <a class="nav-link" href="input_nilai_kepribadian.php">Nilai Kepribadian</a>
                                     <a class="nav-link" href="input_nilai_catatan.php">Nilai Catatan</a>
                                     <a class="nav-link" href="input_absensi.php">Absensi</a>
-                                    <a class="nav-link" href="input_naik_kelas.php">Kenaikan Kelas</a>
+                                    <?php
+
+                                    if ($kelas == 6) {
+                                        echo '<a class="nav-link" href="input_naik_kelas.php">Kelulusan</a>';
+                                    } else {
+                                        echo '<a class="nav-link" href="input_naik_kelas.php">Kenaikan Kelas</a>';
+                                    }
+
+                                    ?>
+
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts1" aria-expanded="false" aria-controls="collapseLayouts1">
                                 <div class="sb-nav-link-icon"><i class="fa-regular fa-file-lines"></i></div>
-                                Asesmen Kualitatif
+                                CP
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
                             <div class="collapse" id="collapseLayouts1" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="input_nilai_kualitatif_ganjil.php">Semester Ganjil</a>
-                                    <a class="nav-link" href="input_nilai_kualitatif_genap.php">Semester Genap</a>                                </nav>
+                                    <a class="nav-link" href="input_capaian_kompetensi.php">Capaian Kompetensi</a>
+                                    <a class="nav-link" href="capkom_siswa_ganjil.php">Asesmen Ganjil</a>
+                                    <a class="nav-link" href="capkom_siswa_genap.php">Asesmen Genap</a>
+                                </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts2" aria-expanded="false" aria-controls="collapseLayouts2">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-book"></i></div>
@@ -106,7 +117,7 @@ if (isset($_SESSION['kelas'])) {
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="daftar_nilai.php">Daftar Nilai</a>
                                     <a class="nav-link" href="rapot_sisipan.php">Rapot Sisipan</a>
-                                    <a class="nav-link" href="rapot_semester.php">Rapot Semester</a>
+                                    <!-- <a class="nav-link" href="rapot_semester.php">Rapot Semester</a> -->
                                     <a class="nav-link" href="rapot_akhir.php">Rapot Akhir</a>
                                 </nav>
                             </div>
@@ -147,7 +158,7 @@ if (isset($_SESSION['kelas'])) {
                         <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalKelas">Ganti Kelas</button>
                     </div><br>
                     <div style="text-align: center;">
-                        <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalTahunAjar">Ganti Tahun Ajar</button>
+                        <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalTahunAjar">Tahun Ajar</button>
                     </div>
                 </nav>
             </div>
@@ -200,9 +211,10 @@ if (isset($_SESSION['kelas'])) {
                 <!-- Modal body -->      
                     <form method="post">
                     <div class="modal-body">
+                        <h6>Ganti Tahun Ajar :<h6>                        
                         <br>
                         <select class="form-select" name="tahunAjar" aria-label="Pilih TA">
-                            <option selected>Pilih Tahun Ajar</option>
+                            <option selected>Pilih Tahun Ajar </option>
                             <?php
                                 // Ambil data kelas dari tabel kelas
                                 $queryTA = mysqli_query($conn, "SELECT id_tahun_ajar, tahun_ajar FROM tahun_ajar");
@@ -212,10 +224,21 @@ if (isset($_SESSION['kelas'])) {
                                 ?>
                         </select>
                         <br>
+                        <div class="text-center">
+                        <button type="submit" class="btn btn-primary" name="ubahTahunAjar">Ganti</button> 
+                        </div>
+                        <hr style="width:100%;text-align:center;margin-left:0">
+                        <br>
+                        <h6>Atau, Tambahkan Tahun Ajar baru bila belum ada :<h6> 
+                        <br>
+                        <input type="text" name="newTahunAjar" placeholder="Tahun/Tahun" class="form-control">
+                        <br>
+                        <div class="text-center">
+                        <button type="submit" class="btn btn-success" name="tambahTahunAjar">Tambah</button> 
+                        </div>
+                        <br>
                     </div>
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-primary" name="ubahTahunAjar">Ubah</button> 
-                    </div>
+                    
                     <br> 
                 </form>   
             </div>
@@ -265,5 +288,9 @@ if (isset($_SESSION['kelas'])) {
             </div>
         </div>
     </div> 
+
+<script>
+<?= $sweetAlert; ?>
+</script>
 
 
