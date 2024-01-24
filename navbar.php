@@ -1,6 +1,11 @@
 <?php
 
 require 'cek.php';
+
+$queryUser = mysqli_query($conn, "SELECT `role` FROM users WHERE username = '$username'");
+while ($dataRole = mysqli_fetch_assoc($queryUser)) {
+    $role = $dataRole['role'];
+} 
 ?>
 
 <!DOCTYPE html>
@@ -34,8 +39,18 @@ require 'cek.php';
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="ganti_password.php">Ganti password</a></li>
-                        <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+                    <?php   
+                    if ($role == 'admin') {
+                        // Tampilkan semua menu untuk 'admin'
+                        echo '<li><a class="dropdown-item" href="register.php">Register</a></li>';
+                        echo '<li><a class="dropdown-item" href="ganti_password.php">Ganti password</a></li>';
+                        echo '<li><a class="dropdown-item" href="logout.php">Logout</a></li>';
+                    } else {
+                        // Tampilkan menu untuk 'guru'
+                        echo '<li><a class="dropdown-item" href="ganti_password.php">Ganti password</a></li>';
+                        echo '<li><a class="dropdown-item" href="logout.php">Logout</a></li>';
+                    } 
+                    ?>
                     </ul>
                 </li>
             </ul>
