@@ -468,7 +468,6 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                         echo '<td style="width: 25%; text-align: left;">' . $kategoriPraktek . '</td>';
                         echo '<td style="width: 15%">' . $nilaiPrak  . '</td>';   
                         echo '</tr>';
-
                     }
                     echo '</table>';
                     echo '</div>';
@@ -497,7 +496,6 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                         echo '<td style="width: 25%; text-align: left;">' . $kategoriKepribadian . '</td>';
                         echo '<td style="width: 15%">' . $nilaiKeprib  . '</td>';   
                         echo '</tr>';
-
                     }
 
                     echo '</table>';
@@ -528,7 +526,6 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                         echo '<td style="width: 25%; text-align: left;">' . $kategoriAbsen . '</td>';
                         echo '<td style="width: 15%">' . $jumlahAbsen  . '</td>';   
                         echo '</tr>';
-
                     }
 
                     echo '</table>';
