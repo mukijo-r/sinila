@@ -124,7 +124,7 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                             <div class="col-md-3" style="text-align: right; border: none">
                             </div>
                             <div class="col-md-6" style="text-transform: uppercase;">
-                                <h5>LAPORAN PENILAIAN HASIL BELAJAR</h5>
+                                <h5>LAPORAN HASIL BELAJAR (RAPOR)</h5>
                                 <h5>SEMESTER <?=$semester;?></h5>
                                 <h5>TAHUN PELAJARAN <?=$tahunAjar;?></h5>                             
                             </div>
@@ -260,17 +260,18 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                         $idMapel = $rowMapel['id_mapel'];
                         }
 
-                        $queryDeskripsi1 = "SELECT GROUP_CONCAT(a.deskripsi SEPARATOR ', ') AS combined_deskripsi1
+                        $queryDeskripsi1 = "SELECT GROUP_CONCAT(ck.deskripsi SEPARATOR ', ') AS combined_deskripsi1
                         FROM
-                        `capaian_kompetensi` ck
-                        LEFT JOIN asesmen a ON ck.id_asesmen = a.id_asesmen  
-                        LEFT JOIN siswa s ON ck.id_siswa = s.id_siswa                                  
+                        `asesmen_capkom` ack
+                        LEFT JOIN capaian_kompetensi ck ON ack.id_ck = ck.id_ck  
+                        LEFT JOIN siswa s ON ack.id_siswa = s.id_siswa                                  
                         WHERE
-                        a.semester = '$semester' AND
-                        ck.id_siswa = '$idSiswa' AND
-                        ck.capaian = '1' AND
-                        a.id_kelas = '$kelas' AND
-                        a.id_mapel = '$idMapel';";
+                        semester = '$semester' AND
+                        ack.id_siswa = '$idSiswa' AND
+                        ack.tampil = '1' AND
+                        ack.capaian = '1' AND
+                        ack.kelas = '$kelas' AND
+                        ck.id_mapel = '$idMapel';";                        
 
                         $result1 = mysqli_query($conn, $queryDeskripsi1);
 
@@ -279,24 +280,27 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                             $combinedDeskripsi1 = $row1['combined_deskripsi1'];
                         }
 
-                        $queryDeskripsi0 = "SELECT GROUP_CONCAT(a.deskripsi SEPARATOR ', ') AS combined_deskripsi0
+                        $queryDeskripsi0 = "SELECT GROUP_CONCAT(ck.deskripsi SEPARATOR ', ') AS combined_deskripsi0
                         FROM
-                        `capaian_kompetensi` ck
-                        LEFT JOIN asesmen a ON ck.id_asesmen = a.id_asesmen  
-                        LEFT JOIN siswa s ON ck.id_siswa = s.id_siswa                                  
+                        `asesmen_capkom` ack
+                        LEFT JOIN capaian_kompetensi ck ON ack.id_ck = ck.id_ck  
+                        LEFT JOIN siswa s ON ack.id_siswa = s.id_siswa                                  
                         WHERE
-                        a.semester = '$semester' AND
-                        ck.id_siswa = '$idSiswa' AND
-                        ck.capaian = '0' AND
-                        a.id_kelas = '$kelas' AND
-                        a.id_mapel = '$idMapel';";
+                        semester = '$semester' AND
+                        ack.id_siswa = '$idSiswa' AND
+                        ack.tampil = '1' AND
+                        ack.capaian = '0' AND
+                        ack.kelas = '$kelas' AND
+                        ck.id_mapel = '$idMapel';";
 
                         $result0 = mysqli_query($conn, $queryDeskripsi0);
 
                         if ($result0) {
                             $row0 = mysqli_fetch_assoc($result0);
                             $combinedDeskripsi0 = $row0['combined_deskripsi0'];
-                        }                        
+                        }   
+                        
+                        echo $queryDeskripsi0;
 
                         echo '<tr>';
                         echo '<td rowspan="2">' . $i++ . '</td>';
@@ -304,7 +308,7 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                         echo '<td rowspan="2">' . $nilaiRapot . '</td>';
                         if ($combinedDeskripsi1 <> '') {
                             if ($nilaiRapot > 74){
-                                echo '<td style="text-align: left;">'. $namaSiswa . ' mampu ' . $combinedDeskripsi1 .'.</td>';
+                                echo '<td style="text-align: left;">'. $namaSiswa . ' memiliki pemahaman dalam ' . $combinedDeskripsi1 .'.</td>';
                             } else {
                                 echo '<td style="text-align: left;">'. $namaSiswa . ' membutuhkan bantuan dalam ' . $combinedDeskripsi1 .'.</td>';
                             } 
@@ -322,7 +326,40 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                     }
 
                     echo '</tbody>';
-                    echo '</table>';  
+                    echo '</table>';
+                    echo '<br><br>';
+                    
+                    echo '<table class="table table-bordered" style="width: 100%; font-family: times; font-size: 12px">';
+                    echo '<tr>';
+                    echo '<th border="1" style="line-height: 1.5; width: 5%; text-align: center; vertical-align: middle; font-weight: bold;"><br>No.</th>';
+                    echo '<th border="1" style="line-height: 1.5; width: 25%; text-align: center; vertical-align: middle; font-weight: bold;"><br>Ekstrakurikuler</th>';
+                    echo '<th border="1" style="line-height: 1.5; width: 62%; text-align: center; vertical-align: middle; font-weight: bold;"><br>Keterangan</th>';
+                    echo '</tr>';
+                    
+                    $queryCatatanEkstra = "SELECT
+                        ek.nama_ek,
+                        catatan
+                        FROM nilai_catatan_ekstrakurikuler nce
+                        LEFT JOIN ekstrakurikuler ek ON nce.id_ek = ek.id_ek
+                        WHERE id_siswa = $idSiswa";
+                    
+                    $j = 1;
+                    $catatanEkstra = mysqli_query($conn, $queryCatatanEkstra);
+                    
+                    while ($rowCatatanEkstra = mysqli_fetch_array($catatanEkstra)) {
+                        $namaEkstra = $rowCatatanEkstra['nama_ek'];
+                        $catatan = $rowCatatanEkstra['catatan'];
+                    
+                        echo '<tr>'; 
+                        echo '<td border="1" style="line-height: 1.5; width: 5%; text-align: center; vertical-align: middle; font-weight: bold;">' . $j . '</td>';
+                        echo '<td border="1" style="line-height: 1.5; width: 25%; text-align: center; vertical-align: middle; font-weight: bold;">' . $namaEkstra . '</td>';
+                        echo '<td border="1" style="line-height: 1.5; width: 62%; text-align: center; vertical-align: middle; font-weight: bold;">' . $catatan . '</td>';
+                        echo '</tr>'; 
+                        $j++;
+                    }
+                    
+                    echo '</table><br><br>';
+                    
 
                     echo '<div style="text-align: center;" class="sb-sidenav-footer">';
                     echo '<form method="post" action="pdf_rapot_akhir.php" target="_blank">';
