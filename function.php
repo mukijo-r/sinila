@@ -1992,6 +1992,179 @@
             exit;
         }
     }
+
+    // 38. Tambah Dimensi
+    if(isset($_POST['tambahDimensi'])){
+        $dimensi = $_POST['dimensi'];
+
+        try {
+            $queryDimensi = "INSERT INTO `p5_dimensi` (`dimensi`) VALUES ('$dimensi')";
+                
+            $insertDimensi = mysqli_query($conn, $queryDimensi);
+
+            if (!$insertDimensi) {
+                throw new Exception("Query insert gagal"); // Lempar exception jika query gagal
+            }
+
+            // Query SELECT untuk memeriksa apakah data sudah masuk ke database
+            $result = mysqli_query($conn, "SELECT * FROM p5_dimensi WHERE dimensi='$dimensi'");
+
+            if ($result && mysqli_num_rows($result) === 1) {
+                // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
+                $_SESSION['flash_message'] = 'Tambah dimensi berhasil';
+                $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
+                header('location:p5_dimensi.php');
+                exit;
+            } else {
+                // Data tidak ada dalam database, itu berarti gagal
+                throw new Exception("Data tidak ditemukan setelah ditambahkan");
+            }
+        } catch (Exception $e) {
+            // Tangani exception jika terjadi kesalahan
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $e->getMessage();
+            $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
+            header('location:p5_dimensi.php');
+            exit;
+        }
+    }
+
+    // 39. Ubah Dimensi
+    if(isset($_POST['ubahDimensi'])){
+        $dimensi = $_POST['dimensi'];
+        $idDimensi = $_POST['idDimensi'];
+
+        try {
+            $queryDimensi = "UPDATE`p5_dimensi` SET dimensi='$dimensi' WHERE id_dimensi='$idDimensi';";
+                
+            $updateDimensi = mysqli_query($conn, $queryDimensi);
+
+            if (!$updateDimensi) {
+                throw new Exception("Query update gagal"); // Lempar exception jika query gagal
+            }
+
+            // Query SELECT untuk memeriksa apakah data sudah masuk ke database
+            $result = mysqli_query($conn, "SELECT * FROM p5_dimensi WHERE dimensi='$dimensi'");
+
+            if ($result && mysqli_num_rows($result) === 1) {
+                // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
+                $_SESSION['flash_message'] = 'Ubah dimensi berhasil';
+                $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
+                header('location:p5_dimensi.php');
+                exit;
+            } else {
+                // Data tidak ada dalam database, itu berarti gagal
+                throw new Exception("Data tidak ditemukan");
+            }
+        } catch (Exception $e) {
+            // Tangani exception jika terjadi kesalahan
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryDimensi . $e->getMessage();
+            $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
+            header('location:p5_dimensi.php');
+            exit;
+        }
+    }
+
+    // 40. Tambah Elemen
+    if(isset($_POST['tambahElemen'])){
+        $idDimensi = $_POST['dimensi1'];
+        $elemen = $_POST['elemen'];
+
+        try {
+            $queryElemen = "INSERT INTO `p5_elemen`
+            (`id_dimensi`, `elemen`)
+             VALUES 
+             ('$idDimensi','$elemen')";
+                
+            $insertElemen = mysqli_query($conn, $queryElemen);
+
+            if (!$insertElemen) {
+                throw new Exception("Query insert gagal"); // Lempar exception jika query gagal
+            }
+
+            // Query SELECT untuk memeriksa apakah data sudah masuk ke database
+            $result = mysqli_query($conn, "SELECT * FROM p5_elemen WHERE id_dimensi='$idDimensi' AND elemen='$elemen'");
+
+            if ($result && mysqli_num_rows($result) === 1) {
+                // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
+                $_SESSION['flash_message'] = 'Tambah elemen berhasil';
+                $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
+                header('location:p5_elemen.php');
+                exit;
+            } else {
+                // Data tidak ada dalam database, itu berarti gagal
+                throw new Exception("Data tidak ditemukan setelah ditambahkan");
+            }
+        } catch (Exception $e) {
+            // Tangani exception jika terjadi kesalahan
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryElemen . $e->getMessage();
+            $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
+            header('location:p5_elemen.php');
+            exit;
+        }
+    }
+
+    // 41. Tambah Project
+    if(isset($_POST['btnSimpanProject'])){
+        $namaProject = $_POST['namaProject'];
+        $deskripsiProject = $_POST['deskripsiProject'];
+        $idCapaian1 = $_POST['id_capaian1'];
+        $idCapaian2 = $_POST['id_capaian2'];
+        $idCapaian3 = $_POST['id_capaian3'];
+        $idCapaian4 = $_POST['id_capaian4'];
+        $namaUser = $_POST['namaUser'];
+        $tanggal = date('Y-m-d'); 
+
+        $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
+        $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
+        $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];
+
+        try {
+            $queryProject = "INSERT INTO `p5_project`
+            (`id_tahun_ajar`, `tanggal`, `pembuat`, `nama_project`, `id_kelas`, `deskripsi_project`, `id_capaian1`, `id_capaian2`, `id_capaian3`, `id_capaian4`, `status_project`) 
+            VALUES 
+            ('$idTahunAjar', '$tanggal', '$namaUser', '$namaProject','$kelas','$deskripsiProject','$idCapaian1','$idCapaian2','$idCapaian3','$idCapaian4', 'berjalan');";
+                
+            $insertProject = mysqli_query($conn, $queryProject);
+
+            if (!$insertProject) {
+                throw new Exception("Query insert gagal"); // Lempar exception jika query gagal
+            }
+
+            // Query SELECT untuk memeriksa apakah data sudah masuk ke database
+            $result = mysqli_query($conn, "SELECT * FROM `p5_project`
+            WHERE
+            `id_tahun_ajar` = '$idTahunAjar' AND
+            `tanggal` = '$tanggal' AND
+            `pembuat` = '$namaUser' AND
+            `nama_project` = '$namaProject' AND
+            `id_kelas` = '$kelas' AND
+            `deskripsi_project` = '$deskripsiProject' AND
+            `id_capaian1` = '$idCapaian1' AND
+            `id_capaian2` = '$idCapaian2'  AND
+            `id_capaian3` = '$idCapaian3' AND
+            `id_capaian4` = '$idCapaian4' AND
+            `status_project` = 'berjalan';
+            ");
+
+            if ($result && mysqli_num_rows($result) === 1) {
+                // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
+                $_SESSION['flash_message'] = 'Tambah Project baru berhasil';
+                $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
+                header('location:p5_daftar_project.php');
+                exit;
+            } else {
+                // Data tidak ada dalam database, itu berarti gagal
+                throw new Exception("Data tidak ditemukan atau duplikat");
+            }
+        } catch (Exception $e) {
+            // Tangani exception jika terjadi kesalahan
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryProject . $e->getMessage();
+            $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
+            header('location:p5_daftar_project.php');
+            exit;
+        }
+    }
+    
     
     
 
