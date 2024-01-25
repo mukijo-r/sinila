@@ -98,8 +98,8 @@ if (isset($_POST['login'])) {
                                                 <label for="inputPassword">Password</label>
                                             </div>
                                             <div class="form-floating mb-3">
-                                                <select class="form-select" name="tahunAjar" aria-label="Pilih TA">
-                                                    <option selected>Pilih Tahun Ajar</option>
+                                                <select class="form-select" name="tahunAjar" aria-label="Pilih TA" required>
+                                                    <option value="">Pilih Tahun Ajar</option>
                                                     <?php
                                                         // Ambil data kelas dari tabel kelas
                                                         $queryTA = mysqli_query($conn, "SELECT id_tahun_ajar, tahun_ajar FROM tahun_ajar");
@@ -110,8 +110,8 @@ if (isset($_POST['login'])) {
                                                 </select>
                                             </div>
                                             <div class="form-floating mb-3">
-                                                <select class="form-select" name="kelas" id="kelas" aria-label="Kelas">
-                                                    <option selected>Pilih Kelas</option>
+                                                <select class="form-select" name="kelas" id="kelas" aria-label="Kelas" required>
+                                                    <option value="">Pilih Kelas</option>
                                                     <?php
                                                     // Ambil data kelas dari tabel kelas
                                                     $queryKelas = mysqli_query($conn, "SELECT id_kelas, nama_kelas FROM kelas");
