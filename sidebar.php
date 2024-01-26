@@ -97,7 +97,7 @@ if (isset($_SESSION['kelas'])) {
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts1" aria-expanded="false" aria-controls="collapseLayouts1">
-                                <div class="sb-nav-link-icon"><i class="fa-regular fa-file-lines"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-bullseye"></i></div>
                                 CP
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
@@ -106,6 +106,18 @@ if (isset($_SESSION['kelas'])) {
                                     <a class="nav-link" href="input_capaian_kompetensi.php">Capaian Kompetensi</a>
                                     <a class="nav-link" href="capkom_siswa_ganjil.php">Asesmen Ganjil</a>
                                     <a class="nav-link" href="capkom_siswa_genap.php">Asesmen Genap</a>
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts1a" aria-expanded="false" aria-controls="collapseLayouts1a">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-person-digging"></i></div>
+                                Project
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseLayouts1a" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="p5_dimensi.php">Komponen Project</a>
+                                    <a class="nav-link" href="p5_daftar_project.php">Daftar Project</a>
+                                    <a class="nav-link" href="#">Penilaian Project</a>
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts2" aria-expanded="false" aria-controls="collapseLayouts2">
