@@ -2114,15 +2114,19 @@
         $namaUser = $_POST['namaUser'];
         $tanggal = date('Y-m-d'); 
 
-        $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
-        $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
-        $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];
+        if ($kelas == 1 | $kelas == 2) { 
+            $fase = 'A';
+        } elseif ($kelas == 3 | $kelas == 4) {
+            $fase = 'B';
+        } elseif ($kelas == 5 | $kelas == 6) {
+            $fase = 'C';
+        }
 
         try {
             $queryProject = "INSERT INTO `p5_project`
-            (`id_tahun_ajar`, `tanggal`, `pembuat`, `nama_project`, `id_kelas`, `deskripsi_project`, `id_capaian1`, `id_capaian2`, `id_capaian3`, `id_capaian4`, `status_project`) 
+            (`tanggal`, `pembuat`, `nama_project`, `fase`, `deskripsi_project`, `id_capaian1`, `id_capaian2`, `id_capaian3`, `id_capaian4`) 
             VALUES 
-            ('$idTahunAjar', '$tanggal', '$namaUser', '$namaProject','$kelas','$deskripsiProject','$idCapaian1','$idCapaian2','$idCapaian3','$idCapaian4', 'berjalan');";
+            ('$tanggal', '$namaUser', '$namaProject','$fase','$deskripsiProject','$idCapaian1','$idCapaian2','$idCapaian3','$idCapaian4');";
                 
             $insertProject = mysqli_query($conn, $queryProject);
 
@@ -2133,17 +2137,15 @@
             // Query SELECT untuk memeriksa apakah data sudah masuk ke database
             $result = mysqli_query($conn, "SELECT * FROM `p5_project`
             WHERE
-            `id_tahun_ajar` = '$idTahunAjar' AND
             `tanggal` = '$tanggal' AND
             `pembuat` = '$namaUser' AND
             `nama_project` = '$namaProject' AND
-            `id_kelas` = '$kelas' AND
+            `fase` = '$fase' AND
             `deskripsi_project` = '$deskripsiProject' AND
             `id_capaian1` = '$idCapaian1' AND
             `id_capaian2` = '$idCapaian2'  AND
             `id_capaian3` = '$idCapaian3' AND
-            `id_capaian4` = '$idCapaian4' AND
-            `status_project` = 'berjalan';
+            `id_capaian4` = '$idCapaian4'
             ");
 
             if ($result && mysqli_num_rows($result) === 1) {
