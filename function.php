@@ -2166,6 +2166,76 @@
             exit;
         }
     }
+
+    // 42. Tambah Penilaian Project
+    if(isset($_POST['btnSubmitNilaiProject'])){
+        $idProject = $_POST['idProject'];
+        $penilaianData = $_POST['penilaian'];
+
+        $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
+        $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
+        $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];
+
+        try {
+            foreach ($penilaianData as $idSiswa => $penilaianCapaian) {
+                foreach ($penilaianCapaian as $idCapaian => $nilai) {
+                    // Lakukan query SELECT untuk memeriksa apakah kombinasi data sudah ada
+                    $querySelect = "
+                        SELECT * FROM p5_penilaian
+                        WHERE
+                            `id_tahun_ajar` = '$idTahunAjar' AND
+                            `kelas` = '$kelas' AND
+                            `id_project` = '$idProject' AND
+                            `id_siswa` = '$idSiswa' AND
+                            `id_capaian` = '$idCapaian'";
+                    
+                    $result = mysqli_query($conn, $querySelect);            
+
+                    // Jika data sudah ada, lakukan UPDATE; jika tidak, lakukan INSERT
+                    if (mysqli_num_rows($result) > 0) {
+                        $queryUpdate = "
+                            UPDATE p5_penilaian
+                            SET `nilai` = '$nilai'
+                            WHERE
+                                `id_tahun_ajar` = '$idTahunAjar' AND
+                                `kelas` = '$kelas' AND
+                                `id_project` = '$idProject' AND
+                                `id_siswa` = '$idSiswa' AND
+                                `id_capaian` = '$idCapaian'";
+                        
+                        $updateNilai = mysqli_query($conn, $queryUpdate);
+        
+                    } else {
+                        $queryInsert = "
+                            INSERT INTO p5_penilaian (`id_tahun_ajar`, `kelas`, `id_project`, `id_siswa`, `id_capaian`, `nilai`)
+                            VALUES ('$idTahunAjar', '$kelas', '$idProject', '$idSiswa', '$idCapaian', '$nilai')";
+        
+                        $insertNilai = mysqli_query($conn, $queryInsert);
+        
+                    }
+                }
+            }
+            
+            if ($insertNilai | $updateNilai) {
+                // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
+                $_SESSION['flash_message'] = 'Penilaian berhasil';
+                $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
+                header('location:p5_penilaian.php');
+                exit;
+            } else {
+                // Data tidak ada dalam database, itu berarti gagal
+                throw new Exception("Data tidak ditemukan setelah ditambahkan");
+            }
+
+            
+        } catch (Exception $e) {
+            // Tangani exception jika terjadi kesalahan
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $e->getMessage();
+            $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
+            header('location:p5_penilaian.php');
+            exit;
+        }
+    }
     
     
     
