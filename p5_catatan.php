@@ -76,7 +76,7 @@ $semester = 'Ganjil';
                                         </div>
                                     </div>
                                     <div class="col">
-                                        <button type="submit" class="btn btn-primary" name="btnTampilPenilaian" id="btnTampilPenilaian">
+                                        <button type="submit" class="btn btn-primary" name="btnTampilPenilaianCatatan" id="btnTampilPenilaianCatatan">
                                             Tampilkan
                                         </button>
                                     </div>                                              
@@ -100,7 +100,7 @@ $semester = 'Ganjil';
 
                     <div class="container-fluid px-4">
                         <?php
-                        if (isset($_POST['btnTampilPenilaian'])) {                        
+                        if (isset($_POST['btnTampilPenilaianCatatan'])) {                        
                             $idProject = $_POST['project'];
                     
                             $queryNamaProject = mysqli_query($conn, "SELECT nama_project FROM p5_project WHERE id_project='$idProject'");
@@ -110,27 +110,8 @@ $semester = 'Ganjil';
                             echo '<br>';
                             echo '<div class="row">';
                             echo '<h5>Penilaian siswa terhadap project yang telah dikerjakan</h5>';
-                            echo '<h6>Keterangan tingkat pencapaian siswa :</h6>';
-                            echo str_repeat('&nbsp;', 4) . '<table class="table-bordered" style="width: 60%; text-align: center;">
-                                    <tr>
-                                        <th>BB</th>
-                                        <th>MB</th>
-                                        <th>BSH</th>
-                                        <th>SB</th>
-                                    </tr>
-                                    <tr>
-                                        <td>Belum Berkembang</td>
-                                        <td>Mulai Berkembang</td>
-                                        <td>Berkembang Sesuai Harapan</td>
-                                        <td>Sangat Berkembang</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Siswa masih membutuhkan bimbingan dalam mengembangkan kemampuan.</td>
-                                        <td>Siswa mulai mengembangkan kemampuan namun masih belum ajek.</td>
-                                        <td>Siswa telah mengembangkan kemampuan hingga berada dalam tahap ajek.</td>
-                                        <td>Siswa mengembangkan kemampuannya melampaui harapan.</td>
-                                    </tr>
-                                  </table><br><br>';
+                            echo '<h6>Catatan hasil project setiap siswa :</h6>';
+                            
                             penilaianProject($kelas, $idProject);
                         }  
                         ?>
@@ -140,132 +121,40 @@ $semester = 'Ganjil';
                 function penilaianProject($kelas, $idProject) {
                     $conn = mysqli_connect("localhost:3306", "root", "", "sdk");
                 
-                    $queryProject = "SELECT
-                        `nama_project`,
-                        `deskripsi_project`, 
-                        `id_capaian1`,
-                        cp1.capaian as capaian1,
-                        `id_capaian2`,
-                        cp2.capaian as capaian2,
-                        `id_capaian3`,
-                        cp3.capaian as capaian3,
-                        `id_capaian4`,
-                        cp4.capaian as capaian4
-                        FROM `p5_project` pp
-                        LEFT JOIN p5_capaian cp1 ON pp.id_capaian1 = cp1.id_capaian
-                        LEFT JOIN p5_capaian cp2 ON pp.id_capaian2 = cp2.id_capaian
-                        LEFT JOIN p5_capaian cp3 ON pp.id_capaian3 = cp3.id_capaian
-                        LEFT JOIN p5_capaian cp4 ON pp.id_capaian4 = cp4.id_capaian
-                        WHERE `id_project` = '$idProject';";
-                
-                    $tampilProject = mysqli_query($conn, $queryProject);
-                
-                    echo '<form method="post" action="">';
-                    while ($rowProject = mysqli_fetch_assoc($tampilProject)) {
-                        $namaProject = $rowProject['nama_project'];
-                        $deskripsi = $rowProject['deskripsi_project'];
-                        $idCapaian1 = $rowProject['id_capaian1'];
-                        $idCapaian2 = $rowProject['id_capaian2'];
-                        $idCapaian3 = $rowProject['id_capaian3'];
-                        $idCapaian4 = $rowProject['id_capaian4'];
-                        $capaian1 = $rowProject['capaian1'];
-                        $capaian2 = $rowProject['capaian2'];
-                        $capaian3 = $rowProject['capaian3'];
-                        $capaian4 = $rowProject['capaian4'];
-                        echo '<br><hr>';
-                        echo '<h5 style="">Nama Project : ' . $namaProject . '</h5>';
-                        echo '<table>
-                                <tr>
-                                    <td><h5 style="text-decoration: underline;">Deskripsi project : </h5>' . $deskripsi . '</td>
-                                </tr>
-                            </table><br>';                
-
+                    echo '<form method="post">';
+                    echo '<div class="modal-body">';     
+                    echo '<div class="mb-3">';
                         $querySiswa = mysqli_query($conn, "SELECT id_siswa, nama FROM siswa WHERE id_kelas = $kelas");
-                        $nomor = 1;
-                
-                        while ($rowSiswa = mysqli_fetch_assoc($querySiswa)) {
-                            $idSiswa = $rowSiswa['id_siswa'];
-                            $namaSiswa = $rowSiswa['nama'];
-                
-                            echo '<h5>' . $nomor . ' - ' . $namaSiswa . '</h5>';
-                            echo '<label><ul><li>Capaian 1 : ' . $capaian1 . ' : </li></ul></label><br>
-                                <div class="row">                                
-                                    <div class="col-md-1">' . str_repeat('&nbsp;', 7) . '
-                                        <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . $idCapaian1 . ']" value="BB">  BB
-                                    </div>
-                                    <div class="col-md-1">  
-                                        <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . $idCapaian1 . ']" value="MB"> MB
-                                    </div>
-                                    <div class="col-md-1">  
-                                        <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . $idCapaian1 . ']" value="BSH"> BSH
-                                    </div>
-                                    <div class="col-md-1">  
-                                        <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . $idCapaian1 . ']" value="SB"> SB
-                                    </div
-                                </div><br><br>';
-                    
-                            echo '<label><ul><li>Capaian 2 : ' . $capaian2 . ' : </li></ul></label><br>
-                                <div class="row">                                
-                                    <div class="col-md-1">' . str_repeat('&nbsp;', 7) . '
-                                        <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . $idCapaian2 . ']" value="BB"> BB
-                                    </div>
-                                    <div class="col-md-1"> 
-                                        <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . $idCapaian2 . ']" value="MB"> MB
-                                    </div>
-                                    <div class="col-md-1"> 
-                                        <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . $idCapaian2 . ']" value="BSH"> BSH
-                                    </div>
-                                    <div class="col-md-1">  
-                                        <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . $idCapaian2 . ']" value="SB"> SB
-                                    </div>
-                                </div><br><br>';
-                
-                            echo '<label><ul><li>Capaian 3 : ' . $capaian3 . ' : </li></ul></label><br>
-                                <div class="row">                                
-                                    <div class="col-md-1">' . str_repeat('&nbsp;', 7) . '
-                                        <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . $idCapaian3 . ']" value="BB"> BB
-                                    </div>
-                                    <div class="col-md-1"> 
-                                        <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . $idCapaian3 . ']" value="MB"> MB
-                                    </div>
-                                    <div class="col-md-1"> 
-                                        <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . $idCapaian3 . ']" value="BSH"> BSH
-                                    </div>
-                                    <div class="col-md-1"> 
-                                        <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . $idCapaian3 . ']" value="SB"> SB
-                                    </div>
-                                </div><br><br>';
-                
-                            echo '<label><ul><li>Capaian 4 : ' . $capaian4 . ' : </li></ul></label><br>
-                                <div class="row">                                
-                                    <div class="col-md-1">' . str_repeat('&nbsp;', 7) . '
-                                        <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . $idCapaian4 . ']" value="BB"> BB
-                                    </div>
-                                    <div class="col-md-1"> 
-                                        <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . $idCapaian4 . ']" value="MB"> MB
-                                    </div>
-                                    <div class="col-md-1"> 
-                                        <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . $idCapaian4 . ']" value="BSH"> BSH
-                                    </div>
-                                    <div class="col-md-1">  
-                                        <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . $idCapaian4 . ']" value="SB"> SB
-                                    </div>
-                                </div><br><br>';
-                
-                            $nomor++;
-                            echo '<hr>';
-                        }
                         
-                    }
-                    echo '<div style="text-align: center;" class="sb-sidenav-footer">';
+                        if (mysqli_num_rows($querySiswa) > 0) {
+                            $counter = 1; // Initialize a counter variable
+
+                            while ($rowSiswa = mysqli_fetch_assoc($querySiswa)) {
+                                // Display each student's name and sequential number
+                                echo '<div class="row mb-3">';
+                                echo '<div class="col-md-6">' . $counter . '.  ' . $rowSiswa['nama'] . ' :</div><br>';
+                                
+                                echo '<div class="col-md-12">';
+                                echo '<textarea name="nilai_' . $rowSiswa['id_siswa'] . '" rows="4" class="form-control" required></textarea>';
+                                echo '</div>';
+                                
+                                echo '</div>';
+
+                                $counter++; 
+                            }
+                        } else {
+                            echo '<p>No students found.</p>';
+                        }
+
+                    echo '</div>';
+                    echo '<div class="text-center">';
                     echo '<input type="hidden" name="idProject" value="' . $idProject . '">';
-                    echo '<button type="submit" class="btn btn-primary" name="btnSubmitNilaiProject" id="btnSubmitNilaiProject">Simpan</button>';
-                    echo '</div><br>';
+                    echo '<button type="submit" class="btn btn-primary" name="tambahCatatanProject">Simpan</button>';
+                    echo '</div>';
+                    echo '</div>';
                     echo '</form>';
-                }
-                
-                
-                ?>              
+                }               
+                ?>             
                 </main>
             </div>
         </div>
