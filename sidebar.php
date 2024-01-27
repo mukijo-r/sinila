@@ -117,7 +117,7 @@ if (isset($_SESSION['kelas'])) {
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="p5_dimensi.php">Komponen Project</a>
                                     <a class="nav-link" href="p5_daftar_project.php">Daftar Project</a>
-                                    <a class="nav-link" href="#">Penilaian Project</a>
+                                    <a class="nav-link" href="p5_penilaian.php">Penilaian Project</a>
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts2" aria-expanded="false" aria-controls="collapseLayouts2">
@@ -131,6 +131,8 @@ if (isset($_SESSION['kelas'])) {
                                     <a class="nav-link" href="rapot_sisipan.php">Rapot Sisipan</a>
                                     <!-- <a class="nav-link" href="rapot_semester.php">Rapot Semester</a> -->
                                     <a class="nav-link" href="rapot_akhir.php">Rapot Akhir</a>
+                                    <a class="nav-link" href="rapot_project.php">Rapot Project</a>
+                                    rapot_project.php
                                 </nav>
                             </div>
                             <div class="sb-sidenav-menu-heading">Master</div>
@@ -155,15 +157,6 @@ if (isset($_SESSION['kelas'])) {
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-circle-info"></i></div>
                                 About
                             </a>
-                            <!-- <div class="sb-sidenav-menu-heading">Pengaturan</div>
-                            <a class="nav-link" href="guru.php" >
-                                <div class="sb-nav-link-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
-                                Ganti Kelas
-                            </a>
-                            <a class="nav-link" href="siswa.php">
-                                <div class="sb-nav-link-icon"><i class="fa-solid fa-people-group"></i></div>
-                                Ganti Tahun Ajar
-                            </a> -->
                         </div>                            
                     </div>
                     <div style="text-align: center;">
