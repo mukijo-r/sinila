@@ -39,7 +39,7 @@ $namaUser = $rowUser['nama_lengkap'];
                         <div class="container-fluid px-4">
                             <div class="row">                                
                                 <div class="col-md-2">
-                                    <a href="p5_new_project.php"><button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalTambahProject">+ Project Baru</button></a>
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalTambahProject">+ Project Baru</button>
                                 </div>
                                 <div class="col-md-8">
                                     <?php
@@ -64,278 +64,116 @@ $namaUser = $rowUser['nama_lengkap'];
                                 $fase = 'C';
                             }
 
-                            echo '<h4>Daftar Project Fase ' . $fase . ' :</h4><br>';
-                        ?>                       
+                            echo '<h4>Daftar Project Fase ' . $fase . ' :</h4>';
+                        ?>
+                        <div class="mb-3">
+                        <?php
+                        $queryProject = "SELECT 
+                                            ppc.id_project,
+                                            pp.nama_project,
+                                            pp.tanggal,
+                                            pp.pembuat,
+                                            pp.deskripsi_project,
+                                            ppc.pc,
+                                            ppc.id_capaian,
+                                            capaian,
+                                            pc.id_sub_elemen,
+                                            psu.sub_elemen,
+                                            psu.id_elemen,
+                                            pe.elemen,
+                                            pe.id_dimensi,
+                                            pd.dimensi
+                                        FROM 
+                                            `p5_project_capaian` ppc
+                                        LEFT JOIN p5_project pp ON ppc.id_project = pp.id_project
+                                        LEFT JOIN p5_capaian pc ON ppc.id_capaian = pc.id_capaian
+                                        LEFT JOIN p5_sub_elemen psu ON pc.id_sub_elemen = psu.id_sub_elemen
+                                        LEFT JOIN p5_elemen pe ON psu.id_elemen = pe.id_elemen
+                                        LEFT JOIN p5_dimensi pd ON pe.id_dimensi = pd.id_dimensi
+                                        WHERE pp.fase = '$fase'
+                                        ORDER BY ppc.id_project DESC;";
 
-                        <div class="mb-3">                           
+                        $resultProject = mysqli_query($conn, $queryProject);
 
-                                <?php
-                                $queryProject = "SELECT `id_project`, 
-                                `tanggal`,
-                                `pembuat`, 
-                                `nama_project`,  
-                                `deskripsi_project`, 
-                                `id_capaian1`, 
-                                `id_capaian2`, 
-                                `id_capaian3`, 
-                                `id_capaian4` 
-                                FROM `p5_project` prj
-                                WHERE prj.fase = '$fase'
-                                ORDER BY prj.id_project DESC;";
+                        $prevProjectID = null;
+                        
+                        while ($row = mysqli_fetch_assoc($resultProject)) {
+                            $projectID = $row['id_project'];
+                            $tanggal = date('d F Y', strtotime($row['tanggal']));
+                            $bulan = [
+                                'January' => 'Januari',
+                                'February' => 'Februari',
+                                'March' => 'Maret',
+                                'April' => 'April',
+                                'May' => 'Mei',
+                                'June' => 'Juni',
+                                'July' => 'Juli',
+                                'August' => 'Agustus',
+                                'September' => 'September',
+                                'October' => 'Oktober',
+                                'November' => 'November',
+                                'December' => 'Desember'
+                            ];
 
-                                $resultProject = mysqli_query($conn, $queryProject);
-                                $totalEntries = mysqli_num_rows($resultProject);                    
-                                $p = $totalEntries;
+                            foreach ($bulan as $english => $indonesian) {
+                                $tanggal = str_replace($english, $indonesian, $tanggal);
+                            }
+                            $namaProject = $row['nama_project'];
+                            $pembuat = $row['pembuat'];
+                            $dimensi = $row['dimensi'];
+                            $elemen = $row['elemen'];
+                            $subElemen = $row['sub_elemen'];
+                            $capaian = $row['capaian'];
+                            
+                            // Print project information only once for each unique project
+                            if ($prevProjectID !== $projectID) {
+                                $noDimensi = 1;
+                                echo '<table class="table table-bordered" style="width: 85%">';
+                                echo '<tr>
+                                        <td style="font-weight: bold; width: 20%; background-color: #D3D3D3;"><h5>Nama Project</h5></td>
+                                        <td style ="width: 80%; font-weight: bold;text-decoration: underline; background-color: #D3D3D3;"><h5>' . ucfirst($namaProject) . '<h5></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; width: 20%;">Pembuat</td>
+                                        <td style ="width: 80%;">' . $pembuat . '</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; width: 20%;">Tanggal dibuat</td>
+                                        <td style ="width: 80%;">' . $tanggal . '</td>
+                                    </tr>';
 
-                                while ($row = mysqli_fetch_assoc($resultProject)) {
-                                    $tanggal = $row['tanggal'];
-                                    $tanggalDMY = date('d F Y', strtotime($tanggal));
+                                $prevProjectID = $projectID;
+                                                                
+                                 
+                            }
+                            
+                            // Print dimension, element, sub-element, and achievement information
+                            echo '<tr>
+                                    <td style="font-weight: bold; width: 20%;">Dimensi ' . $noDimensi . '</td>
+                                    <td style ="width: 80%; text-decoration: underline; font-weight: bold;">' . $dimensi . '</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: normal; width: 20%;">Elemen</td>
+                                    <td style ="width: 80%;">' .$elemen . '.</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: normal; width: 20%;">Sub Elemen</td>
+                                    <td style ="width: 80%;">' . $subElemen . '.</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: normal; width: 20%;">Capaian</td>
+                                    <td style ="width: 80%;">' . $capaian . '.</td>
+                                </tr><br>';                                  
+                                
+                                
+                                $noDimensi++;   
+                                     
+                        }
+                        
+                        echo '</table><hr><br>';  
+                        
+                        ?>
 
-                                    // Array untuk mengganti nama bulan
-                                    $bulan = [
-                                        'January' => 'Januari',
-                                        'February' => 'Februari',
-                                        'March' => 'Maret',
-                                        'April' => 'April',
-                                        'May' => 'Mei',
-                                        'June' => 'Juni',
-                                        'July' => 'Juli',
-                                        'August' => 'Agustus',
-                                        'September' => 'September',
-                                        'October' => 'Oktober',
-                                        'November' => 'November',
-                                        'December' => 'Desember'
-                                    ];
-
-                                    // Ganti nama bulan dalam bahasa Indonesia
-                                    $tanggalIndonesia = str_replace(array_keys($bulan), array_values($bulan), $tanggalDMY);
-
-                                    $pembuat = $row['pembuat'];
-                                    $nama_project = $row['nama_project'];
-                                    $deskripsi_project = $row['deskripsi_project'];
-                                    //Capaian 1
-                                    $id_capaian1 = $row['id_capaian1'];
-                                    $queryCapaian1 = mysqli_query($conn, "SELECT
-                                    pca.capaian,
-                                    pse.sub_elemen,
-                                    pe.elemen,
-                                    pd.dimensi
-                                    FROM
-                                    p5_capaian pca
-                                    LEFT JOIN p5_sub_elemen pse ON pca.id_sub_elemen = pse.id_sub_elemen
-                                    LEFT JOIN p5_elemen pe ON pse.id_elemen = pe.id_elemen
-                                    LEFT JOIN p5_dimensi pd ON pe.id_dimensi = pd.id_dimensi
-                                    WHERE
-                                    pca.id_capaian = '$id_capaian1';");
-
-                                    while ($rowCap1 = mysqli_fetch_assoc($queryCapaian1)) {                                    
-                                    $capaian1 = $rowCap1['capaian'];
-                                    $subelemen1 = $rowCap1['sub_elemen'];
-                                    $elemen1 = $rowCap1['elemen'];
-                                    $dimensi1 = $rowCap1['dimensi'];
-                                    }
-
-                                    //Capaian 2
-                                    $id_capaian2 = $row['id_capaian2'];
-
-                                    $queryCapaian2 = mysqli_query($conn, "SELECT
-                                    pca.capaian,
-                                    pse.sub_elemen,
-                                    pe.elemen,
-                                    pd.dimensi
-                                    FROM
-                                    p5_capaian pca
-                                    LEFT JOIN p5_sub_elemen pse ON pca.id_sub_elemen = pse.id_sub_elemen
-                                    LEFT JOIN p5_elemen pe ON pse.id_elemen = pe.id_elemen
-                                    LEFT JOIN p5_dimensi pd ON pe.id_dimensi = pd.id_dimensi
-                                    WHERE
-                                    pca.id_capaian = '$id_capaian2';");
-
-                                    while ($rowCap2 = mysqli_fetch_assoc($queryCapaian2)) {                                    
-                                    $capaian2 = $rowCap2['capaian'];
-                                    $subelemen2 = $rowCap2['sub_elemen'];
-                                    $elemen2 = $rowCap2['elemen'];
-                                    $dimensi2 = $rowCap2['dimensi'];
-                                    }
-
-                                    //Capaian 3
-                                    $id_capaian3 = $row['id_capaian3'];
-                                    $queryCapaian3 = mysqli_query($conn, "SELECT
-                                    pca.capaian,
-                                    pse.sub_elemen,
-                                    pe.elemen,
-                                    pd.dimensi
-                                    FROM
-                                    p5_capaian pca
-                                    LEFT JOIN p5_sub_elemen pse ON pca.id_sub_elemen = pse.id_sub_elemen
-                                    LEFT JOIN p5_elemen pe ON pse.id_elemen = pe.id_elemen
-                                    LEFT JOIN p5_dimensi pd ON pe.id_dimensi = pd.id_dimensi
-                                    WHERE
-                                    pca.id_capaian = '$id_capaian3';");
-
-                                    while ($rowCap3 = mysqli_fetch_assoc($queryCapaian3)) {                                    
-                                    $capaian3 = $rowCap3['capaian'];
-                                    $subelemen3 = $rowCap3['sub_elemen'];
-                                    $elemen3 = $rowCap3['elemen'];
-                                    $dimensi3 = $rowCap3['dimensi'];
-                                    }
-
-                                    //Capaian 4
-                                    $id_capaian4 = $row['id_capaian4'];
-                                    $queryCapaian4 = mysqli_query($conn, "SELECT
-                                    pca.capaian,
-                                    pse.sub_elemen,
-                                    pe.elemen,
-                                    pd.dimensi
-                                    FROM
-                                    p5_capaian pca
-                                    LEFT JOIN p5_sub_elemen pse ON pca.id_sub_elemen = pse.id_sub_elemen
-                                    LEFT JOIN p5_elemen pe ON pse.id_elemen = pe.id_elemen
-                                    LEFT JOIN p5_dimensi pd ON pe.id_dimensi = pd.id_dimensi
-                                    WHERE
-                                    pca.id_capaian = '$id_capaian4';");
-
-                                    while ($rowCap4 = mysqli_fetch_assoc($queryCapaian4)) {                                    
-                                    $capaian4 = $rowCap4['capaian'];
-                                    $subelemen4 = $rowCap4['sub_elemen'];
-                                    $elemen4 = $rowCap4['elemen'];
-                                    $dimensi4 = $rowCap4['dimensi'];
-                                    }
-
-                                    echo '<h5>' . $p . '. ' . ucfirst($nama_project) . '</h5>';
-
-                                    echo '<table class="table table-bordered" style="width: 85%">';
-                                    echo '<tr>
-                                            <td style="font-weight: bold; width: 20%;">Nama Project</td>
-                                            <td style ="width: 80%; font-weight: bold;text-decoration: underline;">' . $nama_project . '</td>
-                                          </tr>
-                                          <tr>
-                                            <td style="font-weight: bold; width: 20%;">Pembuat</td>
-                                            <td style ="width: 80%;">' . $pembuat . '</td>
-                                          </tr>
-                                          <tr>
-                                            <td style="font-weight: bold; width: 20%;">Tanggal dibuat</td>
-                                            <td style ="width: 80%;">' . $tanggalIndonesia . '</td>
-                                          </tr>
-                                          </tr>
-                                          <tr>
-                                            <td style="font-weight: bold; width: 20%;">Dimensi 1</td>
-                                            <td style ="width: 80%; text-decoration: underline; font-weight: bold;">' . $dimensi1 . '</td>
-                                          </tr>
-                                          <tr>
-                                            <td style="font-weight: bold; width: 20%;">
-                                                <ul>
-                                                    <li>Elemen</li>
-                                                </ul>
-                                            </td>
-                                            <td style ="width: 80%;">' . ucfirst($elemen1) . '.</td>
-                                          </tr>
-                                          <tr>
-                                            <td style="font-weight: bold; width: 20%;">
-                                                <ul>
-                                                    <li>Sub Elemen</li>
-                                                </ul>
-                                            </td>
-                                            <td style ="width: 80%;">' . ucfirst($subelemen1) . '.</td>
-                                          </tr>
-                                          <tr>
-                                            <td style="font-weight: bold; width: 20%;">
-                                                <ul>
-                                                    <li>Capaian</li>
-                                                </ul>
-                                            </td>
-                                            <td style ="width: 80%;">' . $capaian1 . '.</td>
-                                          </tr>
-                                          <tr>
-                                            <td style="font-weight: bold; width: 20%;">Dimensi 2</td>
-                                            <td style ="width: 80%; text-decoration: underline;font-weight: bold;">' . $dimensi2 . '</td>
-                                          </tr>
-                                          <tr>
-                                            <td style="font-weight: bold; width: 20%;">
-                                                <ul>
-                                                    <li>Elemen</li>
-                                                </ul>
-                                            </td>
-                                            <td style ="width: 80%;">' . ucfirst($elemen2) . '.</td>
-                                          </tr>
-                                          <tr>
-                                            <td style="font-weight: bold; width: 20%;">
-                                                <ul>
-                                                    <li>Sub Elemen</li>
-                                                </ul>
-                                            </td>
-                                            <td style ="width: 80%;">' . ucfirst($subelemen2) . '.</td>
-                                          </tr>
-                                          <tr>
-                                            <td style="font-weight: bold; width: 20%;">
-                                                <ul>
-                                                    <li>Capaian</li>
-                                                </ul>
-                                            </td>
-                                            <td style ="width: 80%;">' . $capaian2 . '.</td>
-                                          </tr>
-                                          <tr>
-                                            <td style="font-weight: bold; width: 20%;">Dimensi 3</td>
-                                            <td style ="width: 80%; text-decoration: underline;font-weight: bold;">' . $dimensi3 . '</td>
-                                          </tr>
-                                          <tr>
-                                            <td style="font-weight: bold; width: 20%;">
-                                                <ul>
-                                                    <li>Elemen</li>
-                                                </ul>
-                                            </td>
-                                            <td style ="width: 80%;">' . ucfirst($elemen3) . '.</td>
-                                          </tr>
-                                          <tr>
-                                            <td style="font-weight: bold; width: 20%;">
-                                                <ul>
-                                                    <li>Sub Elemen</li>
-                                                </ul>
-                                            </td>
-                                            <td style ="width: 80%;">' . ucfirst($subelemen3) . '.</td>
-                                          </tr>
-                                          <tr>
-                                            <td style="font-weight: bold; width: 20%;">
-                                                <ul>
-                                                    <li>Capaian</li>
-                                                </ul>
-                                            </td>
-                                            <td style ="width: 80%;">' . $capaian3 . '.</td>
-                                          </tr>
-                                          <tr>
-                                            <td style="font-weight: bold; width: 20%;">Dimensi 4</td>
-                                            <td style ="width: 80%; text-decoration: underline;font-weight: bold;">' . $dimensi4 . '</td>
-                                          </tr>
-                                          <tr>
-                                            <td style="font-weight: bold; width: 20%;">
-                                                <ul>
-                                                    <li>Elemen</li>
-                                                </ul>
-                                            </td>
-                                            <td style ="width: 80%;">' . ucfirst($elemen4) . '.</td>
-                                          </tr>
-                                          <tr>
-                                            <td style="font-weight: bold; width: 20%;">
-                                                <ul>
-                                                    <li>Sub Elemen</li>
-                                                </ul>
-                                            </td>
-                                            <td style ="width: 80%;">' . ucfirst($subelemen4) . '.</td>
-                                          </tr>
-                                          <tr>
-                                            <td style="font-weight: bold; width: 20%;">
-                                                <ul>
-                                                    <li>Capaian</li>
-                                                </ul>
-                                            </td>
-                                            <td style ="width: 80%;">' . $capaian4 . '.</td>
-                                          </tr>';
-                                    echo '</table><hr><br>';
-
-                                    $p--;
-                                }
-
-                                ?>
                             
                         </div>
 
@@ -352,5 +190,36 @@ $namaUser = $rowUser['nama_lengkap'];
         <script src="assets/demo/chart-bar-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="js/datatables-simple-demo.js"></script>   
-    </body>  
+    </body> 
+    
+    <!-- Modal Tambah Project -->
+    <div class="modal fade" id="modalTambahProject">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Tambah Project Baru</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <!-- Modal Body -->
+                <form method="post" action="p5_new_project.php">
+                    <div class="modal-body">                    
+                        <div class="mb-3">
+                            <label for="dimensi">Jumlah Dimensi :</label>                        
+                            <select class="form-select" name="dimensi" id="dimensi" aria-label="dimensi">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                            </select>                  
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary" name="tambahProject">Buat</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </html>
