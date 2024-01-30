@@ -140,23 +140,33 @@ $semester = 'Ganjil';
                 function penilaianProject($kelas, $idProject) {
                     $conn = mysqli_connect("localhost:3306", "root", "", "sdk");
                 
-                    $queryProject = "SELECT
-                        `nama_project`,
-                        `deskripsi_project`, 
-                        `id_capaian1`,
-                        cp1.capaian as capaian1,
-                        `id_capaian2`,
-                        cp2.capaian as capaian2,
-                        `id_capaian3`,
-                        cp3.capaian as capaian3,
-                        `id_capaian4`,
-                        cp4.capaian as capaian4
-                        FROM `p5_project` pp
-                        LEFT JOIN p5_capaian cp1 ON pp.id_capaian1 = cp1.id_capaian
-                        LEFT JOIN p5_capaian cp2 ON pp.id_capaian2 = cp2.id_capaian
-                        LEFT JOIN p5_capaian cp3 ON pp.id_capaian3 = cp3.id_capaian
-                        LEFT JOIN p5_capaian cp4 ON pp.id_capaian4 = cp4.id_capaian
-                        WHERE `id_project` = '$idProject';";
+                    $queryProject = "SELECT 
+                    ppc.id_project,
+                    nama_project,
+                    deskripsi_project,
+                    MAX(CASE WHEN ppc.pc = 'capaian1' THEN ppc.id_capaian END) as id_capaian1,
+                    MAX(CASE WHEN ppc.pc = 'capaian2' THEN ppc.id_capaian END) as id_capaian2,
+                    MAX(CASE WHEN ppc.pc = 'capaian3' THEN ppc.id_capaian END) as id_capaian3,
+                    MAX(CASE WHEN ppc.pc = 'capaian4' THEN ppc.id_capaian END) as id_capaian4,
+                    MAX(CASE WHEN ppc.pc = 'capaian5' THEN ppc.id_capaian END) as id_capaian5,
+                    MAX(CASE WHEN ppc.pc = 'capaian6' THEN ppc.id_capaian END) as id_capaian6,
+                    MAX(CASE WHEN ppc.pc = 'capaian1' THEN pc.capaian END) as capaian1,
+                    MAX(CASE WHEN ppc.pc = 'capaian2' THEN pc.capaian END) as capaian2,
+                    MAX(CASE WHEN ppc.pc = 'capaian3' THEN pc.capaian END) as capaian3,
+                    MAX(CASE WHEN ppc.pc = 'capaian4' THEN pc.capaian END) as capaian4,
+                    MAX(CASE WHEN ppc.pc = 'capaian5' THEN pc.capaian END) as capaian5,
+                    MAX(CASE WHEN ppc.pc = 'capaian6' THEN pc.capaian END) as capaian6,
+                    COUNT(pc.id_capaian) AS jumlah_id_capaian
+                    FROM 
+                        `p5_project_capaian` ppc
+                    LEFT JOIN 
+                        p5_project pp ON ppc.id_project = pp.id_project
+                    LEFT JOIN 
+                        p5_capaian pc ON ppc.id_capaian = pc.id_capaian
+                    WHERE
+                        ppc.id_project = '$idProject'
+                    GROUP BY
+                        ppc.id_project, nama_project;";
                 
                     $tampilProject = mysqli_query($conn, $queryProject);
                 
@@ -164,14 +174,21 @@ $semester = 'Ganjil';
                     while ($rowProject = mysqli_fetch_assoc($tampilProject)) {
                         $namaProject = $rowProject['nama_project'];
                         $deskripsi = $rowProject['deskripsi_project'];
+                        $jumlahCapaian = $rowProject['jumlah_id_capaian'];
                         $idCapaian1 = $rowProject['id_capaian1'];
                         $idCapaian2 = $rowProject['id_capaian2'];
                         $idCapaian3 = $rowProject['id_capaian3'];
                         $idCapaian4 = $rowProject['id_capaian4'];
+                        $idCapaian5 = $rowProject['id_capaian5'];
+                        $idCapaian6 = $rowProject['id_capaian6'];
                         $capaian1 = $rowProject['capaian1'];
                         $capaian2 = $rowProject['capaian2'];
                         $capaian3 = $rowProject['capaian3'];
                         $capaian4 = $rowProject['capaian4'];
+                        $capaian5 = $rowProject['capaian5'];
+                        $capaian6 = $rowProject['capaian6'];
+
+
                         echo '<br><hr>';
                         echo '<h5 style="">Nama Project : ' . $namaProject . '</h5>';
                         echo '<table>
@@ -188,76 +205,30 @@ $semester = 'Ganjil';
                             $namaSiswa = $rowSiswa['nama'];
                 
                             echo '<h5>' . $nomor . ' - ' . $namaSiswa . '</h5>';
-                            echo '<label><ul><li>Capaian 1 : ' . $capaian1 . ' : </li></ul></label><br>
-                                <div class="row">                                
-                                    <div class="col-md-1">' . str_repeat('&nbsp;', 7) . '
-                                        <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . $idCapaian1 . ']" value="BB">  BB
-                                    </div>
-                                    <div class="col-md-1">  
-                                        <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . $idCapaian1 . ']" value="MB"> MB
-                                    </div>
-                                    <div class="col-md-1">  
-                                        <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . $idCapaian1 . ']" value="BSH"> BSH
-                                    </div>
-                                    <div class="col-md-1">  
-                                        <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . $idCapaian1 . ']" value="SB"> SB
-                                    </div
-                                </div><br><br>';
-                    
-                            echo '<label><ul><li>Capaian 2 : ' . $capaian2 . ' : </li></ul></label><br>
-                                <div class="row">                                
-                                    <div class="col-md-1">' . str_repeat('&nbsp;', 7) . '
-                                        <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . $idCapaian2 . ']" value="BB"> BB
-                                    </div>
-                                    <div class="col-md-1"> 
-                                        <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . $idCapaian2 . ']" value="MB"> MB
-                                    </div>
-                                    <div class="col-md-1"> 
-                                        <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . $idCapaian2 . ']" value="BSH"> BSH
-                                    </div>
-                                    <div class="col-md-1">  
-                                        <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . $idCapaian2 . ']" value="SB"> SB
-                                    </div>
-                                </div><br><br>';
-                
-                            echo '<label><ul><li>Capaian 3 : ' . $capaian3 . ' : </li></ul></label><br>
-                                <div class="row">                                
-                                    <div class="col-md-1">' . str_repeat('&nbsp;', 7) . '
-                                        <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . $idCapaian3 . ']" value="BB"> BB
-                                    </div>
-                                    <div class="col-md-1"> 
-                                        <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . $idCapaian3 . ']" value="MB"> MB
-                                    </div>
-                                    <div class="col-md-1"> 
-                                        <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . $idCapaian3 . ']" value="BSH"> BSH
-                                    </div>
-                                    <div class="col-md-1"> 
-                                        <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . $idCapaian3 . ']" value="SB"> SB
-                                    </div>
-                                </div><br><br>';
-                
-                            echo '<label><ul><li>Capaian 4 : ' . $capaian4 . ' : </li></ul></label><br>
-                                <div class="row">                                
-                                    <div class="col-md-1">' . str_repeat('&nbsp;', 7) . '
-                                        <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . $idCapaian4 . ']" value="BB"> BB
-                                    </div>
-                                    <div class="col-md-1"> 
-                                        <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . $idCapaian4 . ']" value="MB"> MB
-                                    </div>
-                                    <div class="col-md-1"> 
-                                        <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . $idCapaian4 . ']" value="BSH"> BSH
-                                    </div>
-                                    <div class="col-md-1">  
-                                        <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . $idCapaian4 . ']" value="SB"> SB
-                                    </div>
-                                </div><br><br>';
-                
+
+                            for ($c=1; $c<=$jumlahCapaian; $c++) {
+                                echo '<label><ul><li>Capaian ' . $c . ' : ' . ${"capaian" . $c} . ' : </li></ul></label><br>
+                                    <div class="row">                                
+                                        <div class="col-md-1">' . str_repeat('&nbsp;', 7) . '
+                                            <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . ${"idCapaian" . $c} . ']" value="BB">  BB
+                                        </div>
+                                        <div class="col-md-1">  
+                                            <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . ${"idCapaian" . $c} . ']" value="MB"> MB
+                                        </div>
+                                        <div class="col-md-1">  
+                                            <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . ${"idCapaian" . $c} . ']" value="BSH"> BSH
+                                        </div>
+                                        <div class="col-md-1">  
+                                            <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . ${"idCapaian" . $c} . ']" value="SB"> SB
+                                        </div
+                                    </div><br><br>';
+                            }
                             $nomor++;
                             echo '<hr>';
                         }
-                        
                     }
                     echo '<div style="text-align: center;" class="sb-sidenav-footer">';
+                    echo '<input type="hidden" name="jumlahCapaian" value="' . $jumlahCapaian . '">';
                     echo '<input type="hidden" name="idProject" value="' . $idProject . '">';
                     echo '<button type="submit" class="btn btn-primary" name="btnSubmitNilaiProject" id="btnSubmitNilaiProject">Simpan</button>';
                     echo '</div><br>';
