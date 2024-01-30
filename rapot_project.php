@@ -48,7 +48,23 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                         </ol>  
                         <div class="container-fluid px-1">
                             <form method="post" class="form">  
-                                <div class="row row-cols-auto">
+                            <div class="row row-cols-auto">
+                                    <div class="col">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <label class="input-group-text" for="project">Project</label>
+                                            </div>
+                                            <select class="form-select" name="project" id="project" aria-label="project" required>
+                                                <option selected disabled>Pilih Project</option>
+                                                <?php
+                                                $queryProject = mysqli_query($conn, "SELECT id_project, nama_project FROM p5_project");
+                                                while ($rowProject = mysqli_fetch_assoc($queryProject)) {
+                                                    echo '<option value="' . $rowProject['id_project'] . '">' . $rowProject['nama_project'] . '</option>';
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>
                                     <div class="col">
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
@@ -66,15 +82,15 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col">&nbsp;
+                                    <div class="col">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         <button type="submit" class="btn btn-primary" name="btnTampilLapProject" id="btnTampilLapProject">
                                             Tampilkan
                                         </button>
-                                    </div>         
-                                </div>    
+                                    </div>           
+                                </div>
                             </form> 
                         </div><br>                         
-                    </div><br> 
+                    </div> 
 
                     <div class="container-fluid px-4">
                     <?php
@@ -89,8 +105,8 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
 
                     // Tampilkan Daftar Nilai
                     if (isset($_POST['btnTampilLapProject'])) {
+                        $idProject = $_POST['project'];
                         $idSiswa = $_POST['siswa'];
-
                 
                         $querySiswa = mysqli_query($conn, "SELECT nama, nis, nisn FROM siswa WHERE id_siswa='$idSiswa'");
                         $rowSiswa = mysqli_fetch_assoc($querySiswa); 
@@ -130,6 +146,14 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                                     $stringKelas = '';
                                 }
 
+                                if ($kelas == 1 | $kelas == 2) { 
+                                    $fase = 'A';
+                                } elseif ($kelas == 3 | $kelas == 4) {
+                                    $fase = 'B';
+                                } elseif ($kelas == 5 | $kelas == 6) {
+                                    $fase = 'C';
+                                }
+
                                 $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
                                 $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
                                 $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];
@@ -140,6 +164,18 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                             <div class="row">
                                 <div class="col-md-6">
                                     <table>
+                                        <tr>
+                                            <th style="width: 15%"></th>
+                                            <th style="width: 25%">Nama Sekolah</th>
+                                            <th style="width: 10%">:</th>
+                                            <th style="width: 45%">SD KATOLIK BHAKTI</th>       
+                                        </tr>
+                                        <tr>
+                                            <th style="width: 15%"></th>
+                                            <th style="width: 25%">Alamat Sekolah</th>
+                                            <th style="width: 10%">:</th>
+                                            <th style="width: 45%">Jl. Ki. Hajar Dewantoro Rogojampi</th>       
+                                        </tr>
                                         <tr>
                                             <th style="width: 15%"></th>
                                             <th style="width: 25%">Nama</th>
@@ -168,192 +204,149 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                                             <th style="width: 10%">:</th>
                                             <th style="width: 45%"><?=$nomorUrut;?></th>       
                                         </tr>
+                                        <tr>
+                                            <th style="width: 15%"></th>
+                                            <th style="width: 25%">Fase</th>
+                                            <th style="width: 10%">:</th>
+                                            <th style="width: 45%"><?=$fase;?></th>       
+                                        </tr>
+                                        <tr>
+                                            <th style="width: 15%"></th>
+                                            <th style="width: 25%">Tahun Ajar</th>
+                                            <th style="width: 10%">:</th>
+                                            <th style="width: 45%"><?=$tahunAjar;?></th>       
+                                        </tr>
                                     </table>
                                 </div>
                             </div>
                         </div><br><br>              
                         <?php
 
-                        tabelDaftarNilai($idTahunAjar, $semester, $kelas, $idSiswa, $namaSiswa, $nomorUrut);
+                        tabelNilaiProject($idTahunAjar, $kelas, $fase, $idSiswa, $idProject, $nomorUrut);
                     }               
                     ?>
                 </div>
                 <?php
-                function tabelDaftarNilai($idTahunAjar, $semester, $kelas, $idSiswa, $namaSiswa, $nomorUrut) {
+                function tabelNilaiProject($idTahunAjar, $kelas, $fase, $idSiswa, $idProject, $nomorUrut) {
                     $conn = mysqli_connect("localhost:3306", "root", "", "sdk");
 
-                    $queryNilaiHarian = "SELECT m.id_mapel, m.mapel,                    
-                    MAX(CASE WHEN nul.lingkup_materi = 'LM 1' THEN nul.nilai ELSE 0 END) AS LM1,
-                    MAX(CASE WHEN nul.lingkup_materi = 'LM 2' THEN nul.nilai ELSE 0 END) AS LM2,
-                    MAX(CASE WHEN nul.lingkup_materi = 'LM 3' THEN nul.nilai ELSE 0 END) AS LM3,
-                    MAX(CASE WHEN nul.lingkup_materi = 'LM 4' THEN nul.nilai ELSE 0 END) AS LM4,                        
-                    MAX(CASE WHEN nuj.ujian = 'STS' THEN nuj.nilai ELSE 0 END) AS STS,
-                    MAX(CASE WHEN nuj.ujian = 'SAS' THEN nuj.nilai ELSE 0 END) AS SAS
-                    FROM mapel m                    
-                    LEFT JOIN nilai_ulangan nul ON m.id_mapel = nul.id_mapel
-                    LEFT JOIN nilai_ujian nuj ON m.id_mapel = nuj.id_mapel
-                    WHERE 
-                        nul.kelas = '$kelas' AND
-                        nul.semester = '$semester' AND
-                        nul.id_siswa = '$idSiswa' AND
-                        nul.id_tahun_ajar = '$idTahunAjar' AND
-                        nuj.kelas = '$kelas' AND
-                        nuj.semester = '$semester' AND
-                        nuj.id_siswa = '$idSiswa' AND
-                        nuj.id_tahun_ajar = '$idTahunAjar'
-                    GROUP BY  m.id_mapel, m.mapel;
+                    $queryNamaProject = mysqli_query($conn, "SELECT `nama_project`,`deskripsi_project` 
+                    FROM `p5_project` WHERE `id_project` = '$idProject';");
+                    while ($rowProject = mysqli_fetch_array($queryNamaProject)) {
+                        $namaProject = $rowProject['nama_project'];
+                        $deskripsiProject = $rowProject['deskripsi_project'];
+                    }
+
+                    $queryNilaiProject = "SELECT
+                    dimensi,
+                    capaian,
+                    MAX(CASE WHEN nilai = 'BB' THEN 1 ELSE 0 END) AS BB,
+                    MAX(CASE WHEN nilai = 'MB' THEN 1 ELSE 0 END) AS MB,
+                    MAX(CASE WHEN nilai = 'BSH' THEN 1 ELSE 0 END) AS BSH,
+                    MAX(CASE WHEN nilai = 'SB' THEN 1 ELSE 0 END) AS SB
+                    FROM
+                        p5_penilaian pp
+                        LEFT JOIN p5_capaian pc ON pp.id_capaian = pc.id_capaian
+                        LEFT JOIN p5_sub_elemen pse ON pc.id_sub_elemen = pse.id_sub_elemen
+                        LEFT JOIN p5_elemen pe ON pse.id_elemen = pe.id_elemen
+                        LEFT JOIN p5_dimensi pd ON pe.id_dimensi = pd.id_dimensi
+                    WHERE
+                        pp.id_tahun_ajar = '$idTahunAjar' AND
+                        pp.kelas = '$kelas' AND
+                        pp.id_siswa = '$idSiswa' AND
+                        pp.id_project = '$idProject'
+                    GROUP BY dimensi, capaian;
                     ";  
                     
-                    $nilaiHarian = mysqli_query($conn, $queryNilaiHarian);
+                    $nilaiProject = mysqli_query($conn, $queryNilaiProject);
 
                     echo '<div class="card mb-4">';
-                    echo '<div class="card-header">';
-                    echo '<i class="fas fa-table me-1"></i>';
-                    echo '</div>';
                     echo '<div class="card-body">';
-                    echo '<table id="datatablesSimple1" class="table table-bordered"  style="text-align: center;">';
-                    echo '<thead>';
-                    echo '<tr>';
-                    echo '<th style="vertical-align: middle; width: 3%">No.</th>';
-                    echo '<th style="vertical-align: middle; text-align: left; width: 20%"">Mata Pelajaran</th>';
-                    echo '<th style="vertical-align: middle; width: 5%"">Nilai</th>';
-                    echo '<th style="vertical-align: middle; width: 50%"">Deskripsi</th>';
-                    echo '</tr>';
-                    echo '</thead>';
-                    echo '<tbody>';
-                    $i = 1;
+                    echo '<h6>Nama Proyek : ' . $namaProject . '</h6>';
+                    echo '<table id="datatablesSimple1" class="table table-bordered"  style="text-align: justify;">';
+                    echo '<tr><td colspan="5">' . $deskripsiProject . '</td></tr>';
+                    echo '<tr><td colspan="5"></td></tr>';
+                    echo '<tr>
+                            <th>' . $namaProject . '</th>
+                            <th>BB</th>
+                            <th>MB</th>
+                            <th>BSH</th>
+                            <th>SB</th>
+                          </tr>';
                 
-                    while ($row = mysqli_fetch_array($nilaiHarian)) {
-                        $mapel = $row['mapel'];
-                        $LM1 = $row['LM1'];
-                        $LM2 = $row['LM2'];
-                        $LM3 = $row['LM3'];
-                        $LM4 = $row['LM4'];
-                        $rerataUlangan = ($LM1 + $LM2 + $LM3 + $LM4)/4;
-                        $STS = $row['STS'];
-                        $SAS = $row['SAS'];
-                        $nilaiRapot = ((2 * $rerataUlangan) + $STS + (2 * $SAS)) / 5;
+                    while ($row = mysqli_fetch_array($nilaiProject)) {
+                        $dimensi = $row['dimensi'];
+                        $capaian = $row['capaian'];
+                        $BB = $row['BB'];
+                        $MB = $row['MB'];
+                        $BSH = $row['BSH'];
+                        $SB = $row['SB'];
 
-                        $queryMapel = mysqli_query($conn, "SELECT id_mapel
-                        FROM mapel                  
-                        WHERE                                         
-                        `mapel` = '$mapel';");
+                        echo '<tr><td colspan="5" style="background-color: #A9A9A9;">' . $dimensi . '</td></tr>';
 
-                        while ($rowMapel = mysqli_fetch_array($queryMapel)){
-                        $idMapel = $rowMapel['id_mapel'];
-                        }
+                        echo "<tr>";
+                        echo "<td>" . $capaian . "</td>";
+                        echo "<td>" . ($BB == 1 ? '&#10004;' : '') . "</td>";
+                        echo "<td>" . ($MB == 1 ? '&#10004;' : '') . "</td>";
+                        echo "<td>" . ($BSH == 1 ? '&#10004;' : '') . "</td>";
+                        echo "<td>" . ($SB == 1 ? '&#10004;' : '') . "</td>";
+                        echo "</tr>";                       
 
-                        $queryDeskripsi1 = "SELECT GROUP_CONCAT(ck.deskripsi SEPARATOR ', ') AS combined_deskripsi1
-                        FROM
-                        `asesmen_capkom` ack
-                        LEFT JOIN capaian_kompetensi ck ON ack.id_ck = ck.id_ck  
-                        LEFT JOIN siswa s ON ack.id_siswa = s.id_siswa                                  
-                        WHERE
-                        semester = '$semester' AND
-                        ack.id_siswa = '$idSiswa' AND
-                        ack.tampil = '1' AND
-                        ack.capaian = '1' AND
-                        ack.kelas = '$kelas' AND
-                        ck.id_mapel = '$idMapel';";                        
-
-                        $result1 = mysqli_query($conn, $queryDeskripsi1);
-
-                        if ($result1) {
-                            $row1 = mysqli_fetch_assoc($result1);
-                            $combinedDeskripsi1 = $row1['combined_deskripsi1'];
-                        }
-
-                        $queryDeskripsi0 = "SELECT GROUP_CONCAT(ck.deskripsi SEPARATOR ', ') AS combined_deskripsi0
-                        FROM
-                        `asesmen_capkom` ack
-                        LEFT JOIN capaian_kompetensi ck ON ack.id_ck = ck.id_ck  
-                        LEFT JOIN siswa s ON ack.id_siswa = s.id_siswa                                  
-                        WHERE
-                        semester = '$semester' AND
-                        ack.id_siswa = '$idSiswa' AND
-                        ack.tampil = '1' AND
-                        ack.capaian = '0' AND
-                        ack.kelas = '$kelas' AND
-                        ck.id_mapel = '$idMapel';";
-
-                        $result0 = mysqli_query($conn, $queryDeskripsi0);
-
-                        if ($result0) {
-                            $row0 = mysqli_fetch_assoc($result0);
-                            $combinedDeskripsi0 = $row0['combined_deskripsi0'];
-                        }   
-                        
-                        echo $queryDeskripsi0;
-
-                        echo '<tr>';
-                        echo '<td rowspan="2">' . $i++ . '</td>';
-                        echo '<td rowspan="2" style="text-align: left;">' . $mapel . '</td>';
-                        echo '<td rowspan="2">' . $nilaiRapot . '</td>';
-                        if ($combinedDeskripsi1 <> '') {
-                            if ($nilaiRapot > 74){
-                                echo '<td style="text-align: left;">'. $namaSiswa . ' memiliki pemahaman dalam ' . $combinedDeskripsi1 .'.</td>';
-                            } else {
-                                echo '<td style="text-align: left;">'. $namaSiswa . ' membutuhkan bantuan dalam ' . $combinedDeskripsi1 .'.</td>';
-                            } 
-                        } else {
-                            echo '<td style="text-align: left;"></td>';
-                        }
-                        echo '</tr>';
-                        echo '<tr>';
-                        if ($combinedDeskripsi0 <> '') {
-                                echo '<td style="text-align: left;">'. $namaSiswa . ' membutuhkan bantuan dalam ' . $combinedDeskripsi0 .'.</td>';
-                        } else {
-                            echo '<td style="text-align: left;"></td>';
-                        }
-                        echo '</tr>';
                     }
 
-                    echo '</tbody>';
+                    $query = "SELECT 
+                    `catatan` 
+                    FROM `p5_penilaian_catatan` 
+                    WHERE 
+                    `id_tahun_ajar` = '$idTahunAjar' AND
+                    `kelas` = '$kelas' AND
+                    `id_siswa` = '$idSiswa' AND
+                    `id_project` = '$idProject';";
+
+                    $queryCatatanProject = mysqli_query($conn, $query);
+
+                    
+                    while ($rowCatatanProject = mysqli_fetch_array($queryCatatanProject)) {
+                        $catatanProject = $rowCatatanProject['catatan'];
+                    }
+
+                    echo '<tr><td colspan="5"></td></tr>';
+                    echo '<tr><td colspan="5"><h6>Catatan proses :</h6></td></tr>';
+                    echo '<tr><td colspan="5">' . $catatanProject . '</td></tr>';
+
                     echo '</table>';
-                    echo '<br><br>';
-                    
-                    echo '<table class="table table-bordered" style="width: 100%; font-family: times; font-size: 12px">';
-                    echo '<tr>';
-                    echo '<th border="1" style="line-height: 1.5; width: 5%; text-align: center; vertical-align: middle; font-weight: bold;"><br>No.</th>';
-                    echo '<th border="1" style="line-height: 1.5; width: 25%; text-align: center; vertical-align: middle; font-weight: bold;"><br>Ekstrakurikuler</th>';
-                    echo '<th border="1" style="line-height: 1.5; width: 62%; text-align: center; vertical-align: middle; font-weight: bold;"><br>Keterangan</th>';
-                    echo '</tr>';
-                    
-                    $queryCatatanEkstra = "SELECT
-                        ek.nama_ek,
-                        catatan
-                        FROM nilai_catatan_ekstrakurikuler nce
-                        LEFT JOIN ekstrakurikuler ek ON nce.id_ek = ek.id_ek
-                        WHERE id_siswa = $idSiswa";
-                    
-                    $j = 1;
-                    $catatanEkstra = mysqli_query($conn, $queryCatatanEkstra);
-                    
-                    while ($rowCatatanEkstra = mysqli_fetch_array($catatanEkstra)) {
-                        $namaEkstra = $rowCatatanEkstra['nama_ek'];
-                        $catatan = $rowCatatanEkstra['catatan'];
-                    
-                        echo '<tr>'; 
-                        echo '<td border="1" style="line-height: 1.5; width: 5%; text-align: center; vertical-align: middle; font-weight: bold;">' . $j . '</td>';
-                        echo '<td border="1" style="line-height: 1.5; width: 25%; text-align: center; vertical-align: middle; font-weight: bold;">' . $namaEkstra . '</td>';
-                        echo '<td border="1" style="line-height: 1.5; width: 62%; text-align: center; vertical-align: middle; font-weight: bold;">' . $catatan . '</td>';
-                        echo '</tr>'; 
-                        $j++;
-                    }
-                    
-                    echo '</table><br><br>';
-                    
+                    echo '<br><br>'; 
 
                     echo '<div style="text-align: center;" class="sb-sidenav-footer">';
-                    echo '<form method="post" action="pdf_rapot_akhir.php" target="_blank">';
+                    echo '<form method="post" action="pdf_rapot_project.php" target="_blank">';
                     echo '<input type="hidden" name="idTahunAjar" value="' . $idTahunAjar . '">';
-                    echo '<input type="hidden" name="semester" value="' . $semester . '">';
                     echo '<input type="hidden" name="kelas" value="' . $kelas . '">';
                     echo '<input type="hidden" name="idSiswa" value="' . $idSiswa . '">';
-                    echo '<input type="hidden" name="nomorUrut" value="' . $nomorUrut . '">';                       
-                    echo '<button type="submit" class="btn btn-primary" name="btnCetakRapotSisipan" id="btnCetakRapotSisipan">Cetak</button>';
+                    echo '<input type="hidden" name="nomorUrut" value="' . $nomorUrut . '">'; 
+                    echo '<input type="hidden" name="idProject" value="' . $idProject . '">';                     
+                    echo '<button type="submit" class="btn btn-primary" name="btnCetakRapotProject" id="btnCetakRapotProject">Cetak</button>';
                     echo '</form>';
                     echo '</div><br>';
+                    echo '<table class="table-bordered" style="width: 60%; text-align: center;">
+                            <tr>
+                                <th>BB</th>
+                                <th>MB</th>
+                                <th>BSH</th>
+                                <th>SB</th>
+                            </tr>
+                            <tr>
+                                <td>Belum Berkembang</td>
+                                <td>Mulai Berkembang</td>
+                                <td>Berkembang Sesuai Harapan</td>
+                                <td>Sangat Berkembang</td>
+                            </tr>
+                            <tr>
+                                <td>Siswa masih membutuhkan bimbingan dalam mengembangkan kemampuan.</td>
+                                <td>Siswa mulai mengembangkan kemampuan namun masih belum ajek.</td>
+                                <td>Siswa telah mengembangkan kemampuan hingga berada dalam tahap ajek.</td>
+                                <td>Siswa mengembangkan kemampuannya melampaui harapan.</td>
+                            </tr>
+                          </table><br><br>';
                 }
 
                 ?>              
