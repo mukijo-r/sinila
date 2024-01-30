@@ -132,7 +132,6 @@ if (isset($_SESSION['kelas'])) {
                                     <!-- <a class="nav-link" href="rapot_semester.php">Rapot Semester</a> -->
                                     <a class="nav-link" href="rapot_akhir.php">Rapot Akhir</a>
                                     <a class="nav-link" href="rapot_project.php">Rapot Project</a>
-                                    rapot_project.php
                                 </nav>
                             </div>
                             <div class="sb-sidenav-menu-heading">Master</div>
