@@ -265,7 +265,7 @@ $namaUser = $rowUser['nama_lengkap'];
                                 <div class="mb-3">
                                     <label for="semester">Semester :</label><br>
                                     <select class="form-select" name="semester" id="semester" aria-label="Semester" required>
-                                        <option selected>Pilih semester</option>
+                                        <option value="">Pilih semester</option>
                                         <option value="Ganjil">Ganjil</option>
                                         <option value="Genap">Genap</option>
                                     </select>
@@ -275,7 +275,7 @@ $namaUser = $rowUser['nama_lengkap'];
                                 <div class="mb-3">
                                     <label for="mapel">Mata Pelajaran :</label>
                                     <select class="form-select" name="mapel" id="mapel" aria-label="mapel" required>
-                                        <option selected disabled>Pilih Mapel</option>
+                                        <option value="">Pilih Mapel</option>
                                         <?php
                                         // Ambil data kelas dari tabel kelas
                                         $queryMapel = mysqli_query($conn, "SELECT id_mapel, mapel FROM mapel");
@@ -293,7 +293,7 @@ $namaUser = $rowUser['nama_lengkap'];
                                 <div class="mb-3">
                                     <label for="ujian">Jenis Ujian :</label>
                                     <select class="form-select" name="ujian" id="ujian" aria-label="ujian" required>
-                                        <option selected disabled>Pilih Ujian</option>
+                                        <option value="">Pilih Ujian</option>
                                         <option value="STS">STS</option>
                                         <option value="SAS">SAS</option>
                                     </select>

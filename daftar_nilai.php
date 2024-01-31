@@ -54,7 +54,7 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                                             <div class="input-group-prepend">
                                                 <label class="input-group-text" for="semester">Semester</label>
                                             </div>
-                                            <select class="custom-select" id="semester" name="semester">
+                                            <select class="custom-select" id="semester" name="semester" required>
                                                 <option value="">Pilih Semester </option>                                                
                                                 <option value="Ganjil">Ganjil</option>
                                                 <option value="Genap">Genap</option>
@@ -67,7 +67,7 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                                                 <label class="input-group-text" for="kategori">Mata Pelajaran</label>
                                             </div>
                                             <select class="form-select" name="mapel" id="mapel" aria-label="mapel" required>
-                                                <option selected disabled>Pilih Mapel</option>
+                                                <option value="">Pilih Mapel</option>
                                                 <?php
                                                 // Ambil data kelas dari tabel kelas
                                                 $queryMapel = mysqli_query($conn, "SELECT id_mapel, mapel FROM mapel");

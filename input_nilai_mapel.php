@@ -281,7 +281,7 @@ $namaUser = $rowUser['nama_lengkap'];
                                 <div class="mb-3">
                                     <label for="semester">Semester :</label><br>
                                     <select class="form-select" name="semester" id="semester" aria-label="Semester" required>
-                                        <option selected>Pilih semester</option>
+                                        <option value="">Pilih semester</option>
                                         <option value="Ganjil">Ganjil</option>
                                         <option value="Genap">Genap</option>
                                     </select>
@@ -291,7 +291,7 @@ $namaUser = $rowUser['nama_lengkap'];
                                 <div class="mb-3">
                                     <label for="mapel">Mata Pelajaran :</label>
                                     <select class="form-select" name="mapel" id="mapel" aria-label="mapel" required>
-                                        <option selected disabled>Pilih Mapel</option>
+                                        <option value="">Pilih Mapel</option>
                                         <?php
                                         // Ambil data kelas dari tabel kelas
                                         $queryMapel = mysqli_query($conn, "SELECT id_mapel, mapel FROM mapel");
@@ -309,7 +309,7 @@ $namaUser = $rowUser['nama_lengkap'];
                                 <div class="mb-3">
                                     <label for="lingkupMateri">Lingkup Materi :</label>
                                     <select class="form-select" name="lingkupMateri" id="lingkupMateri" aria-label="lingkupMateri" required>
-                                        <option selected disabled>Pilih LM</option>
+                                        <option value="">Pilih LM</option>
                                         <option value="LM 1">LM 1</option>
                                         <option value="LM 2">LM 2</option>
                                         <option value="LM 3">LM 3</option>
@@ -321,7 +321,7 @@ $namaUser = $rowUser['nama_lengkap'];
                                 <div class="mb-3">
                                     <label for="tujuanPembelajaran">Tujuan Pembelajaran :</label>
                                     <select class="form-select" name="tujuanPembelajaran" id="tujuanPembelajaran" aria-label="tujuanPembelajaran" required>
-                                        <option selected disabled>Pilih TP</option>
+                                        <option value="">Pilih TP</option>
                                         <option value="TP1">TP 1</option>
                                         <option value="TP2">TP 2</option>
                                         <option value="TP3">TP 3</option>

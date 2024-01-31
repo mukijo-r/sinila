@@ -154,45 +154,5 @@ require 'config.php';
         <script>
         </script>
     </body>
-    <!-- Modal Tambah Guru-->
-    <div class="modal fade" id="modalTambahGuru">
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-        <!-- Modal Header -->
-        <div class="modal-header">
-            <h4 class="modal-title">Tambah Guru</h4>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <!-- Modal body -->      
-            <form method="post">
-            <div class="modal-body">
-                <input type="text" name="nip" placeholder="NIP" class="form-control">
-                <br>
-                <input type="text" name="namaGuru" placeholder="Nama Guru" class="form-control" required>
-                <br>
-                <select class="form-select" name="jk" aria-label="Jenis Kelamin">
-                    <option selected>Jenis Kelamin</option>
-                    <option value="L">L</option>
-                    <option value="P">P</option>
-                </select>
-                <br>
-                <select class="form-select" name="jabatan" aria-label="jabatan">
-                    <option selected>Jabatan</option>
-                    <option value="Guru">Guru</option>
-                    <option value="Bendahara Sekolah">Bendahara Sekolah</option>
-                    <option value="Kepala Sekolah">Kepala Sekolah</option>
-                    <option value="Tenaga Administrasi Sekolah">Tenaga Administrasi Sekolah</option>
-                </select>
-            </div>
-            <div class="text-center">
-                <button type="submit" class="btn btn-success" name="tambahGuru">Tambah</button> 
-            </div>
-            <br> 
-        </form>   
-        </div>
-    </div>
-    </div>
-
     
 </html>

@@ -55,7 +55,7 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                                                 <label class="input-group-text" for="project">Project</label>
                                             </div>
                                             <select class="form-select" name="project" id="project" aria-label="project" required>
-                                                <option selected disabled>Pilih Project</option>
+                                                <option value="">Pilih Project</option>
                                                 <?php
                                                 $queryProject = mysqli_query($conn, "SELECT id_project, nama_project FROM p5_project");
                                                 while ($rowProject = mysqli_fetch_assoc($queryProject)) {
@@ -71,7 +71,7 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                                                 <label class="input-group-text" for="siswa">Nama Siswa</label>
                                             </div>
                                             <select class="form-select" name="siswa" id="siswa" aria-label="siswa" required>
-                                                <option selected disabled>Pilih siswa</option>
+                                                <option value="">Pilih siswa</option>
                                                 <?php
                                                 // Ambil data kelas dari tabel kelas
                                                 $querySiswa = mysqli_query($conn, "SELECT id_siswa, nama FROM siswa WHERE id_kelas='$kelas'");

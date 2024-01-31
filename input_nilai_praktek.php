@@ -249,7 +249,7 @@ $namaUser = $rowUser['nama_lengkap'];
                                 <div class="mb-3">
                                     <label for="semester">Semester :</label><br>
                                     <select class="form-select" name="semester" id="semester" aria-label="Semester" required>
-                                        <option selected>Pilih semester</option>
+                                        <option value="">Pilih semester</option>
                                         <option value="Ganjil">Ganjil</option>
                                         <option value="Genap">Genap</option>
                                     </select>
@@ -259,7 +259,7 @@ $namaUser = $rowUser['nama_lengkap'];
                                 <div class="mb-3">
                                     <label for="kategoriPraktek">Ketegori Praktek :</label>
                                     <select class="form-select" name="kategoriPraktek" id="kategoriPraktek" aria-label="kategoriPraktek" required>
-                                        <option selected disabled>Pilih Kategori</option>                         
+                                        <option value="">Pilih Kategori</option>                         
                                         <option value="Seni Tari">Seni Tari</option>
                                         <option value="Seni Rupa">Seni Rupa</option>
                                         <option value="Seni Teater">Seni Teater</option>

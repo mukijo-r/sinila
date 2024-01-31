@@ -239,7 +239,7 @@ $namaUser = $rowUser['nama_lengkap'];
                         <div class="mb-3">
                             <label for="semester">Semester :</label><br>
                             <select class="form-select" name="semester" id="semester" aria-label="Semester" required>>
-                                <option selected>Pilih semester</option>                            
+                                <option value="">Pilih semester</option>                            
                                 <option value="Ganjil">Ganjil</option>
                                 <option value="Genap">Genap</option>
                             </select>
@@ -247,7 +247,7 @@ $namaUser = $rowUser['nama_lengkap'];
                         <div class="mb-3">
                             <label for="siswa">Siswa :</label>
                             <select name="siswa" class="form-select" id="siswa" aria-label="Siswa" required>>
-                                <option selected disabled>Pilih Siswa</option>
+                                <option value="">Pilih Siswa</option>
                                 <?php
                                 // Ambil data siswa dari tabel siswa
                                 $querySiswa = mysqli_query($conn, "SELECT id_siswa, nama FROM siswa WHERE id_kelas = $kelas");
@@ -260,7 +260,7 @@ $namaUser = $rowUser['nama_lengkap'];
                         <div class="mb-3">
                             <label for="absen">Absen :</label>
                             <select class="form-select" name="absen" id="absen" aria-label="absen" required>
-                                <option selected disabled>Pilih Absen</option>                         
+                                <option value="">Pilih Absen</option>                         
                                 <option value="Sakit">Sakit</option>
                                 <option value="Ijin">Ijin</option>
                                 <option value="Alpa">Alpa</option>

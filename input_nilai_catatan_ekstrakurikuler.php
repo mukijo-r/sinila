@@ -263,7 +263,7 @@ $namaUser = $rowUser['nama_lengkap'];
                         <div class="mb-3">
                             <label for="semester">Semester :</label><br>
                             <select class="form-select" name="semester" id="semester" aria-label="Semester" required>
-                                <option selected>Pilih semester</option>                            
+                                <option value="">Pilih semester</option>                            
                                 <option value="Ganjil">Ganjil</option>
                                 <option value="Genap">Genap</option>
                             </select>
@@ -271,7 +271,7 @@ $namaUser = $rowUser['nama_lengkap'];
                         <div class="mb-3">
                             <label for="ekstra">Ekstrakurikuler :</label><br>
                             <select class="form-select" name="ekstra" id="ekstra" aria-label="Ekstra" required>
-                                <option selected disabled>Pilih Ekstrakurikuler</option>
+                                <option value="">Pilih Ekstrakurikuler</option>
                                 <?php
                                 // Ambil data kelas dari tabel kelas
                                 $queryEkstra = mysqli_query($conn, "SELECT `id_ek`, `nama_ek` FROM `ekstrakurikuler`");
@@ -298,7 +298,7 @@ $namaUser = $rowUser['nama_lengkap'];
                                     
                                     // Input field for each student's grade
                                     echo '<div class="col-md-12">';
-                                    echo '<input type="text" name="nilai_' . $rowSiswa['id_siswa'] . '" class="form-control">';
+                                    echo '<input type="text" name="nilai_' . $rowSiswa['id_siswa'] . '" class="form-control" required>';
                                     echo '</div>';
                                     
                                     echo '</div>';

@@ -198,14 +198,14 @@ require 'config.php';
                 <br>
                 <input type="text" name="namaGuru" placeholder="Nama Guru" class="form-control" required>
                 <br>
-                <select class="form-select" name="jk" aria-label="Jenis Kelamin">
-                    <option selected>Jenis Kelamin</option>
+                <select class="form-select" name="jk" aria-label="Jenis Kelamin" required>
+                    <option value="">Jenis Kelamin</option>
                     <option value="L">L</option>
                     <option value="P">P</option>
                 </select>
                 <br>
-                <select class="form-select" name="jabatan" aria-label="jabatan">
-                    <option selected>Jabatan</option>
+                <select class="form-select" name="jabatan" aria-label="jabatan" required>
+                    <option value="">Jabatan</option>
                     <option value="Guru">Guru</option>
                     <option value="Bendahara Sekolah">Bendahara Sekolah</option>
                     <option value="Kepala Sekolah">Kepala Sekolah</option>

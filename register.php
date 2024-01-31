@@ -52,7 +52,8 @@ require 'config.php';
                                             </div>
                                             <div class="mb-3">
                                                 <label for="role">Role :</label>
-                                                <select class="form-select" name="role" id="role" aria-label="Role">
+                                                <select class="form-select" name="role" id="role" aria-label="Role" required>
+                                                    <option value="">Pilih Role</option>
                                                     <option value="admin">Admin</option>
                                                     <option value="guru">Guru</option>
                                                     <option value="kepsek">Kepala Sekolah</option>

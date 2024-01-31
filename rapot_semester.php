@@ -67,7 +67,7 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                                                 <label class="input-group-text" for="siswa">Nama Siswa</label>
                                             </div>
                                             <select class="form-select" name="siswa" id="siswa" aria-label="siswa" required>
-                                                <option selected disabled>Pilih siswa</option>
+                                                <option value="">Pilih siswa</option>
                                                 <?php
                                                 // Ambil data kelas dari tabel kelas
                                                 $querySiswa = mysqli_query($conn, "SELECT id_siswa, nama FROM siswa WHERE id_kelas='$kelas'");
