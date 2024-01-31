@@ -2105,12 +2105,9 @@
 
     // 41. Tambah Project
     if(isset($_POST['btnSimpanProject'])){
+        $jumlahDimensi = $_POST['jumlahDimensi'];
         $namaProject = $_POST['namaProject'];
         $deskripsiProject = $_POST['deskripsiProject'];
-        $idCapaian1 = $_POST['id_capaian1'];
-        $idCapaian2 = $_POST['id_capaian2'];
-        $idCapaian3 = $_POST['id_capaian3'];
-        $idCapaian4 = $_POST['id_capaian4'];
         $namaUser = $_POST['namaUser'];
         $tanggal = date('Y-m-d'); 
 
@@ -2123,32 +2120,43 @@
         }
 
         try {
-            $queryProject = "INSERT INTO `p5_project`
-            (`tanggal`, `pembuat`, `nama_project`, `fase`, `deskripsi_project`, `id_capaian1`, `id_capaian2`, `id_capaian3`, `id_capaian4`) 
+            $queryInsertProject = "INSERT INTO `p5_project`
+            (`tanggal`, `pembuat`, `nama_project`, `fase`, `deskripsi_project`) 
             VALUES 
-            ('$tanggal', '$namaUser', '$namaProject','$fase','$deskripsiProject','$idCapaian1','$idCapaian2','$idCapaian3','$idCapaian4');";
+            ('$tanggal', '$namaUser', '$namaProject','$fase','$deskripsiProject');";
                 
-            $insertProject = mysqli_query($conn, $queryProject);
+            $insertProject1 = mysqli_query($conn, $queryInsertProject);
 
-            if (!$insertProject) {
-                throw new Exception("Query insert gagal"); // Lempar exception jika query gagal
+            if (!$insertProject1) {
+                throw new Exception("Query insert gagal"); 
             }
 
-            // Query SELECT untuk memeriksa apakah data sudah masuk ke database
-            $result = mysqli_query($conn, "SELECT * FROM `p5_project`
-            WHERE
+            $selectIdProject = "SELECT id_project FROM p5_project WHERE 
             `tanggal` = '$tanggal' AND
             `pembuat` = '$namaUser' AND
             `nama_project` = '$namaProject' AND
             `fase` = '$fase' AND
-            `deskripsi_project` = '$deskripsiProject' AND
-            `id_capaian1` = '$idCapaian1' AND
-            `id_capaian2` = '$idCapaian2'  AND
-            `id_capaian3` = '$idCapaian3' AND
-            `id_capaian4` = '$idCapaian4'
-            ");
+            `deskripsi_project` = '$deskripsiProject';";
 
-            if ($result && mysqli_num_rows($result) === 1) {
+            $queryIdProject = mysqli_query($conn, $selectIdProject);
+
+            if ($rowProject = mysqli_fetch_assoc($queryIdProject)) {
+                $idProject = $rowProject['id_project'];
+            }
+
+            for ($d = 1; $d <= $jumlahDimensi; $d++) {
+                $capaian = $_POST["capaian$d"];
+                $idCapaian = $_POST["id_capaian$d"];
+
+                $queryProject2 = "INSERT INTO `p5_project_capaian`
+                (`id_project`, `pc`, `id_capaian`) 
+                VALUES 
+                ('$idProject','capaian$d','$idCapaian');";
+        
+                $queryInsertProject2 = mysqli_query($conn, $queryProject2);
+            } 
+
+            if ($queryInsertProject2) {
                 // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
                 $_SESSION['flash_message'] = 'Tambah Project baru berhasil';
                 $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
@@ -2160,7 +2168,7 @@
             }
         } catch (Exception $e) {
             // Tangani exception jika terjadi kesalahan
-            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryProject . $e->getMessage();
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryProject2 . $e->getMessage();
             $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
             header('location:p5_daftar_project.php');
             exit;
@@ -2230,9 +2238,52 @@
             
         } catch (Exception $e) {
             // Tangani exception jika terjadi kesalahan
-            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $e->getMessage();
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $querySelect . $e->getMessage();
             $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
             header('location:p5_penilaian.php');
+            exit;
+        }
+    }
+
+    // 43. Tambah Nilai Catatan
+    if(isset($_POST['tambahCatatanProject'])){
+        $idProject = $_POST['idProject'];
+
+        $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar = '$tahunAjar'");
+        $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
+        $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];
+
+        try {
+            
+            $dataNilai = [];
+            foreach ($_POST as $key => $value) {
+                if (strpos($key, 'nilai_') === 0) {
+                    $idSiswa = substr($key, 6);
+                    $dataNilai[$idSiswa] = $value;
+                    $queryInsertNilaiCatatanProject = "INSERT INTO `p5_penilaian_catatan`
+                    (`id_tahun_ajar`, `kelas`, `id_siswa`, `id_project`, `catatan`) 
+                    VALUES 
+                    ('$idTahunAjar','$kelas','$idSiswa ','$idProject','$value')";
+                        
+                    $insertNilaiCatatanProject = mysqli_query($conn, $queryInsertNilaiCatatanProject);
+                }
+            }            
+            
+            if ($insertNilaiCatatanProject) {
+                // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
+                $_SESSION['flash_message'] = 'Tambah catatan berhasil';
+                $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
+                header('location:p5_catatan.php');
+                exit;
+            } else {
+                // Data tidak ada dalam database, itu berarti gagal
+                throw new Exception("Data tidak ditemukan setelah ditambahkan");
+            }
+        } catch (Exception $e) {
+            // Tangani exception jika terjadi kesalahan
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryInsertNilaiCatatanProject . $e->getMessage();
+            $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
+            header('location:p5_catatan.php');
             exit;
         }
     }
