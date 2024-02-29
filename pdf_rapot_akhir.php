@@ -279,7 +279,7 @@ while ($row = mysqli_fetch_array($nilai)) {
         $combinedDeskripsi0 = $row0['combined_deskripsi0'];
     }                        
 
-    $html  .= '<tr>';
+    $html  .= '<tr nobr="true">';
     $html  .= '<td rowspan="2">' . $i++ . '</td>';
     $html  .= '<td rowspan="2" style="text-align: left;">' . $mapel . '</td>';
     $html  .= '<td rowspan="2">' . $nilaiRapot . '</td>';
@@ -293,7 +293,7 @@ while ($row = mysqli_fetch_array($nilai)) {
         $html  .= '<td style="text-align: left;"></td>';
     }
     $html  .= '</tr>';
-    $html  .= '<tr>';
+    $html  .= '<tr nobr="true">';
     if ($combinedDeskripsi0 <> '') {
             $html  .= '<td style="text-align: left;">'. $namaSiswa . ' membutuhkan bantuan dalam ' . $combinedDeskripsi0 .'.</td>';
     } else {

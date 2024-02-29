@@ -143,6 +143,7 @@ $semester = 'Genap'
                         $idAsesmen = $rowCapKom['id_asesmen'];
                         $siswa = $rowCapKom['nama'];
                         $deskripsi = $rowCapKom['deskripsi'];
+                        $deskripsi = ucfirst($deskripsi);
                         $capaian = $rowCapKom['capaian'];
 
                         echo '<input type="hidden" name="id_siswa[]" value="'.$idSiswa.'">';
@@ -164,7 +165,7 @@ $semester = 'Genap'
                         echo '<input type="hidden" name="capaian['.$idSiswa.']['.$idAsesmen.']" value="0">';
 
                         // Ubah checkbox agar menggunakan array pada nama
-                        echo '<input class="form-check-input" type="checkbox" id="checkbox_'.$idAsesmen.'" name="capaian['.$idSiswa.']['.$idAsesmen.']" value="1" '.($capaian == 1 ? 'checked' : '').'>'.$deskripsi;
+                        echo '<input class="form-check-input" type="checkbox" id="checkbox_'.$idAsesmen.'" name="capaian['.$idSiswa.']['.$idAsesmen.']" value="1" '.($capaian == 1 ? 'checked' : '').'>'.$deskripsi.'.';
 
                         echo '</div>';                        
                     }

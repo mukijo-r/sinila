@@ -287,7 +287,7 @@ $semester = 'Genap';
                                 <div class="mb-3">
                                     <label for="mapel">Mata Pelajaran :</label>
                                     <select class="form-select" name="mapel" id="mapel" aria-label="mapel" required>
-                                        <option selected disabled>Pilih Mapel</option>
+                                        <option value="">Pilih Mapel</option>
                                         <?php
                                         // Ambil data kelas dari tabel kelas
                                         $queryMapel = mysqli_query($conn, "SELECT id_mapel, mapel FROM mapel");

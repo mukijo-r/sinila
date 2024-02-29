@@ -3,7 +3,15 @@ require 'function.php';
 require 'cek.php';
 require 'config.php';
 $conn = mysqli_connect("localhost:3306","root","","sdk");
-$semester = 'Ganjil'
+$semester = 'Ganjil';
+
+if ($kelas == 1 | $kelas == 2) {
+    $fase = 'A';
+} elseif ($kelas == 3 | $kelas == 4) {
+    $fase = 'B';
+} elseif ($kelas == 5 | $kelas == 6){
+    $fase = 'C';
+}
 
 ?>
 <!DOCTYPE html>
@@ -45,7 +53,7 @@ $semester = 'Ganjil'
                     <div class="container-fluid px-4">
                         <h3 class="mt-4">Capaian Kompetensi Siswa Semester Ganjil</h3>
                         <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Asesmen Kualitatif / Asesmen Siswa</li>    
+                            <li class="breadcrumb-item active">Asesmen Kualitatif / Asesmen Siswa <?=$fase;?></li>    
                         </ol>  
                         <div class="container-fluid px-1">
                             <form method="post" class="form">  
@@ -107,12 +115,12 @@ $semester = 'Ganjil'
                         </div>
                         <?php
 
-                        capaianKompetensi($kelas, $idMapel);
+                        capaianKompetensi($fase, $idMapel);
                     }               
                     ?>
                 </div>
                 <?php
-                function capaianKompetensi($kelas, $idMapel) {
+                function capaianKompetensi($fase, $idMapel) {
                     $conn = mysqli_connect("localhost:3306", "root", "", "sdk");
 
                     $queryCk = "SELECT
@@ -126,7 +134,6 @@ $semester = 'Ganjil'
                         LEFT JOIN asesmen a ON ck.id_asesmen = a.id_asesmen  
                         LEFT JOIN siswa s ON ck.id_siswa = s.id_siswa                                  
                         WHERE
-                        semester = 'Ganjil' AND
                         s.id_kelas = '$kelas' AND
                         a.id_kelas = '$kelas' AND
                         a.id_mapel = '$idMapel'  

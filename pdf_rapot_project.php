@@ -36,11 +36,12 @@ class MYPDF extends TCPDF {
 
 // create new PDF document
 $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, 'A4', true, 'UTF-8', false);
+$pdf->SetAutoPageBreak(true, 15); 
 
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
 $pdf->SetAuthor('Mukijo');
-$pdf->SetTitle('Rapot Akhir');
+$pdf->SetTitle('Rapot Project');
 $pdf->SetSubject('TCPDF');
 $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 
@@ -251,9 +252,12 @@ $html .= '<tr><td colspan="5"></td></tr>';
 $html .= '<tr><td colspan="5"><h4>Catatan proses :</h4></td></tr>';
 $html .= '<tr><td colspan="5">' . $catatanProject . '</td></tr>';
 $html .= '</table>';
-$html .= '<h5>Keterangan Capaian Siswa :</h5>';
+$html .= '<br><br>';
+$pdf->SetMargins(12, 18, 0);
 
-$html .= '<table border="1" style="width: 94%; text-align: center;">
+
+$html .= '<table border="1" style="width: 94%; text-align: center;" nobr="true">';
+$html .= '<tr nobr="true"><th colspan="4"><h5>Keterangan Capaian Siswa :</h5></th></tr>
 <tr>
     <th>BB</th>
     <th>MB</th>
@@ -274,9 +278,9 @@ $html .= '<table border="1" style="width: 94%; text-align: center;">
 </tr>
 </table><br><br>';
 
+$html .= '<table nobr="true"><tr nobr="true"><td>';
 
-
-$html .= '<table style="font-family: helvetica; font-size: 13px;">';
+$html .= '<table style="font-family: helvetica; font-size: 13px;" nobr="true">';
 $html .= '<tr>';
 $html .= '<td style="width: 5%"></td>';
 $tahun = date("Y"); 
@@ -331,7 +335,7 @@ $html .= '<td style="width: 35%"> NIY. ' . $nipWaliKelas . '</td>';
 $html .= '</tr>';
 $html .= '</table><br>';
 
-$html .= '<table style="text-align: center; font-family: helvetica; font-size: 13px;">';                   
+$html .= '<table style="text-align: center; font-family: helvetica; font-size: 13px;" nobr="true">';                   
 $html .= '<tr>';
 $html .= '<td style="width: 20%"></td>';
 $html .= '<td style="width: 55%">Mengetahui</td>';
@@ -357,7 +361,9 @@ $html .= '<td style="width: 20%"></td>';
 $html .= '<td style="width: 55%">' . $nipKepsek . '</td>';
 $html .= '<td style="width: 20%"></td>';
 $html .= '</tr>';
-$html .= '</table><br>';                    
+$html .= '</table><br>'; 
+
+$html .= '</td></tr></table><br>';  
                     
 // print a block of text using Write()
 $pdf->Write(0, $txt, '', 0, 'C', true, 0, false, false, 0);
