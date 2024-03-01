@@ -103,10 +103,6 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                     if (isset($_POST['btnTampilLapSiswa'])) {
                         $semester = $_POST['semester'];
                         $idSiswa = $_POST['siswa'];
-                        // $tplm1 = $_POST['tplm1'];
-                        // $tplm2 = $_POST['tplm2'];
-                        // $tplm3 = $_POST['tplm3'];
-                        // $tplm4 = $_POST['tplm4'];
                 
                         $querySiswa = mysqli_query($conn, "SELECT nama, nis, nisn FROM siswa WHERE id_siswa='$idSiswa'");
                         $rowSiswa = mysqli_fetch_assoc($querySiswa); 
@@ -298,9 +294,7 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                         if ($result0) {
                             $row0 = mysqli_fetch_assoc($result0);
                             $combinedDeskripsi0 = $row0['combined_deskripsi0'];
-                        }   
-                        
-                        echo $queryDeskripsi0;
+                        } 
 
                         echo '<tr>';
                         echo '<td rowspan="2">' . $i++ . '</td>';

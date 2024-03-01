@@ -74,6 +74,9 @@ if ($semester == 'Ganjil'){
 $kelas = $_POST['kelas'];
 
 $idMapel = $_POST['idMapel'];
+$queryMapel = mysqli_query($conn, "SELECT mapel FROM mapel WHERE id_mapel='$idMapel'");
+$rowMapel = mysqli_fetch_assoc($queryMapel);
+$namaMapel = $rowMapel['mapel'];
 
 $queryKepsek = mysqli_query($conn, "SELECT nip, nama_lengkap FROM guru WHERE jabatan = 'Kepala Sekolah'");
 $rowKepsek= mysqli_fetch_array($queryKepsek);
@@ -101,7 +104,9 @@ TAHUN PELAJARAN $tahunAjar
 EOD;
 $pdf->SetFont('times', '', 9);
 $pdf->SetCellMargins(0, 1, 0, 0);
-$html = '<table border="0.75" cellpadding="1" style="text-align: center;">';
+$html = '<h4>MATA PELAJARAN : ' . strtoupper($namaMapel) . '</H4>';
+$html .= '<h4></H4>';
+$html .= '<table border="0.75" cellpadding="1" style="text-align: center;">';
 $html .= '<tr>';
 $html .= '<th rowspan="3" style="font-weight: bold;line-height: 2; width: 3%">No. Urut</th>';
 $html .= '<th rowspan="3" style="font-weight: bold;line-height: 2; width: 4%">No. Induk</th>';
@@ -174,7 +179,15 @@ LEFT JOIN nilai_ujian nuj ON s.id_siswa = nuj.id_siswa
 WHERE nm.kelas = '$kelas' AND
     nm.semester = '$semester' AND
     nm.id_mapel = '$idMapel' AND
-    nm.id_tahun_ajar = '$idTahunAjar'
+    nm.id_tahun_ajar = '$idTahunAjar' AND
+    nul.kelas = '$kelas' AND
+    nul.semester = '$semester' AND
+    nul.id_mapel = '$idMapel' AND
+    nul.id_tahun_ajar = '$idTahunAjar' AND
+    nuj.kelas = '$kelas' AND
+    nuj.semester = '$semester' AND
+    nuj.id_mapel = '$idMapel' AND
+    nuj.id_tahun_ajar = '$idTahunAjar'
 GROUP BY s.nis, s.nisn, s.nama;
 ");
 

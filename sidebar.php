@@ -235,7 +235,7 @@ if (isset($_SESSION['kelas'])) {
                         <br>
                         <h6>Atau, Tambahkan Tahun Ajar baru bila belum ada :<h6> 
                         <br>
-                        <input type="text" name="newTahunAjar" placeholder="Tahun/Tahun" class="form-control">
+                        <input type="text" name="newTahunAjar" placeholder="Tahun/Tahun" class="form-control" required>
                         <br>
                         <div class="text-center">
                         <button type="submit" class="btn btn-success" name="tambahTahunAjar">Tambah</button> 
