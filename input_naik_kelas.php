@@ -56,6 +56,12 @@ $namaUser = $rowUser['nama_lengkap'];
                             </div>
                         </div>                    
                         <br>
+                        <?php 
+                        $queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar='$tahunAjar'");
+                        while ($rowTahunAjar = mysqli_fetch_assoc($queryTahunAjar)) {                            
+                            $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];
+                        }
+                        ?>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
@@ -87,6 +93,7 @@ $namaUser = $rowUser['nama_lengkap'];
                                     LEFT JOIN tahun_ajar ta ON kk.id_tahun_ajar = ta.id_tahun_ajar
                                     LEFT JOIN siswa s ON kk.id_siswa = s.id_siswa
                                     WHERE id_kelas = $kelas
+                                    AND kk.id_tahun_ajar = '$idTahunAjar'
                                     ORDER BY kk.id_kn DESC;");
 
                                     $totalEntries = mysqli_num_rows($dataKenaikanKelas);

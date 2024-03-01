@@ -220,7 +220,7 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                     MAX(CASE WHEN nul.lingkup_materi = 'LM 4' THEN nul.nilai ELSE 0 END) AS LM4,                        
                     MAX(CASE WHEN nuj.ujian = 'STS' THEN nuj.nilai ELSE 0 END) AS STS,
                     MAX(CASE WHEN nuj.ujian = 'SAS' THEN nuj.nilai ELSE 0 END) AS SAS
-                FROM siswa s
+                FROM siswa s 
                 LEFT JOIN nilai_mapel nm ON s.id_siswa = nm.id_siswa
                 LEFT JOIN nilai_ulangan nul ON s.id_siswa = nul.id_siswa
                 LEFT JOIN nilai_ujian nuj ON s.id_siswa = nuj.id_siswa

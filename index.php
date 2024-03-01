@@ -103,7 +103,7 @@ $namaUser = $rowUser['nama_lengkap'];
 
                                     //1. Harian 1
                                     $queryLM1 = mysqli_query($conn, "SELECT `nilai` FROM `nilai_mapel` WHERE
-                                    `id_tahun_Ajar`= '$idTahunAjar' AND
+                                    `id_tahun_ajar`= '$idTahunAjar' AND
                                     `semester`= '$semester' AND
                                     `kelas` = '$kelas' AND 
                                     `id_mapel` = '$idMapel' AND
@@ -116,7 +116,7 @@ $namaUser = $rowUser['nama_lengkap'];
 
                                     //2. Harian 2
                                     $queryLM2 = mysqli_query($conn, "SELECT `nilai` FROM `nilai_mapel` WHERE
-                                    `id_tahun_Ajar`= '$idTahunAjar' AND
+                                    `id_tahun_ajar`= '$idTahunAjar' AND
                                     `semester`= '$semester' AND
                                     `kelas` = '$kelas' AND 
                                     `id_mapel` = '$idMapel' AND
@@ -129,7 +129,7 @@ $namaUser = $rowUser['nama_lengkap'];
 
                                     //3. Ulangan 1
                                     $queryUlangan1 = mysqli_query($conn, "SELECT `nilai` FROM `nilai_ulangan` WHERE
-                                    `id_tahun_Ajar`= '$idTahunAjar' AND
+                                    `id_tahun_ajar`= '$idTahunAjar' AND
                                     `semester`= '$semester' AND
                                     `kelas` = '$kelas' AND 
                                     `id_mapel` = '$idMapel' AND
@@ -141,7 +141,7 @@ $namaUser = $rowUser['nama_lengkap'];
 
                                     //4. Ulangan 2
                                     $queryUlangan2 = mysqli_query($conn, "SELECT `nilai` FROM `nilai_ulangan` WHERE
-                                    `id_tahun_Ajar`= '$idTahunAjar' AND
+                                    `id_tahun_ajar`= '$idTahunAjar' AND
                                     `semester`= '$semester' AND
                                     `kelas` = '$kelas' AND 
                                     `id_mapel` = '$idMapel' AND
@@ -153,7 +153,7 @@ $namaUser = $rowUser['nama_lengkap'];
 
                                     //5. Ulangan 3
                                     $queryUlangan3 = mysqli_query($conn, "SELECT `nilai` FROM `nilai_ulangan` WHERE
-                                    `id_tahun_Ajar`= '$idTahunAjar' AND
+                                    `id_tahun_ajar`= '$idTahunAjar' AND
                                     `semester`= '$semester' AND
                                     `kelas` = '$kelas' AND 
                                     `id_mapel` = '$idMapel' AND
@@ -165,7 +165,7 @@ $namaUser = $rowUser['nama_lengkap'];
 
                                     //6. Ulangan 4
                                     $queryUlangan4 = mysqli_query($conn, "SELECT `nilai` FROM `nilai_ulangan` WHERE
-                                    `id_tahun_Ajar`= '$idTahunAjar' AND
+                                    `id_tahun_ajar`= '$idTahunAjar' AND
                                     `semester`= '$semester' AND
                                     `kelas` = '$kelas' AND 
                                     `id_mapel` = '$idMapel' AND
@@ -177,7 +177,7 @@ $namaUser = $rowUser['nama_lengkap'];
 
                                     //7. Ujian 1
                                     $querySTS = mysqli_query($conn, "SELECT `nilai` FROM `nilai_ujian` WHERE
-                                    `id_tahun_Ajar`= '$idTahunAjar' AND
+                                    `id_tahun_ajar`= '$idTahunAjar' AND
                                     `semester`= '$semester' AND
                                     `kelas` = '$kelas' AND 
                                     `id_mapel` = '$idMapel' AND
@@ -189,7 +189,7 @@ $namaUser = $rowUser['nama_lengkap'];
 
                                     //8. Ujian 2
                                     $querySAS = mysqli_query($conn, "SELECT `nilai` FROM `nilai_ujian` WHERE
-                                    `id_tahun_Ajar`= '$idTahunAjar' AND
+                                    `id_tahun_ajar`= '$idTahunAjar' AND
                                     `semester`= '$semester' AND
                                     `kelas` = '$kelas' AND 
                                     `id_mapel` = '$idMapel' AND
@@ -228,8 +228,8 @@ $namaUser = $rowUser['nama_lengkap'];
                             <table id="myTable" class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th onclick="sortTable(0)">Nama</th>
-                                        <th onclick="sortTable(1)">Nilai</th>
+                                        <th onclick="sortTable(0)">Nama  (Klik untuk mengurutkan nama)</th>
+                                        <th onclick="sortTable(1)">Nilai  (KLIK di sini untuk mengurutkan peringkat)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
