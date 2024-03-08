@@ -8,6 +8,10 @@ $semester = 'Ganjil';
 $idMapel = isset($_GET['idMapel']) ? $_GET['idMapel'] : '';
 $semester = isset($_GET['semester']) ? $_GET['semester'] : '';
 
+$queryMapel = mysqli_query($conn, "SELECT `mapel` FROM `mapel` WHERE id_mapel = '$idMapel'");
+$rowMapel = mysqli_fetch_array($queryMapel);
+$Mapel = $rowMapel['mapel'];
+
 
 ?>
 <!DOCTYPE html>
@@ -77,6 +81,7 @@ $semester = isset($_GET['semester']) ? $_GET['semester'] : '';
                     </div>
                     <hr>
                     <div class="container-fluid px-4">
+                        <h4>Penilaian Capaian Kompetensi Mata Pelajaran <?=$Mapel;?>
                         <h4>Aktifkan deskripsi sesuai capaian kompotensi setiap siswa :</h4>
                         <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
