@@ -212,16 +212,16 @@ $semester = 'Ganjil';
                                         <div class="col-md-1">' . str_repeat('&nbsp;', 7) . '
                                             <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . ${"idCapaian" . $c} . ']" value="BB">  BB
                                         </div>
-                                        <div class="col-md-1">  
+                                        <div class="col-md-1">
                                             <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . ${"idCapaian" . $c} . ']" value="MB"> MB
                                         </div>
-                                        <div class="col-md-1">  
+                                        <div class="col-md-1">
                                             <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . ${"idCapaian" . $c} . ']" value="BSH"> BSH
                                         </div>
-                                        <div class="col-md-1">  
+                                        <div class="col-md-1">
                                             <input class="form-check-input" type="radio" name="penilaian[' . $idSiswa . '][' . ${"idCapaian" . $c} . ']" value="SB"> SB
-                                        </div
-                                    </div><br><br>';
+                                        </div>
+                                    </div><br>';
                             }
                             $nomor++;
                             echo '<hr>';
