@@ -607,6 +607,6 @@ $pdf->writeHTML($html, true, false, false, false, '');
 // ---------------------------------------------------------
 
 //Close and output PDF document
-$pdf->Output('laporan_umum.pdf', 'I');
+$pdf->Output('rapot_semester.pdf', 'I');
 
 ?>
