@@ -94,27 +94,14 @@ require 'config.php';
 
                                             <!-- Modal body -->                                            
                                             <form method="post">
-                                            <div class="modal-body">
-                                                <div class="mb-3">
-                                                    <label for="waliKelas">Kelas :</label>   
-                                                    <select class="form-select" name="kelas" id="kelas" aria-label="Kelas">
-                                                            <option selected><?=$idKelas;?></option>
-                                                            <?php
-                                                            // Ambil data kelas dari tabel kelas
-                                                            $queryKelas = mysqli_query($conn, "SELECT id_kelas, nama_kelas FROM kelas");
-                                                            while ($kelas = mysqli_fetch_assoc($queryKelas)) {
-                                                                echo '<option value="' . $kelas['id_kelas'] . '">' . $kelas['nama_kelas'] . '</option>';
-                                                            }
-                                                            ?>
-                                                    </select>
-                                                </div>
+                                            <div class="modal-body">                                                
                                                 <div class="mb-3">   
                                                     <label for="waliKelas">Wali Kelas :</label>                     
                                                     <select name="waliKelas" class="form-select" id="waliKelas" aria-label="Guru">>
                                                     <option selected><?=$waliKelas;?></option>
                                                         <?php
                                                         // Ambil data guru dari tabel guru
-                                                        $queryGuru = mysqli_query($conn, "SELECT id_guru, nama_lengkap FROM guru");
+                                                        $queryGuru = mysqli_query($conn, "SELECT id_guru, nama_lengkap FROM guru WHERE id_guru <> 404");
                                                         while ($guru = mysqli_fetch_assoc($queryGuru)) {
                                                             echo '<option value="' . $guru['id_guru'] . '">' . $guru['nama_lengkap'] . '</option>';
                                                         }
