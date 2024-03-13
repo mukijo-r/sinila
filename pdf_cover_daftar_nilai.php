@@ -225,6 +225,6 @@ $pdf->writeHTML($html, true, false, false, false, '');
 // ---------------------------------------------------------
 
 //Close and output PDF document
-$pdf->Output('laporan_umum.pdf', 'I');
+$pdf->Output('cover_daftar_nilai.pdf', 'I');
 
 ?>
