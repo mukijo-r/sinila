@@ -238,6 +238,13 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                 
                     while ($row = mysqli_fetch_array($nilaiHarian)) {
                         $mapel = $row['mapel'];
+
+                        if ($kelas == 1 | $kelas == 2 | $kelas == 3) {
+                            if ($mapel == 'Bahasa Using') {
+                                continue;
+                            }
+                        }
+
                         $LM1 = $row['LM1'];
                         $LM2 = $row['LM2'];
                         $LM3 = $row['LM3'];
