@@ -128,6 +128,7 @@ if (isset($_SESSION['kelas'])) {
                             <div class="collapse" id="collapseLayouts2" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="daftar_nilai.php">Daftar Nilai</a>
+                                    <a class="nav-link" href="legger.php">Legger</a>
                                     <a class="nav-link" href="rapot_sisipan.php">Rapot Sisipan</a>
                                     <!-- <a class="nav-link" href="rapot_semester.php">Rapot Semester</a> -->
                                     <a class="nav-link" href="rapot_akhir.php">Rapot Akhir</a>
@@ -235,7 +236,7 @@ if (isset($_SESSION['kelas'])) {
                         <br>
                         <h6>Atau, Tambahkan Tahun Ajar baru bila belum ada :<h6> 
                         <br>
-                        <input type="text" name="newTahunAjar" placeholder="Tahun/Tahun" class="form-control" required>
+                        <input type="text" name="newTahunAjar" placeholder="Tahun/Tahun" class="form-control">
                         <br>
                         <div class="text-center">
                         <button type="submit" class="btn btn-success" name="tambahTahunAjar">Tambah</button> 
