@@ -237,9 +237,16 @@ $queryRapotSisipan = "SELECT m.id_mapel, m.mapel,
                     
                     $i = 1;
                 
-                    while ($row = mysqli_fetch_array($query)) {
+                    while ($row = mysqli_fetch_array($query)) {                     
                         $idMapel = $row['id_mapel'];
                         $mapel = $row['mapel'];
+
+                        if ($kelas == 1 | $kelas == 2 | $kelas == 3) {
+                            if ($idMapel == 10) {
+                                continue;
+                            }
+                        }
+
                         $LM1_TP1 = $row['LM1_TP1'];
                         $LM1_TP2 = $row['LM1_TP2'];
                         $LM1_TP3 = $row['LM1_TP3'];
@@ -303,9 +310,7 @@ $queryRapotSisipan = "SELECT m.id_mapel, m.mapel,
                         $html  .= '<td>' . $STS . '</td>';
                         $html  .= '</tr>';
                     }
-                    $html  .= '</table>';
-                    $html  .= '</div>';
-                    $html  .= '</div>';
+                    $html  .= '</table><br>';
 
                     $html  .= '<div class="row">';
                     $html  .= '<table>';
@@ -432,7 +437,7 @@ $queryRapotSisipan = "SELECT m.id_mapel, m.mapel,
                     $html  .= '</table>';
                     $html  .= '</td>';
                     $html  .= '</tr>';
-                    $html  .= '</table><br><br><br>'; 
+                    $html  .= '</table><br><br>'; 
 
                     $html .= '<table style="font-family: helvetica; font-size: 13px;">';
                     $html .= '<tr>';
@@ -530,6 +535,6 @@ $pdf->writeHTML($html, true, false, false, false, '');
 // ---------------------------------------------------------
 
 //Close and output PDF document
-$pdf->Output('laporan_umum.pdf', 'I');
+$pdf->Output('rapot_sisipan.pdf', 'I');
 
 ?>
