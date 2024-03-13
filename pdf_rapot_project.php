@@ -372,6 +372,6 @@ $pdf->writeHTML($html, true, false, false, false, '');
 // ---------------------------------------------------------
 
 //Close and output PDF document
-$pdf->Output('laporan_akhir.pdf', 'I');
+$pdf->Output('rapot_project.pdf', 'I');
 
 ?>
