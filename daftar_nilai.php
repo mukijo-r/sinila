@@ -69,8 +69,12 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                                             <select class="form-select" name="mapel" id="mapel" aria-label="mapel" required>
                                                 <option value="">Pilih Mapel</option>
                                                 <?php
-                                                // Ambil data kelas dari tabel kelas
-                                                $queryMapel = mysqli_query($conn, "SELECT id_mapel, mapel FROM mapel");
+                                                if ($kelas == 1 | $kelas == 2 | $kelas == 3) {
+                                                    $queryMapel = mysqli_query($conn, "SELECT id_mapel, mapel FROM mapel WHERE mapel <> 'Bahasa Using'");
+                                                } else {
+                                                    $queryMapel = mysqli_query($conn, "SELECT id_mapel, mapel FROM mapel");
+                                                }
+
                                                 while ($rowMapel = mysqli_fetch_assoc($queryMapel)) {
                                                     echo '<option value="' . $rowMapel['id_mapel'] . '">' . $rowMapel['mapel'] . '</option>';
                                                 }
@@ -238,7 +242,6 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                     nuj.id_tahun_ajar = '$idTahunAjar'
                 GROUP BY s.nis, s.nisn, s.nama;
                 ";
-
                     $query = mysqli_query($conn, $quer);
                     $i = 1;
 
