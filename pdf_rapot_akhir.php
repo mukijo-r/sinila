@@ -27,13 +27,13 @@ class MYPDF extends TCPDF {
     
         // $this->SetFont('helvetica', '', 20);
         // $this->Cell(0, 0, 'SD KATOLIK BHAKTI', 0, false, 'C', 0, '', 0, false, 'M', 'M');
-        $this->Ln();  
-        $this->SetFont('helvetica', '', 12);
-        $this->Cell(0, 8, 'LAPORAN HASIL BELAJAR', 0, false, 'C', 0, '', 0, false, 'M', 'M');
-        $this->Ln(); 
-        $this->SetFont('helvetica', 'B', 12);
-        $this->Cell(0, 8, '(RAPOR)', 0, false, 'C', 0, '', 0, false, 'M', 'M');
-        $this->Ln();
+        // $this->Ln();  
+        // $this->SetFont('helvetica', '', 12);
+        // $this->Cell(0, 8, 'LAPORAN HASIL BELAJAR', 0, false, 'C', 0, '', 0, false, 'M', 'M');
+        // $this->Ln(); 
+        // $this->SetFont('helvetica', 'B', 12);
+        // $this->Cell(0, 8, '(RAPOR)', 0, false, 'C', 0, '', 0, false, 'M', 'M');
+        // $this->Ln();
     }    
 }
 
@@ -51,7 +51,7 @@ $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 $pdf->SetFont('times', '', 14);
 // set margins
-$pdf->SetMargins(10, 30, 0);
+// $pdf->SetMargins(10, 30, 0);
 
 // set image scale factor
 $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
@@ -130,14 +130,15 @@ $waliKelas = $rowGuru['nama_lengkap'];
 
 $pdf->SetFont('helvetica', '', 10);
 $txt = <<<EOD
-
+LAPORAN HASIL BELAJAR
+(RAPOR)
 EOD;
 $pdf->SetFont('times', '', 12);
-// $pdf->SetMargins(15, 15, 0);
+$pdf->SetMargins(15, 20, 0);
 $pdf->SetCellMargins(0, 0, 0, 0);
-// $pdf->SetCellPaddings(1, 1, 1, 1);
+$pdf->SetCellPaddings(1, 1, 1, 1);
 
-$html = '<div><table style="font-family: times; font-size: 12px;"><tr><td style="width: 60%">
+$html = '<div><br><table style="font-family: times; font-size: 12px;"><tr><td style="width: 60%">
 
     <table>
         <tr>
@@ -218,11 +219,19 @@ $html  .= '<th style="line-height: 1.5; width: 25%; text-align: center; vertical
 $html  .= '<th style="line-height: 1.5; width: 7%; text-align: center; font-weight: bold;">Nilai Akhir</th>';
 $html  .= '<th style="line-height: 1.5; width: 55%; text-align: center; vertical-align: middle; font-weight: bold;"><br>Capaian Kompetensi</th>';
 $html  .= '</tr>';
+$html  .= '</table>';
 
 $i = 1;
                 
 while ($row = mysqli_fetch_array($nilai)) {
     $mapel = $row['mapel'];
+
+    if ($kelas == 1 | $kelas == 2 | $kelas == 3) {
+        if ($mapel == 'Bahasa Using') {
+            continue;
+        }
+    }
+
     $LM1 = $row['LM1'];
     $LM2 = $row['LM2'];
     $LM3 = $row['LM3'];
@@ -241,17 +250,18 @@ while ($row = mysqli_fetch_array($nilai)) {
     $idMapel = $rowMapel['id_mapel'];
     }
 
-    $queryDeskripsi1 = "SELECT GROUP_CONCAT(a.deskripsi SEPARATOR ', ') AS combined_deskripsi1
-                        FROM
-                        `capaian_kompetensi` ck
-                        LEFT JOIN asesmen a ON ck.id_asesmen = a.id_asesmen  
-                        LEFT JOIN siswa s ON ck.id_siswa = s.id_siswa                                  
-                        WHERE
-                        a.semester = '$semester' AND
-                        ck.id_siswa = '$idSiswa' AND
-                        ck.capaian = '1' AND
-                        a.id_kelas = '$kelas' AND
-                        a.id_mapel = '$idMapel';";
+    $queryDeskripsi1 = "SELECT GROUP_CONCAT(ck.deskripsi SEPARATOR ', ') AS combined_deskripsi1
+    FROM
+    `asesmen_capkom` ack
+    LEFT JOIN capaian_kompetensi ck ON ack.id_ck = ck.id_ck  
+    LEFT JOIN siswa s ON ack.id_siswa = s.id_siswa                                  
+    WHERE
+    semester = '$semester' AND
+    ack.id_siswa = '$idSiswa' AND
+    ack.tampil = '1' AND
+    ack.capaian = '1' AND
+    ack.kelas = '$kelas' AND
+    ck.id_mapel = '$idMapel';";                        
 
     $result1 = mysqli_query($conn, $queryDeskripsi1);
 
@@ -260,52 +270,63 @@ while ($row = mysqli_fetch_array($nilai)) {
         $combinedDeskripsi1 = $row1['combined_deskripsi1'];
     }
 
-    $queryDeskripsi0 = "SELECT GROUP_CONCAT(a.deskripsi SEPARATOR ', ') AS combined_deskripsi0
+    $queryDeskripsi0 = "SELECT GROUP_CONCAT(ck.deskripsi SEPARATOR ', ') AS combined_deskripsi0
     FROM
-    `capaian_kompetensi` ck
-    LEFT JOIN asesmen a ON ck.id_asesmen = a.id_asesmen  
-    LEFT JOIN siswa s ON ck.id_siswa = s.id_siswa                                  
+    `asesmen_capkom` ack
+    LEFT JOIN capaian_kompetensi ck ON ack.id_ck = ck.id_ck  
+    LEFT JOIN siswa s ON ack.id_siswa = s.id_siswa                                  
     WHERE
-    a.semester = '$semester' AND
-    ck.id_siswa = '$idSiswa' AND
-    ck.capaian = '0' AND
-    a.id_kelas = '$kelas' AND
-    a.id_mapel = '$idMapel';";
+    semester = '$semester' AND
+    ack.id_siswa = '$idSiswa' AND
+    ack.tampil = '1' AND
+    ack.capaian = '0' AND
+    ack.kelas = '$kelas' AND
+    ck.id_mapel = '$idMapel';";
 
     $result0 = mysqli_query($conn, $queryDeskripsi0);
 
     if ($result0) {
         $row0 = mysqli_fetch_assoc($result0);
         $combinedDeskripsi0 = $row0['combined_deskripsi0'];
-    }                        
+    }                         
 
+    $html .= '<table nobr="true" border="1">';
     $html  .= '<tr nobr="true">';
-    $html  .= '<td rowspan="2">' . $i++ . '</td>';
-    $html  .= '<td rowspan="2" style="text-align: left;">' . $mapel . '</td>';
-    $html  .= '<td rowspan="2">' . $nilaiRapot . '</td>';
+    $html  .= '<td rowspan="2" style="line-height: 1.5; width: 5%; text-align: center; vertical-align: middle;">' . $i++ . '.</td>';
+    $html  .= '<td rowspan="2" style="line-height: 1.5; width: 25%; vertical-align: middle;"> ' . $mapel . '</td>';
+    $html  .= '<td rowspan="2" style="line-height: 1.5; width: 7%; text-align: center;">' . $nilaiRapot . '</td><td style="width: 55%;"> ';    
+
+    $html .= '<table><tr>';
     if ($combinedDeskripsi1 <> '') {
         if ($nilaiRapot > 74){
-            $html  .= '<td style="text-align: left;">'. $namaSiswa . ' mampu ' . $combinedDeskripsi1 .'.</td>';
+            $html  .= '<td style="line-height: 1.5; width: 98%; text-align: justify; vertical-align: middle;">'. $namaSiswa . ' mampu ' . $combinedDeskripsi1 .'. </td>';
         } else {
-            $html  .= '<td style="text-align: left;">'. $namaSiswa . ' membutuhkan bantuan dalam ' . $combinedDeskripsi1 .'.</td>';
+            $html  .= '<td style="line-height: 1.5; width: 98%; text-align: justify; vertical-align: middle;">'. $namaSiswa . ' membutuhkan bantuan dalam ' . $combinedDeskripsi1 .'. </td>';
         } 
     } else {
-        $html  .= '<td style="text-align: left;"></td>';
+        $html  .= '<td style="line-height: 1.5; width: 98%; text-align: justify; vertical-align: middle;"> </td>';
     }
-    $html  .= '</tr>';
-    $html  .= '<tr nobr="true">';
+    $html .= ' </tr></table>';
+
+    $html  .= '</td></tr>';
+
+    $html  .= '<tr><td> ';
+
+    $html .= '<table><tr>';
     if ($combinedDeskripsi0 <> '') {
-            $html  .= '<td style="text-align: left;">'. $namaSiswa . ' membutuhkan bantuan dalam ' . $combinedDeskripsi0 .'.</td>';
+            $html  .= '<td style="line-height: 1.5; width: 98%; text-align: justify; vertical-align: middle;">'. $namaSiswa . ' membutuhkan bantuan dalam ' . $combinedDeskripsi0 .'.</td>';
     } else {
-        $html  .= '<td style="text-align: left;"></td>';
+        $html  .= '<td style="line-height: 1.5; width: 98%; text-align: justify; vertical-align: middle;"></td>';
     }
-    $html  .= '</tr>';
+    $html .= ' </tr></table>';
+
+    $html  .= '</td></tr>';
+    $html .= '</table>';
 }
 
-$html  .= '</table><br><br>';
-
-$html  .= '<table border="1" style=".. font-family: times; font-size: 12px">';
-$html  .= '<tr>';
+$html  .= '<br><br>';
+$html  .= '<table border="1" nobr="true" style="font-family: times; font-size: 12px">';
+$html  .= '<tr nobr="true">';
 $html  .= '<th style="line-height: 1.5; width: 5%; text-align: center; vertical-align: middle; font-weight: bold;"><br>No.</th>';
 $html  .= '<th style="line-height: 1.5; width: 25%; text-align: center; vertical-align: middle; font-weight: bold;"><br>Ekstrakurikuler</th>';
 $html  .= '<th style="line-height: 1.5; width: 62%; text-align: center; vertical-align: middle; font-weight: bold;"><br>Keterangan</th>';
@@ -324,25 +345,23 @@ $queryCatatanEkstra = "SELECT
     while ($rowCatatanEkstra = mysqli_fetch_array($catatanSiswa)) {
     $namaEkstra = $rowCatatanEkstra['nama_ek'];
     $catatan = $rowCatatanEkstra['catatan'];
-    $html  .= '<tr>';
-    $html  .= '<td style="line-height: 1.5; width: 5%; text-align: center; vertical-align: middle;">' . $i . '</td>';
+    $html  .= '<tr nobr="true">';
+    $html  .= '<td style="line-height: 1.5; width: 5%; text-align: center; vertical-align: middle;">' . $i++ . '</td>';
     $html  .= '<td style="line-height: 1.5; width: 25%; text-align: center; vertical-align: middle;">' . $namaEkstra .'</td>';
     $html  .= '<td style="line-height: 1.5; width: 62%; text-align: center; vertical-align: middle;">' . $catatan . '</td>';
     $html  .= '</tr>';
     }
 
-
-
 $html  .= '</table><br><br>';
 
-$html .= '<table style="font-family: times; font-size: 13px; border-collapse: separate;">';
-$html  .= '<tr>';
+$html .= '<table nobr="true" style="font-family: times; font-size: 13px; border-collapse: separate;">';
+$html  .= '<tr nobr="true">';
 $html .= '<td style="width: 5%"></td>';
 $html .= '<td style="width: 47%">';
 
-$html .= '<table border="1" style="text-align: left; font-family: helvetica; font-size: 11px; border-collapse: separate;">';
+$html .= '<table nobr="true" border="1" style="text-align: left; font-family: helvetica; font-size: 11px; border-collapse: separate;">';
 
-$html  .= '<tr>';
+$html  .= '<tr nobr="true">';
 $html  .= '<th colspan="3" style="text-align: center; line-height: 1.5; font-weight: bold; width: 80%">Ketidakhadiran</th>';
 $html  .= '</tr>';
 
@@ -360,7 +379,7 @@ $absensiSiswa = mysqli_query($conn, $queryAbsensi);
 while ($rowAbsensi = mysqli_fetch_array($absensiSiswa)) {
     $kategoriAbsen = $rowAbsensi['absen'];
     $jumlahAbsen = $rowAbsensi['count'];
-    $html .= '<tr>';
+    $html .= '<tr nobr="true">';
     $html .= '<td style="width: 51%; border-left: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; padding: 8px; padding-left: 12px;">  ' . $kategoriAbsen . '</td>';
     $html .= '<td style="width: 9%; text-align: left; padding: 8px; border-top: 1px solid black; border-bottom: 1px solid black; border-left: none; border-right: none;">:   ' . $jumlahAbsen . '</td>';
     $html .= '<td style="width: 20%; border-top: 1px solid black; border-bottom: 1px solid black; border-right: 1px solid black; padding: 8px;">hari</td>';
@@ -373,14 +392,14 @@ $html  .= '</table>';
 $html .='</td>';
 $html .= '<td style="width: 40%">';
 
-if ($semester == 'Genap'){
+if ($semester == 'Genap' && $kelas <> 6){
     //Naik tidak naik
-    $html .= '<table style="border-collapse: collapse;">'; 
-    $html .= '<tr>';
+    $html .= '<table  nobr="true" style="border-collapse: collapse;">'; 
+    $html .= '<tr nobr="true">';
     $html .= '<td style="line-height: 1.5; font-weight: normal; width: 90%; border-top: 0.75px solid black; border-right: 0.75px solid black; border-left: 0.75px solid black">  Berdasarkan pencapaian seluruh kompetensi, ';                    
     $html .= '</td>';                    
     $html .= '</tr>';
-    $html .= '<tr>';
+    $html .= '<tr nobr="true">';
     $html .= '<td style="line-height: 1.5; font-weight: normal; width: 90%; border-right: 0.75px solid black; border-left: 0.75px solid black">  peserta didik dinyatakan :';                    
     $html .= '</td>';                    
     $html .= '</tr>';
@@ -412,22 +431,22 @@ if ($semester == 'Genap'){
     $html .= '</tr>';
     $html .= '</table>';    
 } elseif ($semester == 'Genap' && $kelas == 6) {
-    //Naik tidak naik
-    $html .= '<table style="border-collapse: collapse;">'; 
-    $html .= '<tr>';
+    //Lulus tidak Lulus
+    $html .= '<table nobr="true" style="border-collapse: collapse;">'; 
+    $html .= '<tr nobr="true">';
     $html .= '<td style="line-height: 1.5; font-weight: normal; width: 90%; border-top: 0.75px solid black; border-right: 0.75px solid black; border-left: 0.75px solid black">  Berdasarkan pencapaian seluruh kompetensi, ';                    
     $html .= '</td>';                    
     $html .= '</tr>';
-    $html .= '<tr>';
+    $html .= '<tr nobr="true">';
     $html .= '<td style="line-height: 1.5; font-weight: normal; width: 90%; border-right: 0.75px solid black; border-left: 0.75px solid black">  peserta didik dinyatakan :';                    
     $html .= '</td>';                    
     $html .= '</tr>';
-    $html .= '<tr>';
+    $html .= '<tr nobr="true">';
 
     $queryKenaikan = "SELECT `status`
     FROM kenaikan_kelas                 
     WHERE 
-    `id_tahun_Ajar` = '$idTahunAjar' AND 
+    `id_tahun_ajar` = '$idTahunAjar' AND 
     `semester`='$semester' AND 
     `id_siswa`='$idSiswa'
     ;";
@@ -436,10 +455,10 @@ if ($semester == 'Genap'){
     while ($rowKenaikan = mysqli_fetch_array($kenaikanSiswa)){
         $kenaikan = $rowKenaikan['status'];                        
 
-        if ($kenaikan == 'Naik'){
-            $tampilKenaikan = 'Naik ke kelas ' . ($kelas + 1);
-        } elseif ($kenaikan == 'Tidak Naik'){
-            $tampilKenaikan = 'Tidak Naik ke kelas ' . ($kelas + 1);
+        if ($kenaikan == 'Lulus'){
+            $tampilKenaikan = 'Lulus ';
+        } elseif ($kenaikan == 'Tidak Lulus'){
+            $tampilKenaikan = 'Tidak Lulus';
         } else {
             $tampilKenaikan = 'status belum diinput';
         } 
@@ -455,14 +474,16 @@ $html .='</td>';
 $html  .= '</tr>';
 $html  .= '</table><br><br>';
 
-$html .= '<table style="font-family: helvetica; font-size: 13px;">';
-$html .= '<tr>';
+$html .= '<table nobr="true"><tr nobr="true"><td>';
+
+$html .= '<table nobr="true" style="font-family: helvetica; font-size: 13px;">';
+$html .= '<tr nobr="true">';
 $html .= '<td style="width: 5%"></td>';
 $tahun = date("Y"); 
 $html .= '<td style="width: 55%">Ditandatangani tgl, ......................' . $tahun . '</td>';
 $html .= '<td style="width: 35%">Diberikan di Rogojampi</td>';
 $html .= '</tr>';
-$html .= '<tr>';
+$html .= '<tr nobr="true">';
 $html .= '<td style="width: 5%"></td>';
 $html .= '<td style="width: 55%">Orang Tua / Wali Siswa</td>';
 
@@ -489,55 +510,57 @@ foreach ($bulan as $english => $indonesian) {
 // Tambahkan teks ke dokumen
 $html .= '<td style="width: 35%">Tanggal ' . $tanggal . '</td>';
 $html .= '</tr>';
-$html .= '<tr>';
+$html .= '<tr nobr="true">';
 $html .= '<td style="width: 5%"></td>';
 $html .= '<td style="width: 55%"></td>';
 $html .= '<td style="width: 35%">Wali Kelas </td>';
 $html .= '</tr>';
-$html .= '<tr>';
+$html .= '<tr nobr="true">';
 $html .= '<td style="line-height: 4;width: 5%"></td>';
 $html .= '<td style="line-height: 4;width: 55%"></td>';
 $html .= '<td style="line-height: 4;width: 35%"></td>';
 $html .= '</tr>';
-$html .= '<tr>';
+$html .= '<tr nobr="true">';
 $html .= '<td style="width: 5%"></td>';
 $html .= '<td style="text-decoration: underline; width: 55%">........................................</td>';
 $html .= '<td style="font-weight: bold; text-decoration: underline; width: 35%">' . $waliKelas . '</td>';
 $html .= '</tr>';
-$html .= '<tr>';
+$html .= '<tr nobr="true">';
 $html .= '<td style="width: 5%"></td>';
 $html .= '<td style="width: 55%"></td>';
 $html .= '<td style="width: 35%"> NIY. ' . $nipWaliKelas . '</td>';
 $html .= '</tr>';
 $html .= '</table><br>';
 
-$html .= '<table style="text-align: center; font-family: helvetica; font-size: 13px;">';                   
-$html .= '<tr>';
+$html .= '<table nobr="true" style="text-align: center; font-family: helvetica; font-size: 13px;">';                   
+$html .= '<tr nobr="true">';
 $html .= '<td style="width: 20%"></td>';
 $html .= '<td style="width: 55%">Mengetahui</td>';
 $html .= '<td style="width: 20%"></td>';
 $html .= '</tr>';
-$html .= '<tr>';
+$html .= '<tr nobr="true">';
 $html .= '<td style="width: 20%"></td>';
 $html .= '<td style="width: 55%">Kepala Sekolah</td>';
 $html .= '<td style="width: 20%"></td>';
 $html .= '</tr>';
-$html .= '<tr>';
+$html .= '<tr nobr="true">';
 $html .= '<td style="line-height: 4;width: 20%"></td>';
 $html .= '<td style="line-height: 4;width: 55%"></td>';
 $html .= '<td style="line-height: 4;width: 20%"></td>';
 $html .= '</tr>';
-$html .= '<tr>';
+$html .= '<tr nobr="true">';
 $html .= '<td style="width: 20%"></td>';
 $html .= '<td style="font-weight: bold; text-decoration: underline; width: 55%">' . $kepsek . '</td>';
 $html .= '<td style="width: 20%"></td>';
 $html .= '</tr>';
-$html .= '<tr>';
+$html .= '<tr nobr="true">';
 $html .= '<td style="width: 20%"></td>';
 $html .= '<td style="width: 55%">' . $nipKepsek . '</td>';
 $html .= '<td style="width: 20%"></td>';
 $html .= '</tr>';
-$html .= '</table><br>';                    
+$html .= '</table><br>'; 
+
+$html .= '</td></tr></table><br>';  
                     
 // print a block of text using Write()
 $pdf->Write(0, $txt, '', 0, 'C', true, 0, false, false, 0);
@@ -546,6 +569,6 @@ $pdf->writeHTML($html, true, false, false, false, '');
 // ---------------------------------------------------------
 
 //Close and output PDF document
-$pdf->Output('laporan_akhir.pdf', 'I');
+$pdf->Output('rapot_akhir.pdf', 'I');
 
 ?>
