@@ -43,6 +43,11 @@ $namaUser = $rowUser['nama_lengkap'];
                                         Input Nilai
                                     </button>
                                 </div>
+                                <div class="col-md-2">
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambahNilaiUlanganRemed">
+                                        Remedial
+                                    </button>
+                                </div>
                                 <div class="col-md-8">
                                     <?php
                                     if (isset($_SESSION['flash_message'])) {
@@ -331,7 +336,7 @@ $namaUser = $rowUser['nama_lengkap'];
                                     
                                     // Input field for each student's grade
                                     echo '<div class="col-md-2">';
-                                    echo '<input type="number" name="nilai_' . $rowSiswa['id_siswa'] . '" class="form-control" required max="99999">';
+                                    echo '<input type="number" name="nilai_' . $rowSiswa['id_siswa'] . '" class="form-control" required max="100">';
                                     echo '</div>';
                                     
                                     echo '</div>';
@@ -347,6 +352,93 @@ $namaUser = $rowUser['nama_lengkap'];
                         <div class="text-center">
                             <input type="hidden" name="namaUser" value="<?=$namaUser;?>">
                             <button type="submit" class="btn btn-primary" name="tambahNilaiUlangan">Simpan</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Perbaiki Nilai Siswa -->
+    <div class="modal fade bd-example-modal-lg" id="modalTambahNilaiUlanganRemed" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Perbaiki Nilai Ulangan Siswa kelas <?=$kelas;?></h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <!-- Modal Body -->
+                <form method="post">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="semester">Semester :</label><br>
+                                    <select class="form-select" name="semester" id="semester" aria-label="Semester" required>
+                                        <option value="">Pilih semester</option>
+                                        <option value="Ganjil">Ganjil</option>
+                                        <option value="Genap">Genap</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="mapel">Mata Pelajaran :</label>
+                                    <select class="form-select" name="mapel" id="mapel" aria-label="mapel" required>
+                                        <option value="">Pilih Mapel</option>
+                                        <?php
+                                        // Ambil data kelas dari tabel kelas
+                                        $queryMapel = mysqli_query($conn, "SELECT id_mapel, mapel FROM mapel");
+                                        while ($rowMapel = mysqli_fetch_assoc($queryMapel)) {
+                                            echo '<option value="' . $rowMapel['id_mapel'] . '">' . $rowMapel['mapel'] . '</option>';
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="lingkupMateri">Lingkup Materi :</label>
+                                    <select class="form-select" name="lingkupMateri" id="lingkupMateri" aria-label="lingkupMateri" required>
+                                        <option value="">Pilih LM</option>
+                                        <option value="LM 1">LM 1</option>
+                                        <option value="LM 2">LM 2</option>
+                                        <option value="LM 3">LM 3</option>
+                                        <option value="LM 4">LM 4</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="siswa">Siswa :</label>
+                                    <select class="form-select" name="siswa" id="siswa" aria-label="siswa" required>
+                                        <option value="">Pilih Siswa</option>
+                                        <?php
+                                        // Ambil data kelas dari tabel kelas
+                                        $querySiswa = mysqli_query($conn, "SELECT id_siswa, nama FROM siswa WHERE id_kelas = $kelas");
+                                        while ($rowSiswa = mysqli_fetch_assoc($querySiswa)) {
+                                            echo '<option value="' . $rowSiswa['id_siswa'] . '">' . $rowSiswa['nama'] . '</option>';
+                                        }
+                                        ?>
+                                    </select>
+                                </div>                              
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type="number" name="nilai" class="form-control" required max="100">
+                            </div>
+                        </div><br>
+                        <div class="row">
+                            <div class="text-center">
+                                <input type="hidden" name="namaUser" value="<?=$namaUser;?>">
+                                <button type="submit" class="btn btn-primary" name="tambahNilaiUlanganRemed">Simpan</button>
+                            </div>
                         </div>
                     </div>
                 </form>
