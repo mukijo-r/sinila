@@ -273,7 +273,7 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                         $idMapel = $rowMapel['id_mapel'];
                         }
 
-                        $queryDeskripsi1 = "SELECT GROUP_CONCAT(ck.deskripsi SEPARATOR ', ') AS combined_deskripsi1
+                        $queryDeskripsi1 = "SELECT GROUP_CONCAT(ck.deskripsi SEPARATOR '; ') AS combined_deskripsi1
                         FROM
                         `asesmen_capkom` ack
                         LEFT JOIN capaian_kompetensi ck ON ack.id_ck = ck.id_ck  
@@ -293,7 +293,7 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                             $combinedDeskripsi1 = $row1['combined_deskripsi1'];
                         }
 
-                        $queryDeskripsi0 = "SELECT GROUP_CONCAT(ck.deskripsi SEPARATOR ', ') AS combined_deskripsi0
+                        $queryDeskripsi0 = "SELECT GROUP_CONCAT(ck.deskripsi SEPARATOR '; ') AS combined_deskripsi0
                         FROM
                         `asesmen_capkom` ack
                         LEFT JOIN capaian_kompetensi ck ON ack.id_ck = ck.id_ck  
