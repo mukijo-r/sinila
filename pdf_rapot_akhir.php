@@ -61,6 +61,7 @@ $pdf->AddPage();
 
 $idTahunAjar = $_POST['idTahunAjar'];
 $semester = $_POST['semester'];
+$tanggalCetak = $_POST['tanggalCetak'];
 
 if ($semester == 'Ganjil') {
     $semCap = 'GANJIL';
@@ -355,36 +356,70 @@ $queryCatatanEkstra = "SELECT
 $html  .= '</table><br><br>';
 
 $html .= '<table nobr="true" style="font-family: times; font-size: 13px; border-collapse: separate;">';
-$html  .= '<tr nobr="true">';
+$html .= '<tr nobr="true">';
 $html .= '<td style="width: 5%"></td>';
 $html .= '<td style="width: 47%">';
 
 $html .= '<table nobr="true" border="1" style="text-align: left; font-family: helvetica; font-size: 11px; border-collapse: separate;">';
 
-$html  .= '<tr nobr="true">';
-$html  .= '<th colspan="3" style="text-align: center; line-height: 1.5; font-weight: bold; width: 80%">Ketidakhadiran</th>';
-$html  .= '</tr>';
+$html .= '<tr nobr="true">';
+$html .= '<th colspan="3" style="text-align: center; line-height: 1.5; font-weight: bold; width: 80%">Ketidakhadiran</th>';
+$html .= '</tr>';
 
-$queryAbsensi = "SELECT absen, COUNT(absen) AS count
-FROM absensi                    
-WHERE 
-`id_tahun_Ajar` = '$idTahunAjar' AND 
-`semester`='$semester' AND 
-`id_siswa`='$idSiswa'
-GROUP BY absen 
-;";
+$queryAbsensi = "SELECT 
+                SUM(CASE WHEN absen = 'Sakit' THEN 1 ELSE 0 END) AS sakit,
+                SUM(CASE WHEN absen = 'Ijin' THEN 1 ELSE 0 END) AS ijin,
+                SUM(CASE WHEN absen = 'Alpa' THEN 1 ELSE 0 END) AS alpa
+                FROM absensi                     
+                WHERE 
+                `id_tahun_Ajar` = '$idTahunAjar' AND 
+                `semester`='$semester' AND 
+                `id_siswa`='$idSiswa';"; 
 
-$i = 1;
 $absensiSiswa = mysqli_query($conn, $queryAbsensi);
 while ($rowAbsensi = mysqli_fetch_array($absensiSiswa)) {
-    $kategoriAbsen = $rowAbsensi['absen'];
-    $jumlahAbsen = $rowAbsensi['count'];
-    $html .= '<tr nobr="true">';
-    $html .= '<td style="width: 51%; border-left: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; padding: 8px; padding-left: 12px;">  ' . $kategoriAbsen . '</td>';
-    $html .= '<td style="width: 9%; text-align: left; padding: 8px; border-top: 1px solid black; border-bottom: 1px solid black; border-left: none; border-right: none;">:   ' . $jumlahAbsen . '</td>';
-    $html .= '<td style="width: 20%; border-top: 1px solid black; border-bottom: 1px solid black; border-right: 1px solid black; padding: 8px;">hari</td>';
-    $html .= '</tr>';
+    $sakit = $rowAbsensi['sakit'];
+    $ijin = $rowAbsensi['ijin'];
+    $alpa = $rowAbsensi['alpa'];
 }
+
+$html  .= '<tr>';
+$html  .= '<td style="width: 51%; border-left: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; padding: 8px; padding-left: 12px;"> Sakit </td>';
+$html  .= '<td style="width: 9%; text-align: left; padding: 8px; border-top: 1px solid black; border-bottom: 1px solid black; border-left: none; border-right: none;">:   ' . $sakit  . ' </td>';
+$html  .= '<td style="width: 20%; border-top: 1px solid black; border-bottom: 1px solid black; border-right: 1px solid black; padding: 8px;">hari</td>';   
+$html  .= '</tr>';
+$html  .= '<tr>';
+$html  .= '<td style="width: 51%; border-left: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; padding: 8px; padding-left: 12px;"> Ijin </td>';
+$html  .= '<td style="width: 9%; text-align: left; padding: 8px; border-top: 1px solid black; border-bottom: 1px solid black; border-left: none; border-right: none;">:   ' . $ijin  . ' </td>';
+$html  .= '<td style="width: 20%; border-top: 1px solid black; border-bottom: 1px solid black; border-right: 1px solid black; padding: 8px;">hari</td>';   
+$html  .= '</tr>';
+$html  .= '<tr>';
+$html  .= '<td style="width: 51%; border-left: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; padding: 8px; padding-left: 12px;"> Alpa </td>';
+$html  .= '<td style="width: 9%; text-align: left; padding: 8px; border-top: 1px solid black; border-bottom: 1px solid black; border-left: none; border-right: none;">:   ' . $alpa  . ' </td>';
+$html  .= '<td style="width: 20%; border-top: 1px solid black; border-bottom: 1px solid black; border-right: 1px solid black; padding: 8px;">hari</td>';   
+$html  .= '</tr>';
+
+
+// $queryAbsensi = "SELECT absen, COUNT(absen) AS count
+// FROM absensi                    
+// WHERE 
+// `id_tahun_Ajar` = '$idTahunAjar' AND 
+// `semester`='$semester' AND 
+// `id_siswa`='$idSiswa'
+// GROUP BY absen 
+// ;";
+
+// $i = 1;
+// $absensiSiswa = mysqli_query($conn, $queryAbsensi);
+// while ($rowAbsensi = mysqli_fetch_array($absensiSiswa)) {
+//     $kategoriAbsen = $rowAbsensi['absen'];
+//     $jumlahAbsen = $rowAbsensi['count'];
+//     $html .= '<tr nobr="true">';
+//     $html .= '<td style="width: 51%; border-left: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; padding: 8px; padding-left: 12px;">  ' . $kategoriAbsen . '</td>';
+//     $html .= '<td style="width: 9%; text-align: left; padding: 8px; border-top: 1px solid black; border-bottom: 1px solid black; border-left: none; border-right: none;">:   ' . $jumlahAbsen . '</td>';
+//     $html .= '<td style="width: 20%; border-top: 1px solid black; border-bottom: 1px solid black; border-right: 1px solid black; padding: 8px;">hari</td>';
+//     $html .= '</tr>';
+// }
 
 $html  .= '</table>';
 
@@ -434,11 +469,11 @@ if ($semester == 'Genap' && $kelas <> 6){
     //Lulus tidak Lulus
     $html .= '<table nobr="true" style="border-collapse: collapse;">'; 
     $html .= '<tr nobr="true">';
-    $html .= '<td style="line-height: 1.5; font-weight: normal; width: 90%; border-top: 0.75px solid black; border-right: 0.75px solid black; border-left: 0.75px solid black">  Berdasarkan pencapaian seluruh kompetensi, ';                    
+    $html .= '<td style="line-height: 1.5; font-weight: normal; width: 100%; border-top: 0.75px solid black; border-right: 0.75px solid black; border-left: 0.75px solid black">  Berdasarkan pencapaian seluruh kompetensi, ';                    
     $html .= '</td>';                    
     $html .= '</tr>';
     $html .= '<tr nobr="true">';
-    $html .= '<td style="line-height: 1.5; font-weight: normal; width: 90%; border-right: 0.75px solid black; border-left: 0.75px solid black">  peserta didik dinyatakan :';                    
+    $html .= '<td style="line-height: 1.5; font-weight: normal; width: 100%; border-right: 0.75px solid black; border-left: 0.75px solid black">  peserta didik dinyatakan :';                    
     $html .= '</td>';                    
     $html .= '</tr>';
     $html .= '<tr nobr="true">';
@@ -463,7 +498,7 @@ if ($semester == 'Genap' && $kelas <> 6){
             $tampilKenaikan = 'status belum diinput';
         } 
 
-        $html .= '<td style="text-align: center; line-height: 3; font-style: italic; width: 90%; border-bottom: 0.75px solid black; border-left: 0.75px solid black; border-right: 0.75px solid black;">' . $tampilKenaikan . '</td>';
+        $html .= '<td style="text-align: center; line-height: 3; font-style: italic; width: 100%; border-bottom: 0.75px solid black; border-left: 0.75px solid black; border-right: 0.75px solid black;">' . $tampilKenaikan . '</td>';
     }
 
     $html .= '</tr>';
@@ -487,7 +522,7 @@ $html .= '<tr nobr="true">';
 $html .= '<td style="width: 5%"></td>';
 $html .= '<td style="width: 55%">Orang Tua / Wali Siswa</td>';
 
-$tanggal = date('d F Y');
+$tanggal = date("d F Y", strtotime($tanggalCetak));
 $bulan = [
     'January' => 'Januari',
     'February' => 'Februari',

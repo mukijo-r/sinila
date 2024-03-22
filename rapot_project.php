@@ -82,6 +82,15 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="col">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <label class="input-group-text" for="siswa">Tanggal Cetak</label>
+                                            </div>
+                                            <?php $tanggalSaatIni = date('Y-m-d');?>    
+                                            <input type="date" name="tanggalCetak" value="<?=$tanggalSaatIni;?>" class="form-control"> 
+                                        </div>
+                                    </div>
                                     <div class="col">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         <button type="submit" class="btn btn-primary" name="btnTampilLapProject" id="btnTampilLapProject">
                                             Tampilkan
@@ -107,6 +116,7 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                     if (isset($_POST['btnTampilLapProject'])) {
                         $idProject = $_POST['project'];
                         $idSiswa = $_POST['siswa'];
+                        $tanggalCetak = $_POST['tanggalCetak'];
                 
                         $querySiswa = mysqli_query($conn, "SELECT nama, nis, nisn FROM siswa WHERE id_siswa='$idSiswa'");
                         $rowSiswa = mysqli_fetch_assoc($querySiswa); 
@@ -222,12 +232,12 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                         </div><br><br>              
                         <?php
 
-                        tabelNilaiProject($idTahunAjar, $kelas, $fase, $idSiswa, $idProject, $nomorUrut);
+                        tabelNilaiProject($idTahunAjar, $kelas, $fase, $idSiswa, $idProject, $nomorUrut, $tanggalCetak);
                     }               
                     ?>
                 </div>
                 <?php
-                function tabelNilaiProject($idTahunAjar, $kelas, $fase, $idSiswa, $idProject, $nomorUrut) {
+                function tabelNilaiProject($idTahunAjar, $kelas, $fase, $idSiswa, $idProject, $nomorUrut, $tanggalCetak) {
                     $conn = mysqli_connect("localhost:3306", "root", "", "sdk");
 
                     $queryNamaProject = mysqli_query($conn, "SELECT `nama_project`,`deskripsi_project` 
@@ -323,7 +333,8 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                     echo '<input type="hidden" name="kelas" value="' . $kelas . '">';
                     echo '<input type="hidden" name="idSiswa" value="' . $idSiswa . '">';
                     echo '<input type="hidden" name="nomorUrut" value="' . $nomorUrut . '">'; 
-                    echo '<input type="hidden" name="idProject" value="' . $idProject . '">';                     
+                    echo '<input type="hidden" name="idProject" value="' . $idProject . '">';
+                    echo '<input type="hidden" name="tanggalCetak" value="' . $tanggalCetak . '">';                     
                     echo '<button type="submit" class="btn btn-primary" name="btnCetakRapotProject" id="btnCetakRapotProject">Cetak</button>';
                     echo '</form>';
                     echo '</div><br>';

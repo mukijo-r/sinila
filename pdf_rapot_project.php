@@ -80,6 +80,7 @@ if ($kelas == 1){
 $idSiswa = $_POST['idSiswa'];
 $nomorUrut = $_POST['nomorUrut'];
 $idProject = $_POST['idProject'];
+$tanggalCetak = $_POST['tanggalCetak'];
 
 $querySiswa = mysqli_query($conn, "SELECT nama, nis, nisn FROM siswa WHERE id_siswa='$idSiswa'");
 $rowSiswa = mysqli_fetch_assoc($querySiswa); 
@@ -291,7 +292,7 @@ $html .= '<tr>';
 $html .= '<td style="width: 5%"></td>';
 $html .= '<td style="width: 55%">Orang Tua / Wali Siswa</td>';
 
-$tanggal = date('d F Y');
+$tanggal = date("d F Y", strtotime($tanggalCetak));
 $bulan = [
     'January' => 'Januari',
     'February' => 'Februari',

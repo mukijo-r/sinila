@@ -78,6 +78,15 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="col">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <label class="input-group-text" for="siswa">Tanggal Cetak</label>
+                                            </div>
+                                            <?php $tanggalSaatIni = date('Y-m-d');?>    
+                                            <input type="date" name="tanggalCetak" value="<?=$tanggalSaatIni;?>" class="form-control"> 
+                                        </div>
+                                    </div>
                                     <div class="col">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         <button type="submit" class="btn btn-primary" name="btnTampilLapSiswa" id="btnTampilLapSiswa">
                                             Tampilkan
@@ -139,6 +148,7 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                     if (isset($_POST['btnTampilLapSiswa'])) {
                         $semester = $_POST['semester'];
                         $idSiswa = $_POST['siswa'];
+                        $tanggalCetak = $_POST['tanggalCetak'];
                         // $tplm1 = $_POST['tplm1'];
                         // $tplm2 = $_POST['tplm2'];
                 
@@ -226,12 +236,12 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                         </div><br><br>              
                         <?php
 
-                        tabelDaftarNilai($idTahunAjar, $semester, $kelas, $idSiswa, $nomorUrut, $tplm1, $tplm2);
+                        tabelDaftarNilai($idTahunAjar, $semester, $kelas, $idSiswa, $nomorUrut, $tanggalCetak);
                     }               
                     ?>
                 </div>
                 <?php
-                function tabelDaftarNilai($idTahunAjar, $semester, $kelas, $idSiswa, $nomorUrut, $tplm1, $tplm2) {
+                function tabelDaftarNilai($idTahunAjar, $semester, $kelas, $idSiswa, $nomorUrut, $tanggalCetak) {
                     $conn = mysqli_connect("localhost:3306", "root", "", "sdk");
 
                     $queryNilaiHarian = "SELECT m.id_mapel, m.mapel,
@@ -458,27 +468,38 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                     echo '<th colspan="3">Absensi Siswa</th>';
                     echo '</tr>';
 
-                    $queryAbsensi = "SELECT absen, COUNT(absen) AS count
-                    FROM absensi                    
+                    $queryAbsensi = "SELECT 
+                    SUM(CASE WHEN absen = 'Sakit' THEN 1 ELSE 0 END) AS sakit,
+                    SUM(CASE WHEN absen = 'Ijin' THEN 1 ELSE 0 END) AS ijin,
+                    SUM(CASE WHEN absen = 'Alpa' THEN 1 ELSE 0 END) AS alpa
+                    FROM absensi                     
                     WHERE 
                     `id_tahun_Ajar` = '$idTahunAjar' AND 
                     `semester`='$semester' AND 
-                    `id_siswa`='$idSiswa'
-                    GROUP BY absen 
-                    ;";
+                    `id_siswa`='$idSiswa';"; 
 
-                    $i = 1;
                     $absensiSiswa = mysqli_query($conn, $queryAbsensi);
                     while ($rowAbsensi = mysqli_fetch_array($absensiSiswa)) {
-                        $kategoriAbsen = $rowAbsensi['absen'];
-                        $jumlahAbsen = $rowAbsensi['count'];
-                        echo '<tr>';
-                        echo '<td style="width: 10%">' . $i++ . '</td>';
-                        echo '<td style="width: 25%; text-align: left;">' . $kategoriAbsen . '</td>';
-                        echo '<td style="width: 15%">' . $jumlahAbsen  . '</td>';   
-                        echo '</tr>';
-
+                        $sakit = $rowAbsensi['sakit'];
+                        $ijin = $rowAbsensi['ijin'];
+                        $alpa = $rowAbsensi['alpa'];
                     }
+
+                    echo '<tr>';
+                    echo '<td style="width: 10%"> 1 </td>';
+                    echo '<td style="width: 25%; text-align: left;"> Sakit </td>';
+                    echo '<td style="width: 15%">' . $sakit  . '</td>';   
+                    echo '</tr>';
+                    echo '<tr>';
+                    echo '<td style="width: 10%"> 2 </td>';
+                    echo '<td style="width: 25%; text-align: left;"> Ijin </td>';
+                    echo '<td style="width: 15%">' . $ijin  . '</td>';   
+                    echo '</tr>';
+                    echo '<tr>';
+                    echo '<td style="width: 10%"> 3 </td>';
+                    echo '<td style="width: 25%; text-align: left;"> Alpa </td>';
+                    echo '<td style="width: 15%">' . $alpa  . '</td>';   
+                    echo '</tr>';
 
                     echo '</table>';
                     echo '</div><br><br><br>';
@@ -534,9 +555,8 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                     echo '<input type="hidden" name="semester" value="' . $semester . '">';
                     echo '<input type="hidden" name="kelas" value="' . $kelas . '">';
                     echo '<input type="hidden" name="idSiswa" value="' . $idSiswa . '">'; 
-                    echo '<input type="hidden" name="tplm1" value="' . $tplm1 . '">'; 
-                    echo '<input type="hidden" name="tplm2" value="' . $tplm2 . '">';
-                    echo '<input type="hidden" name="nomorUrut" value="' . $nomorUrut . '">';                       
+                    echo '<input type="hidden" name="nomorUrut" value="' . $nomorUrut . '">';
+                    echo '<input type="hidden" name="tanggalCetak" value="' . $tanggalCetak . '">';                      
                     echo '<button type="submit" class="btn btn-primary" name="btnCetakRapotSisipan" id="btnCetakRapotSisipan">Cetak</button>';
                     echo '</form>';
                     echo '</div><br>';

@@ -63,7 +63,7 @@ $pdf->AddPage();
 
 $idTahunAjar = $_POST['idTahunAjar'];
 $semester = $_POST['semester'];
-
+$tanggalCetak = $_POST['tanggalCetak'];
 
 if ($semester == 'Ganjil') {
     $semCap = 'GANJIL';
@@ -97,9 +97,6 @@ $rowSiswa = mysqli_fetch_assoc($querySiswa);
 $namaSiswa = $rowSiswa['nama'];
 $nis = $rowSiswa['nis'];
 $nisn = $rowSiswa['nisn'];
-
-$tplm1 = $_POST['tplm1'];
-$tplm2 = $_POST['tplm2'];
 
 $queryTahunAjar = mysqli_query($conn, "SELECT tahun_ajar FROM tahun_ajar WHERE id_tahun_ajar = '$idTahunAjar'");
 $rowTahunAjar = mysqli_fetch_array($queryTahunAjar);
@@ -271,28 +268,12 @@ $queryRapotSisipan = "SELECT m.id_mapel, m.mapel,
                         $STS = $row['STS'];
                         $SAS = $row['SAS'];
                         $nilaiRapot = ((2 * $rerataUlangan) + $STS + (2 * $SAS)) / 5;
+                       
+                        $lm1tp1 = $LM1_TP1;
+                        $lm1tp2 = $LM1_TP2;
 
-                        if ($tplm1 == 3) {
-                            $lm1tp1 = ($LM1_TP1 + $LM1_TP2)/2;
-                            $lm1tp2 = ($LM1_TP2 + $LM1_TP3)/2;                            
-                        } elseif ($tplm1 == 4) {
-                            $lm1tp1 = ($LM1_TP1 + $LM1_TP2)/2;
-                            $lm1tp2 = ($LM1_TP3 + $LM1_TP4)/2;
-                        } else {
-                            $lm1tp1 = $LM1_TP1;
-                            $lm1tp2 = $LM1_TP2;
-                        }
-
-                        if ($tplm2 == 3) {
-                            $lm2tp1 = ($LM2_TP1 + $LM2_TP2)/2;
-                            $lm2tp2 = ($LM2_TP2 + $LM2_TP3)/2;
-                        } elseif ($tplm2 == 4) {
-                            $lm2tp1 = ($LM2_TP1 + $LM2_TP2)/2;
-                            $lm2tp2 = ($LM2_TP3 + $LM2_TP4)/2;
-                        } else {
-                            $lm2tp1 = $LM2_TP1;
-                            $lm2tp2 = $LM2_TP2;
-                        }
+                        $lm2tp1 = $LM2_TP1;
+                        $lm2tp2 = $LM2_TP2;
 
                         $html  .= '<tr>';
                         $html  .= '<td style="width: 5%">' . $i++ . '</td>';
@@ -377,27 +358,38 @@ $queryRapotSisipan = "SELECT m.id_mapel, m.mapel,
                     $html  .= '<th colspan="3"  style="line-height: 1.5; font-weight: bold; width: 80%">Absensi Siswa</th>';
                     $html  .= '</tr>';
 
-                    $queryAbsensi = "SELECT absen, COUNT(absen) AS count
-                    FROM absensi                    
+                    $queryAbsensi = "SELECT 
+                    SUM(CASE WHEN absen = 'Sakit' THEN 1 ELSE 0 END) AS sakit,
+                    SUM(CASE WHEN absen = 'Ijin' THEN 1 ELSE 0 END) AS ijin,
+                    SUM(CASE WHEN absen = 'Alpa' THEN 1 ELSE 0 END) AS alpa
+                    FROM absensi                     
                     WHERE 
                     `id_tahun_Ajar` = '$idTahunAjar' AND 
                     `semester`='$semester' AND 
-                    `id_siswa`='$idSiswa'
-                    GROUP BY absen 
-                    ;";
+                    `id_siswa`='$idSiswa';"; 
 
-                    $i = 1;
                     $absensiSiswa = mysqli_query($conn, $queryAbsensi);
                     while ($rowAbsensi = mysqli_fetch_array($absensiSiswa)) {
-                        $kategoriAbsen = $rowAbsensi['absen'];
-                        $jumlahAbsen = $rowAbsensi['count'];
-                        $html  .= '<tr>';
-                        $html  .= '<td style="width: 15%">' . $i++ . '</td>';
-                        $html  .= '<td style="width: 40%; text-align: left;"> ' . $kategoriAbsen . '</td>';
-                        $html  .= '<td style="width: 25%">' . $jumlahAbsen  . '</td>';   
-                        $html  .= '</tr>';
-
+                        $sakit = $rowAbsensi['sakit'];
+                        $ijin = $rowAbsensi['ijin'];
+                        $alpa = $rowAbsensi['alpa'];
                     }
+
+                    $html  .= '<tr>';
+                    $html  .= '<td style="width: 15%"> 1 </td>';
+                    $html  .= '<td style="width: 40%; text-align: left;"> Sakit </td>';
+                    $html  .= '<td style="width: 25%">' . $sakit  . '</td>';   
+                    $html  .= '</tr>';
+                    $html  .= '<tr>';
+                    $html  .= '<td style="width: 15%"> 2 </td>';
+                    $html  .= '<td style="width: 40%; text-align: left;"> Ijin </td>';
+                    $html  .= '<td style="width: 25%">' . $ijin  . '</td>';   
+                    $html  .= '</tr>';
+                    $html  .= '<tr>';
+                    $html  .= '<td style="width: 15%"> 3 </td>';
+                    $html  .= '<td style="width: 40%; text-align: left;"> Alpa </td>';
+                    $html  .= '<td style="width: 25%">' . $alpa  . '</td>';   
+                    $html  .= '</tr>';
 
                     $html  .= '</table>';                    
                     $html  .= '</td>';
@@ -452,7 +444,7 @@ $queryRapotSisipan = "SELECT m.id_mapel, m.mapel,
                     // setlocale(LC_TIME, 'id_ID');
                     // $tanggal = strftime("%d %B %Y");
                     // $html .= '<td style="width: 35%">Tanggal ' . $tanggal . '</td>';
-                    $tanggal = date('d F Y');
+                    $tanggal = date("d F Y", strtotime($tanggalCetak));
                     $bulan = [
                         'January' => 'Januari',
                         'February' => 'Februari',
