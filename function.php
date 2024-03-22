@@ -741,13 +741,12 @@
             $queryCek = "SELECT * 
             FROM nilai_catatan
             WHERE 
-            id_tahun_Ajar='$idTahunAjar' AND
             semester='$semester' AND
             id_siswa='$idSiswa' AND
             catatan='$catatan'; ";
             $result = mysqli_query($conn, $queryCek);
 
-            if ($result && mysqli_num_rows($result) === 1) {
+            if ($result && mysqli_num_rows($result) > 0) {
                 // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
                 $_SESSION['flash_message'] = 'Ubah catatan berhasil';
                 $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
@@ -759,7 +758,7 @@
             }
         } catch (Exception $e) {
             // Tangani exception jika terjadi kesalahan
-            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $e->getMessage();
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $queryCek . $e->getMessage();
             $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
             header('location:input_nilai_catatan.php');
             exit;
@@ -891,7 +890,6 @@
             $query = "SELECT * 
             FROM absensi
             WHERE 
-            `id_tahun_ajar`='$idTahunAjar' AND 
             `semester`='$semester' AND 
             `kelas`='$kelas' AND 
             `id_siswa`='$idSiswa' AND 
@@ -978,7 +976,7 @@
                     $dataNilai[$idSiswa] = $value;
                     $lastValue = $value; // Store the last value
                     $queryInsertKenaikkanKelas = "INSERT INTO `kenaikan_kelas`
-                    (`tanggal`, `id_tahun_ajar`, `semester`, `kelas`, `id_siswa`, `status`, `guru_pencatat`) 
+                    (`tanggal`, `id_tahun_ajar`, `semester`, `kelasi`, `id_siswa`, `status`, `guru_pencatat`) 
                     VALUES ('$tanggalInput','$idTahunAjar','Genap','$kelas','$idSiswa','$value','$namaUser')";
                         
                     $insertKenaikkanKelas = mysqli_query($conn, $queryInsertKenaikkanKelas);
@@ -1300,7 +1298,7 @@
                     $dataNilai[$idSiswa] = $value;
                     $lastValue = $value; // Store the last value
                     $queryInsertNilaiUlangan = "INSERT INTO `nilai_ulangan`
-                    (`tanggal`, `id_tahun_Ajar`, `semester`, `id_siswa`, `kelas`, `id_mapel`, `lingkup_materi`, `nilai`, `guru_penilai`) 
+                    (`tanggal`, `id_tahun_Ajar`, `semester`, `id_siswa`, `kelasi`, `id_mapel`, `lingkup_materi`, `nilai`, `guru_penilai`) 
                     VALUES ('$tanggal','$idTahunAjar','$semester','$idSiswa', '$kelas', '$idMapel','$lingkupMateri','$value','$namaUser')";
                         
                     $insertNilaiUlangan = mysqli_query($conn, $queryInsertNilaiUlangan);
@@ -2450,6 +2448,84 @@
             exit;
         }
     }
+
+    // 47. Tambah Guru
+    if(isset($_POST['tambahGuru'])){
+        $nip = $_POST['nip'];
+        $namaGuru = $_POST['namaGuru'];
+        $jk = $_POST['jk'];
+        $jabatan = $_POST['jabatan'];
+
+        try {
+            // Coba jalankan query insert
+            $addGuru = mysqli_query($conn, "INSERT INTO guru (nip, nama_lengkap, jk, jabatan) VALUES ('$nip', '$namaGuru', '$jk', '$jabatan')");
+
+            if (!$addGuru) {
+                throw new Exception("Query insert gagal"); // Lempar exception jika query gagal
+            }
+
+            // Query SELECT untuk memeriksa apakah data sudah masuk ke database
+            $result = mysqli_query($conn, "SELECT * FROM guru WHERE nip = '$nip'");
+
+            if ($result && mysqli_num_rows($result) > 0) {
+                // Data sudah masuk ke database, Anda dapat mengatur pesan flash message berhasil
+                $_SESSION['flash_message'] = 'Tambah data guru berhasil';
+                $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
+                header('location:guru.php');
+                exit;
+            } else {
+                // Data tidak ada dalam database setelah insert, itu berarti gagal
+                throw new Exception("Data guru tidak ditemukan setelah ditambahkan");
+            }
+        } catch (Exception $e) {
+            // Tangani exception jika terjadi kesalahan
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $e->getMessage();
+            $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
+            header('location:guru.php');
+            exit;
+        }
+    }
+
+    // 48. Edit Guru
+    if(isset($_POST['editGuru'])){
+        $nip = $_POST['nip'];
+        $namaGuru = $_POST['namaGuru'];
+        $jk = $_POST['jk'];
+        $jabatan= $_POST['jabatan'];
+        $idg = $_POST['idg'];
+
+        try {
+            // Coba jalankan query update
+            $editGuru = mysqli_query($conn, "UPDATE guru SET nip='$nip', nama_lengkap='$namaGuru', jk='$jk', jabatan='$jabatan' WHERE id_guru=$idg");
+
+            if (!$editGuru) {
+                throw new Exception("Query update gagal"); // Lempar exception jika query gagal
+            }
+
+            // Query SELECT untuk mengambil data yang baru saja diperbarui
+            $result = mysqli_query($conn, "SELECT * FROM guru WHERE id_guru = $idg");
+
+            if ($result && mysqli_num_rows($result) > 0) {
+                // Data yang baru saja diperbarui ada dalam database, itu berarti edit berhasil
+                $_SESSION['flash_message'] = 'Edit data guru berhasil';
+                $_SESSION['flash_message_class'] = 'alert-success'; // Berhasil
+                header('location:guru.php');
+                exit;
+            } else {
+                // Data yang baru saja diperbarui tidak ada dalam database, itu berarti edit gagal
+                $_SESSION['flash_message'] = 'Edit data guru gagal';
+                $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
+                header('location:guru.php');
+                exit;
+            }
+        } catch (Exception $e) {
+            // Tangani exception jika terjadi kesalahan
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $e->getMessage();
+            $_SESSION['flash_message_class'] = 'alert-danger'; // Gagal
+            header('location:guru.php');
+            exit;
+        }
+    }   
     
     
     
