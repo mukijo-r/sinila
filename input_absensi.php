@@ -173,6 +173,7 @@ $namaUser = $rowUser['nama_lengkap'];
                                                             </div>
                                                             <div class="text-center">
                                                                 <input type="hidden" name="idAbsen" value="<?=$idAbsen;?>">
+                                                                <input type="hidden" name="namaUser" value="<?=$namaUser;?>">
                                                                 <button type="submit" class="btn btn-primary" name="ubahAbsen">Simpan</button>
                                                             </div>
                                                         </div>
