@@ -333,7 +333,7 @@ $namaUser = $rowUser['nama_lengkap'];
                                     
                                     // Input field for each student's grade
                                     echo '<div class="col-md-2">';
-                                    echo '<input type="number" name="nilai_' . $rowSiswa['id_siswa'] . '" class="form-control" required max="99999">';
+                                    echo '<input type="number" name="nilai_' . $rowSiswa['id_siswa'] . '" class="form-control" required max="100">';
                                     echo '</div>';
                                     
                                     echo '</div>';

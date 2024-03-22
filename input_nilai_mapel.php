@@ -241,7 +241,7 @@ $namaUser = $rowUser['nama_lengkap'];
                                                 
                                             </div>
                                             <div class="modal-footer">
-                                                <input type="hidden" name="idNilaiMapel" value="<?=$idNilaiMapel;?>">
+                                                <input type="hidden" name="idNilaiMapel" value="<?=$idNilaiMapel;?>" required max="100">
                                                 <button type="submit" class="btn btn-danger" name="hapusNilaiMapel">Hapus</button> 
                                             </div>
                                             <br> 
@@ -358,7 +358,7 @@ $namaUser = $rowUser['nama_lengkap'];
                                     
                                     // Input field for each student's grade
                                     echo '<div class="col-md-2">';
-                                    echo '<input type="number" name="nilai_' . $rowSiswa['id_siswa'] . '" class="form-control" required max="99999">';
+                                    echo '<input type="number" id="nilai" name="nilai_' . $rowSiswa['id_siswa'] . '" class="form-control" required max="100">';
                                     echo '</div>';
                                     
                                     echo '</div>';
