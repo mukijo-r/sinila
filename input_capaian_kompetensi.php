@@ -306,11 +306,13 @@ $semester = 'Ganjil';
                         <div class="mb-3">
                             <label for="deskripsi">Deskripsi :</label>
                             <input type="text" name="deskripsi" class="form-control" required>
+                            <label>*)Masukkan hanya satu kalimat</label>
                         </div>
                         <div class="text-center">
                             <input type="hidden" name="fase" value="<?=$fase;?>">
                             <input type="hidden" name="kelas" value="<?=$kelas;?>">
                             <button type="submit" class="btn btn-primary" name="tambahDeskripsi">Simpan</button>
+                            
                         </div>
                     </div>
                 </form>
