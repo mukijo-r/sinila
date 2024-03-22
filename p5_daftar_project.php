@@ -120,6 +120,7 @@ $namaUser = $rowUser['nama_lengkap'];
                             }
                             $namaProject = $row['nama_project'];
                             $pembuat = $row['pembuat'];
+                            $deskripsi = $row['deskripsi_project'];
                             $dimensi = $row['dimensi'];
                             $elemen = $row['elemen'];
                             $subElemen = $row['sub_elemen'];
@@ -140,6 +141,10 @@ $namaUser = $rowUser['nama_lengkap'];
                                     <tr>
                                         <td style="font-weight: bold; width: 20%;">Tanggal dibuat</td>
                                         <td style ="width: 80%;">' . $tanggal . '</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold; width: 20%;">Deskripsi project</td>
+                                        <td style ="width: 80%;">' . $deskripsi . '</td>
                                     </tr>';
 
                                 $prevProjectID = $projectID;
