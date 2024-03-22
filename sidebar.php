@@ -82,8 +82,8 @@ if (isset($_SESSION['kelas'])) {
                                     <a class="nav-link" href="input_nilai_ujian.php">Nilai Ujian</a>
                                     <a class="nav-link" href="input_nilai_praktek.php">Nilai Praktek</a>
                                     <a class="nav-link" href="input_nilai_kepribadian.php">Nilai Kepribadian</a>
-                                    <a class="nav-link" href="input_nilai_catatan.php">Nilai Catatan</a>
                                     <a class="nav-link" href="input_absensi.php">Absensi</a>
+                                    <a class="nav-link" href="input_nilai_catatan.php">Nilai Catatan</a>                                    
                                     <?php
 
                                     if ($kelas == 6) {
@@ -129,10 +129,11 @@ if (isset($_SESSION['kelas'])) {
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="daftar_nilai.php">Daftar Nilai</a>
                                     <a class="nav-link" href="legger.php">Legger</a>
-                                    <a class="nav-link" href="rapot_sisipan.php">Rapot Sisipan</a>
+                                    <a class="nav-link" href="rapot_project.php">Rapot Project</a>
+                                    <a class="nav-link" href="rapot_sisipan.php">Rapot Sisipan</a>                                    
                                     <!-- <a class="nav-link" href="rapot_semester.php">Rapot Semester</a> -->
                                     <a class="nav-link" href="rapot_akhir.php">Rapot Akhir</a>
-                                    <a class="nav-link" href="rapot_project.php">Rapot Project</a>
+                                    
                                 </nav>
                             </div>
                             <div class="sb-sidenav-menu-heading">Master</div>
@@ -164,7 +165,7 @@ if (isset($_SESSION['kelas'])) {
                     </div><br>
                     <div style="text-align: center;">
                         <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalTahunAjar">Tahun Ajar</button>
-                    </div>
+                    </div><br>
                 </nav>
             </div>
 

@@ -41,7 +41,7 @@ $semester = 'Ganjil';
                             <div class="row">
                                 <div class="col-md-2">
                                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalTambahDeskripsi">
-                                        Deskripsi Baru
+                                        Kompetensi Baru
                                     </button>
                                 </div>
                                 <div class="col-md-8">
@@ -280,7 +280,7 @@ $semester = 'Ganjil';
             <div class="modal-content">
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h4 class="modal-title">Tambah Deskripsi Penilaian kelas <?=$kelas;?></h4>
+                    <h4 class="modal-title">Tambah Kompetensi Fase <?=$fase;?></h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <!-- Modal Body -->

@@ -24,7 +24,7 @@ date_default_timezone_set('Asia/Jakarta');
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h2 class="mt-4">Tambahkan Mata Pelajaran</h2>
+                        <h2 class="mt-4">Mata Pelajaran</h2>
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item active">MASTER / Mata Pelajaran</li>                            
                         </ol>                        

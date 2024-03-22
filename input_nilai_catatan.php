@@ -42,7 +42,7 @@ $namaUser = $rowUser['nama_lengkap'];
                         </li>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="input_nilai_catatan_ekstrakurikuler.php">Ekstrakurikuler</a>
+                            <a class="nav-link" href="input_nilai_catatan_ekstrakurikuler.php">Catatan Ekstrakurikuler</a>
                         </li>
                         </ul>
                         <br><br>

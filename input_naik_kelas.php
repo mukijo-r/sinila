@@ -39,9 +39,19 @@ $namaUser = $rowUser['nama_lengkap'];
                         <div class="container-fluid px-4">
                             <div class="row">
                                 <div class="col-md-2">
-                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalKenaikanKelas">
-                                        Naikkan Siswa
-                                    </button>
+                                    <?php
+                                    if ($kelas == '6') {
+                                        echo '  <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalKenaikanKelas">
+                                                    Luluskan Siswa
+                                                </button>';
+                                    } else {
+                                        echo '  <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalKenaikanKelas">
+                                                    Naikkan Siswa
+                                                </button>';
+                                    }
+
+                                    ?>
+                                    
                                 </div>
                                 <div class="col-md-8">
                                     <?php
@@ -65,7 +75,14 @@ $namaUser = $rowUser['nama_lengkap'];
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
-                                Daftar Kenaikan Kelas
+                                <?php
+                                if ($kelas == 6) {
+                                    echo 'Daftar Kelulusan Siswa';
+                                } else {
+                                    echo 'Daftar Kenaikan Kelas';
+                                }
+                                ?>
+                                
                             </div>
                             <div class="card-body">
                                 <table id="datatablesSimple">
@@ -77,7 +94,7 @@ $namaUser = $rowUser['nama_lengkap'];
                                             <th>Semester</th>
                                             <th>Kelas</th>
                                             <th>Nama Siswa</th>
-                                            <th>Naik/Tinggal</th>
+                                            <th>Status</th>
                                             <th>Penilai</th>
                                             <th colspan='2'>Aksi</th>
                                         </tr>
@@ -131,14 +148,14 @@ $namaUser = $rowUser['nama_lengkap'];
                                                 <div class="modal-content">
                                                     <!-- Modal Header -->
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title">Ubah Kenaikan Kelas <?=$kelas;?></h4>
+                                                        <h4 class="modal-title">Ubah Status Siswa Kelas <?=$kelas;?></h4>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                     </div>
                                                     <!-- Modal Body -->
                                                     <form method="post">
                                                         <div class="modal-body">
                                                             <div class="mb-3">
-                                                                <label for="tanggalKenaikan">Tanggal Kenaikan Kelas :</label>       
+                                                                <label for="tanggalKenaikan">Tanggal :</label>       
                                                                 <input type="date" name="tanggalKenaikan" value="<?=$tanggal;?>" class="form-control">
                                                             </div>
                                                             <div class="mb-3">
@@ -158,8 +175,15 @@ $namaUser = $rowUser['nama_lengkap'];
                                                                 <label for="kenaikan">Status :</label>
                                                                 <select name="kenaikan" class="form-select" id="kenaikan" aria-label="Kenaikkan" required>
                                                                     <option value="<?=$status;?>"><?=$status;?></option>
-                                                                    <option value="Naik">Naik Kelas</option>
-                                                                    <option value="Tidak Naik">Tidak Naik Kelas</option>
+                                                                    <?php
+                                                                        if ($kelas == 6) {                                        
+                                                                            echo '<option value="Lulus">Lulus</option>';
+                                                                            echo '<option value="Tidak Lulus">Tidak Lulus</option>';
+                                                                        } else {
+                                                                        echo '<option value="Naik">Naik Kelas</option>';
+                                                                        echo '<option value="Tidak Naik">Tidak Naik Kelas</option>';
+                                                                        }
+                                                                    ?>
                                                                 </select>
                                                             </div>
                                                             <div class="text-center">
@@ -180,14 +204,14 @@ $namaUser = $rowUser['nama_lengkap'];
 
                                                 <!-- Modal Header -->
                                                 <div class="modal-header">
-                                                    <h4 class="modal-title">Hapus Status kenaikan Siswa ini?</h4>
+                                                    <h4 class="modal-title">Hapus Status Siswa ini?</h4>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                 </div>
 
                                                 <!-- Modal body -->                                            
                                                 <form method="post">
                                                     <div class="modal-body">
-                                                    <h5>Anda yakin ingin menghapus status kenaikan kelas atas nama <u><?=$namaSiswa;?></u>?</h5>
+                                                    <h5>Anda yakin ingin menghapus status atas nama <u><?=$namaSiswa;?></u>?</h5>
                                                     <br>
                                                     <h5>"<i><?=$status;?></i>"</h5>
                                                         
@@ -226,7 +250,7 @@ $namaUser = $rowUser['nama_lengkap'];
             <div class="modal-content">
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h4 class="modal-title">Naikkan Siswa kelas <?=$kelas;?></h4>
+                    <h4 class="modal-title"><?php if ($kelas == '6') { echo 'Luluskan Siswa kelas ' . $kelas; } else { echo 'Naikkan Siswa kelas ' . $kelas; } ?></h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <!-- Modal Body -->

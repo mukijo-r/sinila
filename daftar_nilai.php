@@ -165,7 +165,7 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                     echo '<th colspan="16" style="text-align: center;">FORMATIF</th>';
                     echo '<th rowspan="2" colspan="5" style="text-align: center; vertical-align: middle;">NILAI SUMATIF LINGKUP MATERI</th>';
                     echo '<th rowspan="2" colspan="2" style="text-align: center; vertical-align: middle;">NILAI SUMATIF</th>';
-                    echo '<th rowspan="2"  style="vertical-align: middle;">NR</th>';
+                    echo '<th rowspan="3" style="vertical-align: middle;">NR</th>';
                     echo '</tr>';
                     echo '<tr>';
                     echo '<th colspan="4">Lingkup Materi 1</th>';
@@ -305,6 +305,7 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                         echo '<td>' . $nilaiRapot . '</td>';
                         echo '</tr>';
                     }
+                        echo '</tbody>';
                         echo '</table>';
                         echo '</div>';
                         echo '</div>';

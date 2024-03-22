@@ -112,7 +112,7 @@ require 'config.php';
                                                 <input type="hidden" name="idk" value="<?=$idKelas;?>">
                                             </div>
                                             <div class="text-center">
-                                                <button type="submit" class="btn btn-warning" name="editKelas">Edit</button> 
+                                                <button type="submit" class="btn btn-warning" name="editKelas">Ubah</button> 
                                             </div>
                                             <br> 
                                             </form>        
