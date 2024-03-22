@@ -34,7 +34,7 @@ $semester = 'Ganjil';
                     <div class="container-fluid px-4">
                         <h2 class="mt-4">Input Data</h2>
                         <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">PROSES / Input Data / Nilai Asesmen Semester Ganjil</li>                            
+                            <li class="breadcrumb-item active">PROSES / CP / Capaian Kompetensi</li>                            
                         </ol>                        
                         <br>
                         <div class="container-fluid px-4">

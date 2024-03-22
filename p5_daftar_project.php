@@ -34,7 +34,7 @@ $namaUser = $rowUser['nama_lengkap'];
                     <div class="container-fluid px-4">
                         <h2 class="mt-4">Halaman Project</h2>
                         <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">PROSES / Project / Elemen Project</li>                            
+                            <li class="breadcrumb-item active">PROSES / Project / Daftar Project</li>                            
                         </ol>
                         <div class="container-fluid px-4">
                             <div class="row">                                
