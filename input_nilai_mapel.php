@@ -177,7 +177,12 @@ $namaUser = $rowUser['nama_lengkap'];
                                                                     <option value="<?=$idMapel;?>"><?=$mapel;?></option>
                                                                     <?php
                                                                     // Ambil data kelas dari tabel kelas
-                                                                    $queryMapel = mysqli_query($conn, "SELECT id_mapel, mapel FROM mapel");
+                                                                    if ($kelas == 1 | $kelas == 2 | $kelas == 3) {
+                                                                        $queryMapel = mysqli_query($conn, "SELECT id_mapel, mapel FROM mapel WHERE mapel <> 'Bahasa Using';");
+                                                                    } else {
+                                                                        $queryMapel = mysqli_query($conn, "SELECT id_mapel, mapel FROM mapel");
+                                                                    }
+
                                                                     while ($rowMapel = mysqli_fetch_assoc($queryMapel)) {
                                                                         echo '<option value="' . $rowMapel['id_mapel'] . '">' . $rowMapel['mapel'] . '</option>';
                                                                     }
@@ -301,7 +306,12 @@ $namaUser = $rowUser['nama_lengkap'];
                                         <option value="">Pilih Mapel</option>
                                         <?php
                                         // Ambil data kelas dari tabel kelas
-                                        $queryMapel = mysqli_query($conn, "SELECT id_mapel, mapel FROM mapel");
+                                        if ($kelas == 1 | $kelas == 2 | $kelas == 3) {
+                                            $queryMapel = mysqli_query($conn, "SELECT id_mapel, mapel FROM mapel WHERE mapel <> 'Bahasa Using';");
+                                        } else {
+                                            $queryMapel = mysqli_query($conn, "SELECT id_mapel, mapel FROM mapel");
+                                        }                                        
+
                                         while ($rowMapel = mysqli_fetch_assoc($queryMapel)) {
                                             echo '<option value="' . $rowMapel['id_mapel'] . '">' . $rowMapel['mapel'] . '</option>';
                                         }

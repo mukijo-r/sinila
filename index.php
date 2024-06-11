@@ -93,7 +93,12 @@ $namaUser = $rowUser['nama_lengkap'];
                                 $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];
                                 
                                 // Eksekusi query untuk mendapatkan daftar mata pelajaran
-                                $queryMapel = mysqli_query($conn, "SELECT * FROM mapel;");
+                                if ($kelas == 1 | $kelas == 2 | $kelas == 3) {
+                                    $queryMapel = mysqli_query($conn, "SELECT * FROM mapel WHERE mapel <> 'Bahasa Using';");
+                                } else {
+                                    $queryMapel = mysqli_query($conn, "SELECT * FROM mapel;");
+                                }
+                                
 
                                 $totalProgress = 0;
 

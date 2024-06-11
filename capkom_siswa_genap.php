@@ -57,7 +57,11 @@ $semester = 'Genap';
                                             <select class="form-select" name="mapel" id="mapel" aria-label="mapel" required>
                                                 <option selected disabled>Pilih Mapel</option>
                                                 <?php
-                                                $queryMapel = mysqli_query($conn, "SELECT id_mapel, mapel FROM mapel");
+                                                if ($kelas == 1 | $kelas == 2 | $kelas == 3) {
+                                                    $queryMapel = mysqli_query($conn, "SELECT id_mapel, mapel FROM mapel WHERE mapel <> 'Bahasa Using';");
+                                                } else {
+                                                    $queryMapel = mysqli_query($conn, "SELECT id_mapel, mapel FROM mapel");
+                                                }
                                                 while ($rowMapel = mysqli_fetch_assoc($queryMapel)) {
                                                     echo '<option value="' . $rowMapel['id_mapel'] . '">' . $rowMapel['mapel'] . '</option>';
                                                 }
