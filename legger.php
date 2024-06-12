@@ -223,7 +223,7 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                                 $rerataUlangan = ($LM1 + $LM2 + $LM3 + $LM4) / 4;
                                 $STS = $row['STS'];
                                 $SAS = $row['SAS'];
-                                $nilaiRapot = ((2 * $rerataUlangan) + $STS + (2 * $SAS)) / 5;
+                                $nilaiRapot = round(((2 * $rerataUlangan) + $STS + (2 * $SAS)) / 5);
                         
                                 echo '<td>' . $nilaiRapot . '</td>';
                             } else {

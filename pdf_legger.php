@@ -198,7 +198,7 @@ while ($studentRow = mysqli_fetch_assoc($studentResult)) {
             $rerataUlangan = ($LM1 + $LM2 + $LM3 + $LM4) / 4;
             $STS = $row['STS'];
             $SAS = $row['SAS'];
-            $nilaiRapot = ((2 * $rerataUlangan) + $STS + (2 * $SAS)) / 5;
+            $nilaiRapot = round(((2 * $rerataUlangan) + $STS + (2 * $SAS)) / 5);
     
             $html .= '<td style="width: 6.5%">' . $nilaiRapot . '</td>';
         } else {
