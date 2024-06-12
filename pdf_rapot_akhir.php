@@ -237,7 +237,31 @@ while ($row = mysqli_fetch_array($nilai)) {
     $LM2 = $row['LM2'];
     $LM3 = $row['LM3'];
     $LM4 = $row['LM4'];
-    $rerataUlangan = ($LM1 + $LM2 + $LM3 + $LM4)/4;
+
+    // Array untuk menampung nilai yang bukan 0
+    $nilaiLM = array();
+
+    // Memasukkan nilai ke dalam array jika nilai tersebut bukan 0
+    if ($LM1 != 0) {
+        $nilaiLM[] = $LM1;
+    }
+    if ($LM2 != 0) {
+        $nilaiLM[] = $LM2;
+    }
+    if ($LM3 != 0) {
+        $nilaiLM[] = $LM3;
+    }
+    if ($LM4 != 0) {
+        $nilaiLM[] = $LM4;
+    }
+
+    // Menghitung rata-rata jika ada nilai yang bukan 0
+    if (count($nilaiLM) > 0) {
+        $rerataUlangan = array_sum($nilaiLM) / count($nilaiLM);
+    } else {
+        $rerataUlangan = 0;
+    }    
+
     $STS = $row['STS'];
     $SAS = $row['SAS'];
     $nilaiRapot = round(((2 * $rerataUlangan) + $STS + (2 * $SAS)) / 5);
