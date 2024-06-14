@@ -976,7 +976,7 @@
                     $dataNilai[$idSiswa] = $value;
                     $lastValue = $value; // Store the last value
                     $queryInsertKenaikkanKelas = "INSERT INTO `kenaikan_kelas`
-                    (`tanggal`, `id_tahun_ajar`, `semester`, `kelasi`, `id_siswa`, `status`, `guru_pencatat`) 
+                    (`tanggal`, `id_tahun_ajar`, `semester`, `kelas`, `id_siswa`, `status`, `guru_pencatat`) 
                     VALUES ('$tanggalInput','$idTahunAjar','Genap','$kelas','$idSiswa','$value','$namaUser')";
                         
                     $insertKenaikkanKelas = mysqli_query($conn, $queryInsertKenaikkanKelas);
@@ -1298,7 +1298,7 @@
                     $dataNilai[$idSiswa] = $value;
                     $lastValue = $value; // Store the last value
                     $queryInsertNilaiUlangan = "INSERT INTO `nilai_ulangan`
-                    (`tanggal`, `id_tahun_Ajar`, `semester`, `id_siswa`, `kelasi`, `id_mapel`, `lingkup_materi`, `nilai`, `guru_penilai`) 
+                    (`tanggal`, `id_tahun_Ajar`, `semester`, `id_siswa`, `kelas`, `id_mapel`, `lingkup_materi`, `nilai`, `guru_penilai`) 
                     VALUES ('$tanggal','$idTahunAjar','$semester','$idSiswa', '$kelas', '$idMapel','$lingkupMateri','$value','$namaUser')";
                         
                     $insertNilaiUlangan = mysqli_query($conn, $queryInsertNilaiUlangan);
