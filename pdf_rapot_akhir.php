@@ -141,7 +141,7 @@ $pdf->SetCellPaddings(1, 1, 1, 1);
 
 $html = '<div><br><table style="font-family: times; font-size: 12px;"><tr><td style="width: 60%">
 
-    <table>
+    <table style="font-size: 14px">
         <tr>
             <th style="width: 35%">Nama Peserta Didik</th>
             <th style="width: 6%">:</th>
@@ -164,7 +164,7 @@ $html = '<div><br><table style="font-family: times; font-size: 12px;"><tr><td st
         </tr>
     </table></td><td>
 
-    <table>
+    <table style="font-size: 14px">
         <tr>
             <th style="width: 30%">Kelas</th>
             <th style="width: 6%">:</th>
@@ -213,7 +213,7 @@ $queryNilai = "SELECT m.id_mapel, m.mapel,
 
 $nilai = mysqli_query($conn, $queryNilai);
 
-$html  .= '<table border="1" style="padding-top: 5x; padding-bottom: 5px; width: 100%; text-align: center; font-family: times; font-size: 12px">';
+$html  .= '<table border="1" style="padding-top: 5x; padding-bottom: 5px; width: 100%; text-align: center; font-family: times; font-size: 13px">';
 $html  .= '<tr>';
 $html  .= '<th style="line-height: 1.5; width: 5%; text-align: center; vertical-align: middle; font-weight: bold;"><br>No.</th>';
 $html  .= '<th style="line-height: 1.5; width: 25%; text-align: center; vertical-align: middle; font-weight: bold;"><br>Muatan Pelajaran</th>';
@@ -315,8 +315,8 @@ while ($row = mysqli_fetch_array($nilai)) {
         $combinedDeskripsi0 = $row0['combined_deskripsi0'];
     }                         
 
-    $html .= '<table nobr="true" border="1">';
-    $html  .= '<tr nobr="true">';
+    $html .= '<table nobr="true" border="1" style="font-size: 13px">';
+    $html  .= '<tr>';
     $html  .= '<td rowspan="2" style="line-height: 1.5; width: 5%; text-align: center; vertical-align: middle;">' . $i++ . '.</td>';
     $html  .= '<td rowspan="2" style="line-height: 1.5; width: 25%; vertical-align: middle;"> ' . $mapel . '</td>';
     $html  .= '<td rowspan="2" style="line-height: 1.5; width: 7%; text-align: center;">' . $nilaiRapot . '</td><td style="width: 55%;"> ';    
@@ -349,9 +349,10 @@ while ($row = mysqli_fetch_array($nilai)) {
     $html .= '</table>';
 }
 
-$html  .= '<br><br>';
-$html  .= '<table border="1" nobr="true" style="font-family: times; font-size: 12px">';
-$html  .= '<tr nobr="true">';
+$html .= '<table nobr="true"><tr><td>';
+
+$html  .= '<table border="1" style="font-family: times; font-size: 12px">';
+$html  .= '<tr>';
 $html  .= '<th style="line-height: 1.5; width: 5%; text-align: center; vertical-align: middle; font-weight: bold;"><br>No.</th>';
 $html  .= '<th style="line-height: 1.5; width: 25%; text-align: center; vertical-align: middle; font-weight: bold;"><br>Ekstrakurikuler</th>';
 $html  .= '<th style="line-height: 1.5; width: 62%; text-align: center; vertical-align: middle; font-weight: bold;"><br>Keterangan</th>';
@@ -370,7 +371,7 @@ $queryCatatanEkstra = "SELECT
     while ($rowCatatanEkstra = mysqli_fetch_array($catatanSiswa)) {
     $namaEkstra = $rowCatatanEkstra['nama_ek'];
     $catatan = $rowCatatanEkstra['catatan'];
-    $html  .= '<tr nobr="true">';
+    $html  .= '<tr>';
     $html  .= '<td style="line-height: 1.5; width: 5%; text-align: center; vertical-align: middle;">' . $i++ . '</td>';
     $html  .= '<td style="line-height: 1.5; width: 25%; text-align: center; vertical-align: middle;">' . $namaEkstra .'</td>';
     $html  .= '<td style="line-height: 1.5; width: 62%; text-align: center; vertical-align: middle;">' . $catatan . '</td>';
@@ -379,14 +380,14 @@ $queryCatatanEkstra = "SELECT
 
 $html  .= '</table><br><br>';
 
-$html .= '<table nobr="true" style="font-family: times; font-size: 13px; border-collapse: separate;">';
-$html .= '<tr nobr="true">';
+$html .= '<table style="font-family: times; font-size: 13px; border-collapse: separate;">';
+$html .= '<tr>';
 $html .= '<td style="width: 5%"></td>';
 $html .= '<td style="width: 47%">';
 
-$html .= '<table nobr="true" border="1" style="text-align: left; font-family: helvetica; font-size: 11px; border-collapse: separate;">';
+$html .= '<table border="1" style="text-align: left; font-family: helvetica; font-size: 11px; border-collapse: separate;">';
 
-$html .= '<tr nobr="true">';
+$html .= '<tr>';
 $html .= '<th colspan="3" style="text-align: center; line-height: 1.5; font-weight: bold; width: 80%">Ketidakhadiran</th>';
 $html .= '</tr>';
 
@@ -423,42 +424,19 @@ $html  .= '<td style="width: 9%; text-align: left; padding: 8px; border-top: 1px
 $html  .= '<td style="width: 20%; border-top: 1px solid black; border-bottom: 1px solid black; border-right: 1px solid black; padding: 8px;">hari</td>';   
 $html  .= '</tr>';
 
-
-// $queryAbsensi = "SELECT absen, COUNT(absen) AS count
-// FROM absensi                    
-// WHERE 
-// `id_tahun_Ajar` = '$idTahunAjar' AND 
-// `semester`='$semester' AND 
-// `id_siswa`='$idSiswa'
-// GROUP BY absen 
-// ;";
-
-// $i = 1;
-// $absensiSiswa = mysqli_query($conn, $queryAbsensi);
-// while ($rowAbsensi = mysqli_fetch_array($absensiSiswa)) {
-//     $kategoriAbsen = $rowAbsensi['absen'];
-//     $jumlahAbsen = $rowAbsensi['count'];
-//     $html .= '<tr nobr="true">';
-//     $html .= '<td style="width: 51%; border-left: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; padding: 8px; padding-left: 12px;">  ' . $kategoriAbsen . '</td>';
-//     $html .= '<td style="width: 9%; text-align: left; padding: 8px; border-top: 1px solid black; border-bottom: 1px solid black; border-left: none; border-right: none;">:   ' . $jumlahAbsen . '</td>';
-//     $html .= '<td style="width: 20%; border-top: 1px solid black; border-bottom: 1px solid black; border-right: 1px solid black; padding: 8px;">hari</td>';
-//     $html .= '</tr>';
-// }
-
 $html  .= '</table>';
-
 
 $html .='</td>';
 $html .= '<td style="width: 40%">';
 
 if ($semester == 'Genap' && $kelas <> 6){
     //Naik tidak naik
-    $html .= '<table  nobr="true" style="border-collapse: collapse;">'; 
-    $html .= '<tr nobr="true">';
+    $html .= '<table style="border-collapse: collapse;">'; 
+    $html .= '<tr>';
     $html .= '<td style="line-height: 1.5; font-weight: normal; width: 90%; border-top: 0.75px solid black; border-right: 0.75px solid black; border-left: 0.75px solid black">  Berdasarkan pencapaian seluruh kompetensi, ';                    
     $html .= '</td>';                    
     $html .= '</tr>';
-    $html .= '<tr nobr="true">';
+    $html .= '<tr>';
     $html .= '<td style="line-height: 1.5; font-weight: normal; width: 90%; border-right: 0.75px solid black; border-left: 0.75px solid black">  peserta didik dinyatakan :';                    
     $html .= '</td>';                    
     $html .= '</tr>';
@@ -491,16 +469,16 @@ if ($semester == 'Genap' && $kelas <> 6){
     $html .= '</table>';    
 } elseif ($semester == 'Genap' && $kelas == 6) {
     //Lulus tidak Lulus
-    $html .= '<table nobr="true" style="border-collapse: collapse;">'; 
-    $html .= '<tr nobr="true">';
+    $html .= '<table style="border-collapse: collapse;">'; 
+    $html .= '<tr>';
     $html .= '<td style="line-height: 1.5; font-weight: normal; width: 100%; border-top: 0.75px solid black; border-right: 0.75px solid black; border-left: 0.75px solid black">  Berdasarkan pencapaian seluruh kompetensi, ';                    
     $html .= '</td>';                    
     $html .= '</tr>';
-    $html .= '<tr nobr="true">';
+    $html .= '<tr>';
     $html .= '<td style="line-height: 1.5; font-weight: normal; width: 100%; border-right: 0.75px solid black; border-left: 0.75px solid black">  peserta didik dinyatakan :';                    
     $html .= '</td>';                    
     $html .= '</tr>';
-    $html .= '<tr nobr="true">';
+    $html .= '<tr>';
 
     $queryKenaikan = "SELECT `status`
     FROM kenaikan_kelas                 
@@ -533,16 +511,16 @@ $html .='</td>';
 $html  .= '</tr>';
 $html  .= '</table><br><br>';
 
-$html .= '<table nobr="true"><tr nobr="true"><td>';
+$html .= '<table><tr><td>';
 
-$html .= '<table nobr="true" style="font-family: helvetica; font-size: 13px;">';
-$html .= '<tr nobr="true">';
+$html .= '<table style="font-family: helvetica; font-size: 13px;">';
+$html .= '<tr>';
 $html .= '<td style="width: 5%"></td>';
 $tahun = date("Y"); 
 $html .= '<td style="width: 55%">Ditandatangani tgl, ......................' . $tahun . '</td>';
 $html .= '<td style="width: 35%">Diberikan di Rogojampi</td>';
 $html .= '</tr>';
-$html .= '<tr nobr="true">';
+$html .= '<tr>';
 $html .= '<td style="width: 5%"></td>';
 $html .= '<td style="width: 55%">Orang Tua / Wali Siswa</td>';
 
@@ -569,57 +547,60 @@ foreach ($bulan as $english => $indonesian) {
 // Tambahkan teks ke dokumen
 $html .= '<td style="width: 35%">Tanggal ' . $tanggal . '</td>';
 $html .= '</tr>';
-$html .= '<tr nobr="true">';
+$html .= '<tr>';
 $html .= '<td style="width: 5%"></td>';
 $html .= '<td style="width: 55%"></td>';
 $html .= '<td style="width: 35%">Wali Kelas </td>';
 $html .= '</tr>';
-$html .= '<tr nobr="true">';
+$html .= '<tr>';
 $html .= '<td style="line-height: 4;width: 5%"></td>';
 $html .= '<td style="line-height: 4;width: 55%"></td>';
 $html .= '<td style="line-height: 4;width: 35%"></td>';
 $html .= '</tr>';
-$html .= '<tr nobr="true">';
+$html .= '<tr>';
 $html .= '<td style="width: 5%"></td>';
 $html .= '<td style="text-decoration: underline; width: 55%">........................................</td>';
 $html .= '<td style="font-weight: bold; text-decoration: underline; width: 35%">' . $waliKelas . '</td>';
 $html .= '</tr>';
-$html .= '<tr nobr="true">';
+$html .= '<tr>';
 $html .= '<td style="width: 5%"></td>';
 $html .= '<td style="width: 55%"></td>';
 $html .= '<td style="width: 35%"> NIY. ' . $nipWaliKelas . '</td>';
 $html .= '</tr>';
 $html .= '</table><br>';
 
-$html .= '<table nobr="true" style="text-align: center; font-family: helvetica; font-size: 13px;">';                   
-$html .= '<tr nobr="true">';
+$html .= '<table style="text-align: center; font-family: helvetica; font-size: 13px;">';                   
+$html .= '<tr>';
 $html .= '<td style="width: 20%"></td>';
 $html .= '<td style="width: 55%">Mengetahui</td>';
 $html .= '<td style="width: 20%"></td>';
 $html .= '</tr>';
-$html .= '<tr nobr="true">';
+$html .= '<tr>';
 $html .= '<td style="width: 20%"></td>';
 $html .= '<td style="width: 55%">Kepala Sekolah</td>';
 $html .= '<td style="width: 20%"></td>';
 $html .= '</tr>';
-$html .= '<tr nobr="true">';
+$html .= '<tr>';
 $html .= '<td style="line-height: 4;width: 20%"></td>';
 $html .= '<td style="line-height: 4;width: 55%"></td>';
 $html .= '<td style="line-height: 4;width: 20%"></td>';
 $html .= '</tr>';
-$html .= '<tr nobr="true">';
+$html .= '<tr>';
 $html .= '<td style="width: 20%"></td>';
 $html .= '<td style="font-weight: bold; text-decoration: underline; width: 55%">' . $kepsek . '</td>';
 $html .= '<td style="width: 20%"></td>';
 $html .= '</tr>';
-$html .= '<tr nobr="true">';
+$html .= '<tr>';
 $html .= '<td style="width: 20%"></td>';
 $html .= '<td style="width: 55%">' . $nipKepsek . '</td>';
 $html .= '<td style="width: 20%"></td>';
 $html .= '</tr>';
 $html .= '</table><br>'; 
 
-$html .= '</td></tr></table><br>';  
+$html .= '</td></tr></table>'; 
+
+$html .= '</td></tr></table>';
+
                     
 // print a block of text using Write()
 $pdf->Write(0, $txt, '', 0, 'C', true, 0, false, false, 0);
