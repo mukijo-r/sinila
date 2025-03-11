@@ -1892,7 +1892,8 @@
     if (isset($_POST['btnCapkomLanjut'])) {
         $idMapel = $_POST['idMapel'];
         $kelas = $_POST['kelas'];
-        $semester = $_POST['semester'];
+        $semester = $_POST['semester'];  
+        $idCapkomCheck = null;      
 
         if ($kelas == 1 || $kelas == 2) {
             $fase = 'A';
@@ -1921,25 +1922,11 @@
             foreach ($_POST['checkbox'] as $idCapkom => $checkboxValues) {
                 foreach ($siswaArray as $idSiswa) {
                     foreach ($checkboxValues as $checkboxValue) {
-                        $queryCheckExistence = "SELECT * FROM `asesmen_capkom`
-                            WHERE 
-                            `id_tahun_ajar` = '$idTahunAjar' AND
-                            `semester` = '$semester' AND
-                            `id_siswa` = '$idSiswa' AND
-                            `id_ck` = '$idCapkom' AND
-                            `kelas` = '$kelas';";
-                
-                        $resultExistence = mysqli_query($conn, $queryCheckExistence);
-                    
-                        if (!$resultExistence) {
-                            throw new Exception("Query select gagal: " . mysqli_error($conn));
-                        }
-                    
-                        if (mysqli_num_rows($resultExistence) > 0) {
-                            // If the combination already exists, perform an update
-                            $queryUpdateDeskripsi = "UPDATE `asesmen_capkom`
-                                SET
-                                `tampil` = '$checkboxValue'
+                        if ($checkboxValue == 1){
+                            if ($idCapkomCheck == null) {
+                                $idCapkomCheck = $idCapkom;
+                            }
+                            $queryCheckExistence1 = "SELECT * FROM `asesmen_capkom`
                                 WHERE 
                                 `id_tahun_ajar` = '$idTahunAjar' AND
                                 `semester` = '$semester' AND
@@ -1947,30 +1934,80 @@
                                 `id_ck` = '$idCapkom' AND
                                 `kelas` = '$kelas';";
                     
-                            $updateDeskripsi = mysqli_query($conn, $queryUpdateDeskripsi);
-                    
-                            if (!$updateDeskripsi) {
-                                throw new Exception("Query update gagal: " . mysqli_error($conn));
+                            $resultExistence1 = mysqli_query($conn, $queryCheckExistence1);              
+                        
+                            if (!$resultExistence1) {
+                                throw new Exception("Query select gagal: " . mysqli_error($conn));
                             }
-                        } else {
-                            // If the combination doesn't exist, perform an insert
-                            $queryInsertDeskripsi = "INSERT INTO `asesmen_capkom`
-                                (`id_tahun_ajar`, `semester`, `id_siswa`, `id_ck`, `kelas`, `tampil`, `capaian`)
-                                VALUES 
-                                ('$idTahunAjar', '$semester', '$idSiswa', '$idCapkom', '$kelas', '$checkboxValue', '0');";
+                        
+                            $jumlah = mysqli_num_rows($resultExistence1);
+
+                            if (mysqli_num_rows($resultExistence1) > 0) {
+                                // If the combination already exists, perform an update
+                                $queryUpdateDeskripsi = "UPDATE `asesmen_capkom`
+                                    SET
+                                    `tampil` = '$checkboxValue'
+                                    WHERE 
+                                    `id_tahun_ajar` = '$idTahunAjar' AND
+                                    `semester` = '$semester' AND
+                                    `id_siswa` = '$idSiswa' AND
+                                    `id_ck` = '$idCapkom' AND
+                                    `kelas` = '$kelas';";                                
+                        
+                                $updateDeskripsi = mysqli_query($conn, $queryUpdateDeskripsi);
+                        
+                                if (!$updateDeskripsi) {
+                                    throw new Exception("Query update gagal: " . mysqli_error($conn));
+                                }
+                                
+                            } else {
+                                // If the combination doesn't exist, perform an insert
+                                $queryInsertDeskripsi = "INSERT INTO `asesmen_capkom`
+                                    (`id_tahun_ajar`, `semester`, `id_siswa`, `id_ck`, `kelas`, `tampil`, `capaian`)
+                                    VALUES 
+                                    ('$idTahunAjar', '$semester', '$idSiswa', '$idCapkom', '$kelas', '$checkboxValue', '0');";
+                        
+                                $insertDeskripsi = mysqli_query($conn, $queryInsertDeskripsi);
+                        
+                                if (!$insertDeskripsi) {
+                                    throw new Exception("Query insert gagal: " . mysqli_error($conn));
+                                }
+                            }
+                            
+                        } elseif ($checkboxValue == 0) {
+                            $queryCheckExistence0 = "SELECT * FROM `asesmen_capkom`
+                                WHERE 
+                                `id_tahun_ajar` = '$idTahunAjar' AND
+                                `semester` = '$semester' AND
+                                `id_siswa` = '$idSiswa' AND
+                                `id_ck` = '$idCapkom' AND
+                                `kelas` = '$kelas';";
                     
-                            $insertDeskripsi = mysqli_query($conn, $queryInsertDeskripsi);
-                    
-                            if (!$insertDeskripsi) {
-                                throw new Exception("Query insert gagal: " . mysqli_error($conn));
+                            $resultExistence0 = mysqli_query($conn, $queryCheckExistence0);
+                                                    
+                            if (!$resultExistence0) {
+                                throw new Exception("Query select gagal: " . mysqli_error($conn));
+                            }
+                        
+                            if (mysqli_num_rows($resultExistence0) > 0) {
+                                // If the combination exists, perform delete
+                                $queryDeleteDeskripsi = "DELETE FROM `asesmen_capkom`
+                                    WHERE 
+                                    `id_tahun_ajar` = '$idTahunAjar' AND
+                                    `semester` = '$semester' AND
+                                    `id_siswa` = '$idSiswa' AND
+                                    `id_ck` = '$idCapkom' AND
+                                    `kelas` = '$kelas';";                        
+                                $deleteDeskripsi = mysqli_query($conn, $queryDeleteDeskripsi);
                             }
                         }
+                        
                     }
-                }                
+                }                  
             }
     
             // Check if data exists in the database
-            $queryCek = "SELECT * FROM asesmen_capkom WHERE `id_ck` = '$idCapkom'";
+            $queryCek = "SELECT * FROM asesmen_capkom WHERE `id_ck` = '$idCapkomCheck'";
             $result = mysqli_query($conn, $queryCek);
     
             if (!$result) {
@@ -1985,8 +2022,9 @@
             } else {
                 throw new Exception("Data tidak ditemukan setelah ditambahkan");
             }
+
         } catch (Exception $e) {
-            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $e->getMessage();
+            $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $e->getMessage() . $queryCek;
             $_SESSION['flash_message_class'] = 'alert-danger';
             if ($semester == 'Ganjil') {
                 header('location:capkom_siswa_ganjil.php');
@@ -2656,10 +2694,6 @@
         $ids = $_POST['ids'];
 
         try {
-            //Hapus capaian kompetensi siswa bersangkutan
-
-            $hapusCK = mysqli_query($conn, "DELETE FROM capaian_kompetensi WHERE id_siswa='$ids'");
-
             // Coba jalankan query hapus
             $hapusSiswa = mysqli_query($conn, "DELETE FROM siswa WHERE id_siswa='$ids'");
 
@@ -2833,34 +2867,13 @@
             $tanggalLahir = $data[6];
             $agama = $data[7];
             $alamat = $data[8];
-            $status = $data[9];
 
             // Lakukan operasi INSERT ke tabel "siswa" dalam database
-            $sql = "INSERT INTO siswa (nama, id_kelas, jk, nis, nisn, tempat_lahir, tanggal_lahir, agama, alamat, `status`) VALUES ('$namaSiswa', '$idKelas', '$jk', '$nis', '$nisn', '$tempatLahir', '$tanggalLahir', '$agama', '$alamat', '$status')";
+            $sql = "INSERT INTO siswa (nama, id_kelas, jk, nis, nisn, tempat_lahir, tanggal_lahir, agama, alamat, `status`) VALUES ('$namaSiswa', '$idKelas', '$jk', '$nis', '$nisn', '$tempatLahir', '$tanggalLahir', '$agama', '$alamat', 'aktif')";
             
             // // Eksekusi query INSERT
             if (!mysqli_query($conn, $sql)) {
                 throw new Exception(mysqli_error($conn));
-            }
-
-            //mendapatkan id siswa
-            $querysiswa = "SELECT id_siswa FROM siswa WHERE nisn = '$nisn'";
-            $selectSiswa = mysqli_query($conn, $querysiswa);
-            while ($dataSiswa = mysqli_fetch_assoc($selectSiswa)) {
-                $idSiswa = $dataSiswa['id_siswa'];
-            };
-
-            //Tambahkan capaian kompetensi dengan nilai 0
-            $querySelectAsesmen = "SELECT id_asesmen FROM asesmen";
-            $selectAsesmen = mysqli_query($conn, $querySelectAsesmen);
-
-            while ($dataAsesmen = mysqli_fetch_assoc($selectAsesmen)) {
-                $idAsesmen = $dataAsesmen['id_asesmen'];
-
-                // Insert untuk setiap id_asesmen
-                $queryInsertCK = "INSERT INTO capaian_kompetensi (id_siswa, id_asesmen, capaian) 
-                                VALUES ($idSiswa, $idAsesmen, 0);";
-                $insertCK = mysqli_query($conn, $queryInsertCK);
             }
 
         }
