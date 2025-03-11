@@ -254,8 +254,8 @@ if (isset($_POST['login'])) {
     <!-- Header -->
     <header class="header">
       <br>
-      <h1 style="color: #fff;">SIRKUM</h1>
-      <h3 style="color: #fff;">Sistem Informasi Rapot Kurikulum Merdeka</h3>
+      <h1 style="color: #fff;">SIRKUM SD</h1>
+      <h3 style="color: #fff;">Sistem Informasi Rapor Kurikulum Merdeka</h3>
       <nav class="nav">
         <a href="#" class="nav_logo"></a>
         
