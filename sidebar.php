@@ -77,8 +77,8 @@ if (isset($_SESSION['kelas'])) {
                             </a>
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="input_nilai_mapel.php">Nilai Harian</a>
-                                    <a class="nav-link" href="input_nilai_ulangan.php">Nilai Ulangan</a>
+                                    <a class="nav-link" href="input_nilai_mapel.php">Nilai Formatif</a>
+                                    <a class="nav-link" href="input_nilai_ulangan.php">Nilai Sumatif</a>
                                     <a class="nav-link" href="input_nilai_ujian.php">Nilai Ujian</a>
                                     <a class="nav-link" href="input_nilai_praktek.php">Nilai Praktek</a>
                                     <a class="nav-link" href="input_nilai_kepribadian.php">Nilai Kepribadian</a>
@@ -153,6 +153,15 @@ if (isset($_SESSION['kelas'])) {
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-book-open"></i></div>
                                 Mata Pelajaran
                             </a>
+                            <div class="sb-sidenav-menu-heading">Database</div>
+                            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#modalBackup">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-download"></i></div>
+                                Backup
+                            </a>
+                            <!-- <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#modalRestore">
+                                <div class="sb-nav-link-icon"><i class="fa-regular fa-folder-open"></i></div>
+                                Restore
+                            </a> -->
                             <div class="sb-sidenav-menu-heading">Info</div>
                             <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#modalAbout">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-circle-info"></i></div>
@@ -251,6 +260,34 @@ if (isset($_SESSION['kelas'])) {
         </div>
     </div>
 
+    <!-- Modal Backup-->
+    <div class="modal fade" id="modalBackup">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Backup Data</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <!-- Modal body -->      
+                    <form method="post">
+                    <div class="modal-body" style="text-align: center;">
+                        <h5>Backup data ke dalam file?<h5> 
+                        <!-- <br>
+                        <input type="text" name="fileBackup" placeholder="" class="form-control">
+                        <br> -->
+                        <div class="text-center">
+                        <button type="submit" class="btn btn-success" name="simpanBackup">Simpan</button> 
+                        </div>
+                    </div>
+                    
+                    <br> 
+                </form>   
+            </div>
+        </div>
+    </div>
+
 
     <!-- Modal About-->
     <div class="modal fade" id="modalAbout">
@@ -266,16 +303,19 @@ if (isset($_SESSION['kelas'])) {
                     <form method="post">
                     <div class="modal-body">
                         <h5>Tentang Aplikasi</h5>
-                        <p>Sistem Pengelolaan Nilai SDK Bhakti Rogojampi.</p>
+                        <p>Sistem Pengelolaan Nilai Rapor</p>
                         <h5>Fitur</h5>
                         <ul>
-                            <li>Mengelola data nilai</li>
+                            <li>Mengelola data guru, siswa, kelas, mapel</li>
+                            <li>Mengelola data nilai rapor</li>
+                            <li>Mengelola absensi</li>
+                            <li>Mengelola data nilai P5</li>
                             <li>Mencetak rapor.</li>
                         </ul>
                         <h5>Versi</h5>
                         <p>1.0.0 </p>
                         <h5>Tanggal Rilis</h5>
-                        <p>15 November 2023 </p>
+                        <p>01 Juni 2024 </p>
                         <h5>Pengembangan</h5>
                         <ul>
                             <li>Pengembang : Mukijo</li>
