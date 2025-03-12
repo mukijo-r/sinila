@@ -65,7 +65,7 @@ date_default_timezone_set('Asia/Jakarta');
                                     </thead>
                                     <tbody>
                                     <?php 
-                                    $dataNilaiMapel = mysqli_query($conn, "SELECT * FROM mapel;");
+                                    $dataNilaiMapel = mysqli_query($conn, "SELECT * FROM mapel ORDER BY urutan;");
 
                                     $i = 1;
                                     
