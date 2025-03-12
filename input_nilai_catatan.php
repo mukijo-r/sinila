@@ -161,7 +161,7 @@ $namaUser = $rowUser['nama_lengkap'];
                                                                     <option value="<?=$idSiswa;?>"><?=$namaSiswa;?></option>
                                                                     <?php
                                                                     // Ambil data siswa dari tabel siswa
-                                                                    $querySiswa = mysqli_query($conn, "SELECT id_siswa, nama FROM siswa WHERE id_kelas = $kelas ORDER BY nama ORDER BY nama");
+                                                                    $querySiswa = mysqli_query($conn, "SELECT id_siswa, nama FROM siswa WHERE id_kelas = $kelas ORDER BY nama");
                                                                     while ($rowSiswa = mysqli_fetch_assoc($querySiswa)) {
                                                                         echo '<option value="' . $rowSiswa['id_siswa'] . '">' . $rowSiswa['nama'] . '</option>';
                                                                     }
