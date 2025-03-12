@@ -383,7 +383,7 @@ require 'config.php';
                     <div class="container-fluid px-4">
                         <h6>Siapkan file Excel (.xls, .xlsx) dengan format seperti di bawah :</h6>
                         <h6>Format tanggal : yyyy-mm-dd</h6>
-                        <h6>Kolom status isikan dengan "aktif" </h6><br>
+                        <h6>Format jenis kelamin : L/P</h6>
                             <table class="table table-bordered">
                                 <tr> 
                                     <th>Nama</th>
@@ -395,7 +395,6 @@ require 'config.php';
                                     <th>Tanggal Lahir</th>
                                     <th>Agama</th>
                                     <th>Alamat</th>
-                                    <th>Status</th>
                                 </tr>
                             </table>
                     </div>
