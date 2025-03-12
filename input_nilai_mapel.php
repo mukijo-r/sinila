@@ -307,9 +307,9 @@ $namaUser = $rowUser['nama_lengkap'];
                                         <?php
                                         // Ambil data kelas dari tabel kelas
                                         if ($kelas == 1 | $kelas == 2 | $kelas == 3) {
-                                            $queryMapel = mysqli_query($conn, "SELECT id_mapel, mapel FROM mapel WHERE mapel <> 'Bahasa Using';");
+                                            $queryMapel = mysqli_query($conn, "SELECT id_mapel, mapel FROM mapel WHERE mapel <> 'Bahasa Using' ORDER BY urutan;");
                                         } else {
-                                            $queryMapel = mysqli_query($conn, "SELECT id_mapel, mapel FROM mapel");
+                                            $queryMapel = mysqli_query($conn, "SELECT id_mapel, mapel FROM mapel ORDER BY urutan");
                                         }                                        
 
                                         while ($rowMapel = mysqli_fetch_assoc($queryMapel)) {
