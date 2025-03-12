@@ -283,7 +283,8 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                         nuj.semester = '$semester' AND
                         nuj.id_siswa = '$idSiswa' AND
                         nuj.id_tahun_ajar = '$idTahunAjar'
-                    GROUP BY  m.id_mapel, m.mapel;
+                    GROUP BY  m.id_mapel, m.mapel
+                    ORDER BY m.urutan;
                     ";
                     $nilaiHarian = mysqli_query($conn, $queryNilaiHarian);
 
@@ -355,7 +356,9 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                         $LM2 = $row['LM2'];
                         $LM3 = $row['LM3'];
                         $LM4 = $row['LM4'];
+
                         $rerataUlangan = ($LM1 + $LM2 + $LM3 + $LM4)/4;
+                        
                         $STS = $row['STS'];
                         $SAS = $row['SAS'];
                         $nilaiRapot = ((2 * $rerataUlangan) + $STS + (2 * $SAS)) / 5;
