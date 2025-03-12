@@ -89,13 +89,14 @@ $semester = 'Ganjil';
                                     id_ck,
                                     ck.id_mapel,
                                     deskripsi,
-                                    mapel
+                                    mapel,
+                                    urutan
                                     FROM 
                                     capaian_kompetensi ck
                                     LEFT JOIN mapel m ON ck.id_mapel = m.id_mapel                                    
                                     WHERE 
                                     fase = '$fase'
-                                    ORDER BY mapel, id_ck;");   
+                                    ORDER BY urutan, id_ck;");   
                                     
                                     while($data=mysqli_fetch_array($dataAsesmen)){
                                         $idAsesemen = $data['id_ck'];                                       
@@ -293,8 +294,8 @@ $semester = 'Ganjil';
                                     <select class="form-select" name="mapel" id="mapel" aria-label="mapel" required>
                                         <option value="">Pilih Mapel</option>
                                         <?php
-                                        // Ambil data kelas dari tabel kelas
-                                        $queryMapel = mysqli_query($conn, "SELECT id_mapel, mapel FROM mapel");
+                                        // Ambil data mapel dari tabel mapel
+                                        $queryMapel = mysqli_query($conn, "SELECT id_mapel, mapel FROM mapel ORDER BY urutan;");
                                         while ($rowMapel = mysqli_fetch_assoc($queryMapel)) {
                                             echo '<option value="' . $rowMapel['id_mapel'] . '">' . $rowMapel['mapel'] . '</option>';
                                         }
