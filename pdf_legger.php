@@ -107,7 +107,7 @@ $html .= '<th style="vertical-align: middle; font-weight: bold; width: 4%">No. I
 $html .= '<th style="vertical-align: middle; font-weight: bold; width: 7%">NISN</th>';
 $html .= '<th style="vertical-align: middle; font-weight: bold; width: 13%">Nama</th>';
 
-$subjectsQuery = "SELECT id_mapel, mapel FROM mapel ORDER BY id_mapel;";
+$subjectsQuery = "SELECT id_mapel, mapel FROM mapel ORDER BY urutan;";
 $subjectsResult = mysqli_query($conn, $subjectsQuery);
 
 while ($subjectRow = mysqli_fetch_assoc($subjectsResult)) {

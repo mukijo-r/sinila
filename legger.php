@@ -133,7 +133,7 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                     echo '<th style="vertical-align: middle;">NISN</th>';
                     echo '<th style="vertical-align: middle;">Nama</th>';
 
-                    $subjectsQuery = "SELECT id_mapel, mapel FROM mapel ORDER BY id_mapel;";
+                    $subjectsQuery = "SELECT id_mapel, mapel FROM mapel ORDER BY urutan;";
                     $subjectsResult = mysqli_query($conn, $subjectsQuery);
 
                     while ($subjectRow = mysqli_fetch_assoc($subjectsResult)) {
