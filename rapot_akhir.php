@@ -224,7 +224,8 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                         nuj.semester = '$semester' AND
                         nuj.id_siswa = '$idSiswa' AND
                         nuj.id_tahun_ajar = '$idTahunAjar'
-                    GROUP BY  m.id_mapel, m.mapel;
+                    GROUP BY  m.id_mapel, m.mapel
+                    ORDER BY m.urutan;
                     ";  
                     
                     $nilaiHarian = mysqli_query($conn, $queryNilaiHarian);

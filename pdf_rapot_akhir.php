@@ -208,7 +208,8 @@ $queryNilai = "SELECT m.id_mapel, m.mapel,
         nuj.semester = '$semester' AND
         nuj.id_siswa = '$idSiswa' AND
         nuj.id_tahun_ajar = '$idTahunAjar'
-    GROUP BY  m.id_mapel, m.mapel;
+    GROUP BY  m.id_mapel, m.mapel
+    ORDER BY m.urutan;
     "; 
 
 $nilai = mysqli_query($conn, $queryNilai);
