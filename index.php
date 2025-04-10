@@ -339,6 +339,30 @@ $namaUser = $rowUser['nama_lengkap'];
                                         $nilaiSAS = $rowSAS['nilai'];
                                     }
                                     $rerataUlangan = ($nilaiNSLM1 + $nilaiNSLM2 + $nilaiNSLM3 + $nilaiNSLM4) / 4;
+
+                                    $nilaiLM = array();
+
+                                    // Memasukkan nilai ke dalam array jika nilai tersebut bukan 0
+                                    if ($nilaiNSLM1 != 0) {
+                                        $nilaiLM[] = $nilaiNSLM1;
+                                    }
+                                    if ($nilaiNSLM2 != 0) {
+                                        $nilaiLM[] = $nilaiNSLM2;
+                                    }
+                                    if ($nilaiNSLM3 != 0) {
+                                        $nilaiLM[] = $nilaiNSLM3;
+                                    }
+                                    if ($nilaiNSLM4 != 0) {
+                                        $nilaiLM[] = $nilaiNSLM4;
+                                    }
+
+                                    // Menghitung rata-rata jika ada nilai yang bukan 0
+                                    if (count($nilaiLM) > 0) {
+                                        $rerataUlangan = array_sum($nilaiLM) / count($nilaiLM);
+                                    } else {
+                                        $rerataUlangan = 0;
+                                    }
+
                                     $nilaiRapotMapel += ((2 * $rerataUlangan) + $nilaiSTS + (2 * $nilaiSAS)) / 5;                                        
                                 }
 
