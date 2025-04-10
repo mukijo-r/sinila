@@ -74,7 +74,7 @@ if ($semester == 'Ganjil'){
 $kelas = $_POST['kelas'];
 
 $idMapel = $_POST['idMapel'];
-$queryMapel = mysqli_query($conn, "SELECT mapel FROM mapel WHERE id_mapel='$idMapel'");
+$queryMapel = mysqli_query($conn, "SELECT mapel FROM mapel WHERE id_mapel='$idMapel' ORDER BY urutan");
 $rowMapel = mysqli_fetch_assoc($queryMapel);
 $namaMapel = $rowMapel['mapel'];
 
