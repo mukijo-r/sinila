@@ -240,7 +240,8 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                     nuj.semester = '$semester' AND
                     nuj.id_mapel = '$idMapel' AND
                     nuj.id_tahun_ajar = '$idTahunAjar'
-                GROUP BY s.nis, s.nisn, s.nama;
+                GROUP BY s.nis, s.nisn, s.nama
+                ORDER BY s.nama;
                 ";
                     $query = mysqli_query($conn, $quer);
                     $i = 1;

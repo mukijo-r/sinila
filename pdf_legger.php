@@ -126,10 +126,12 @@ $html .= '</tr>';
 
 // Fetch student data
 $query = "
-    SELECT s.nis, s.nisn, s.nama
-    FROM siswa s
-    WHERE id_kelas = $kelas
-    GROUP BY s.nis, s.nisn, s.nama;
+    SELECT DISTINCT nu.id_siswa, s.nis, s.nisn, s.nama 
+    FROM `nilai_ujian` nu 
+    INNER JOIN siswa s ON nu.id_siswa = s.id_siswa 
+    WHERE 
+    nu.kelas = $kelas AND nu.id_tahun_ajar = $idTahunAjar
+    ORDER BY s.nama;
 ";
 $studentResult = mysqli_query($conn, $query);
 
@@ -195,7 +197,31 @@ while ($studentRow = mysqli_fetch_assoc($studentResult)) {
             $LM2 = $row['LM2'];
             $LM3 = $row['LM3'];
             $LM4 = $row['LM4'];
-            $rerataUlangan = ($LM1 + $LM2 + $LM3 + $LM4) / 4;
+
+            // Array untuk menampung nilai yang bukan 0
+            $nilaiLM = array();
+
+            // Memasukkan nilai ke dalam array jika nilai tersebut bukan 0
+            if ($LM1 != 0) {
+                $nilaiLM[] = $LM1;
+            }
+            if ($LM2 != 0) {
+                $nilaiLM[] = $LM2;
+            }
+            if ($LM3 != 0) {
+                $nilaiLM[] = $LM3;
+            }
+            if ($LM4 != 0) {
+                $nilaiLM[] = $LM4;
+            }
+
+            // Menghitung rata-rata jika ada nilai yang bukan 0
+            if (count($nilaiLM) > 0) {
+                $rerataUlangan = array_sum($nilaiLM) / count($nilaiLM);
+            } else {
+                $rerataUlangan = 0;
+            }
+
             $STS = $row['STS'];
             $SAS = $row['SAS'];
             $nilaiRapot = round(((2 * $rerataUlangan) + $STS + (2 * $SAS)) / 5);

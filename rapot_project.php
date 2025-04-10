@@ -4,6 +4,11 @@ require 'cek.php';
 require 'config.php';
 $conn = mysqli_connect("localhost:3306","root","","sdk");
 
+$queryTahunAjar = mysqli_query($conn, "SELECT id_tahun_ajar FROM tahun_ajar WHERE tahun_ajar='$tahunAjar'");
+while ($rowTahunAjar = mysqli_fetch_assoc($queryTahunAjar)) {                            
+    $idTahunAjar = $rowTahunAjar['id_tahun_ajar'];
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -74,7 +79,12 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                                                 <option value="">Pilih siswa</option>
                                                 <?php
                                                 // Ambil data kelas dari tabel kelas
-                                                $querySiswa = mysqli_query($conn, "SELECT id_siswa, nama FROM siswa WHERE id_kelas='$kelas'");
+                                                $querySiswa = mysqli_query($conn, "SELECT DISTINCT pp.id_siswa, s.nama 
+                                                FROM `p5_penilaian` pp 
+                                                INNER JOIN siswa s ON pp.id_siswa = s.id_siswa 
+                                                WHERE 
+                                                pp.kelas = $kelas AND pp.id_tahun_ajar = $idTahunAjar;");
+
                                                 while ($rowSiswa = mysqli_fetch_assoc($querySiswa)) {
                                                     echo '<option value="' . $rowSiswa['id_siswa'] . '">' . $rowSiswa['nama'] . '</option>';
                                                 }
@@ -104,7 +114,11 @@ $conn = mysqli_connect("localhost:3306","root","","sdk");
                     <div class="container-fluid px-4">
                     <?php
 
-                    $query = "SELECT id_siswa, nama FROM siswa WHERE id_kelas = $kelas ORDER BY nama";
+                    $query = "SELECT DISTINCT pp.id_siswa, s.nama 
+                                FROM `p5_penilaian` pp 
+                                INNER JOIN siswa s ON pp.id_siswa = s.id_siswa 
+                                WHERE 
+                                pp.kelas = $kelas AND pp.id_tahun_ajar = $idTahunAjar;";
                     $result = mysqli_query($conn, $query);
 
                     $siswaArray = array();

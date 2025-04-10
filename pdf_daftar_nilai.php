@@ -188,7 +188,8 @@ WHERE nm.kelas = '$kelas' AND
     nuj.semester = '$semester' AND
     nuj.id_mapel = '$idMapel' AND
     nuj.id_tahun_ajar = '$idTahunAjar'
-GROUP BY s.nis, s.nisn, s.nama;
+GROUP BY s.nis, s.nisn, s.nama
+ORDER BY s.nama;
 ");
 
 $i = 1;
